@@ -63,8 +63,8 @@ contract ConstantProductAMM is Context, Ownable {
         reserveAgainst += amountA;
         reserveFavour += amountB;
 
-        favourBalances[_msgSender()] += amountB;
-        againstBalances[_msgSender()] += amountB;
+        favourBalances[_msgSender()] -= amountB;
+        againstBalances[_msgSender()] -= amountB;
     }
 
     // External function to swap tokenAgainst for tokenFavour
@@ -76,6 +76,9 @@ contract ConstantProductAMM is Context, Ownable {
 
         reserveAgainst += amountA;
         reserveFavour -= amountB;
+
+        againstBalances[_msgSender()] += amountA;
+        favourBalances[_msgSender()] -= amountA;
 
         if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
 
@@ -91,6 +94,9 @@ contract ConstantProductAMM is Context, Ownable {
 
         reserveAgainst -= amountA;
         reserveFavour += amountB;
+
+        againstBalances[_msgSender()] -= amountA;
+        favourBalances[_msgSender()] += amountA;
 
         if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
 
@@ -114,6 +120,9 @@ contract ConstantProductAMM is Context, Ownable {
         reserveAgainst += amountAgainst;
         reserveFavour -= amountUSDC;
 
+        againstBalances[_msgSender()] += amountUSDC;
+        favourBalances[_msgSender()] -= amountUSDC;
+
         if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
 
         // Emit swap event
@@ -135,6 +144,9 @@ contract ConstantProductAMM is Context, Ownable {
 
         reserveFavour += amountFavour;
         reserveAgainst -= amountUSDC;
+
+        againstBalances[_msgSender()] -= amountUSDC;
+        favourBalances[_msgSender()] += amountUSDC;
 
         if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
 
