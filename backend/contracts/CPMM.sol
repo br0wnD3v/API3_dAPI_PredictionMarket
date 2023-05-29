@@ -1,110 +1,110 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "./ICPMM.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-error PM_ClosedForTrading();
-error PM_OpenForTrading();
+error PM_IsClosedForTrading();
+error PM_IsOpenForTrading();
+error PM_NotReadyForTrades();
 
-contract ConstantProductAMM is Context, Ownable {
-    uint256 public reserveAgainst;
-    uint256 public reserveFavour;
-    uint256 public immutable PREDICTION_BASE_PRICE;
-    uint256 public immutable CONSTANT_K;
+contract PM_CPMM is Context, Ownable, ICPMM {
+    uint256 public reserveNo;
+    uint256 public reserveYes;
+    uint256 public deadline;
+    uint256 public fee;
+
+    uint256 public CONSTANT_K;
+    uint256 private immutable SELF_ID;
+    uint256 private constant DECIMALS = 18;
+
+    bool private ready;
 
     IERC20 usdcToken;
 
-    uint256 deadline;
-
-    mapping(address => uint256) private favourBalances;
-    mapping(address => uint256) private againstBalances;
+    mapping(address => uint256) private YesBalances;
+    mapping(address => uint256) private NoBalances;
 
     // Events
-    event Swap(address indexed trader, uint256 amountIn, uint256 amountOut);
+    event SwapOrder(
+        address indexed trader,
+        uint256 amountYes,
+        uint256 amountNo
+    );
+    event BuyOrder(address indexed trader, uint256 amountYes, uint256 amountNo);
 
     modifier isOpen() {
-        if (block.timestamp > deadline) revert PM_ClosedForTrading();
+        if (block.timestamp > deadline) revert PM_IsClosedForTrading();
         _;
     }
 
     modifier isClosed() {
-        if (block.timestamp < deadline) revert PM_OpenForTrading();
+        if (block.timestamp <= deadline) revert PM_IsOpenForTrading();
+        _;
+    }
+
+    modifier isReady() {
+        if (!ready) revert PM_NotReadyForTrades();
         _;
     }
 
     // Constructor
-    constructor(
-        uint256 _initialSupply,
-        uint256 _basePrice,
-        uint256 _deadline,
-        address _usdcTokenAddress
-    ) {
-        reserveAgainst = _initialSupply;
-        reserveFavour = _initialSupply;
-        PREDICTION_BASE_PRICE = _basePrice;
-        CONSTANT_K = _initialSupply * _initialSupply;
-        deadline = _deadline;
+    constructor(uint256 _id, uint256 _fee, address _usdcTokenAddress) {
+        SELF_ID = _id;
+        fee = _fee;
         usdcToken = IERC20(_usdcTokenAddress);
     }
 
-    // External function to add liquidity
-    function addLiquidity(
-        uint256 amountA,
-        uint256 amountB
-    ) external isOpen onlyOwner {
-        require(
-            amountA > 0 && amountB > 0,
-            "Amounts must be greater than zero"
-        );
-
-        // Update reserves
-        reserveAgainst += amountA;
-        reserveFavour += amountB;
-
-        favourBalances[_msgSender()] -= amountB;
-        againstBalances[_msgSender()] -= amountB;
+    function enableForTrades(
+        uint256 _initialSupply,
+        uint256 _deadline
+    ) external onlyOwner {
+        reserveNo = _initialSupply * 10 ** DECIMALS;
+        reserveYes = _initialSupply * 10 ** DECIMALS;
+        deadline = _deadline;
+        ready = true;
     }
 
-    // External function to swap tokenAgainst for tokenFavour
-    function swapAgainstForFavour(uint256 amountA) external isOpen {
+    // External function to SwapOrder tokenNo for tokenYes
+    function swapNoForYes(uint256 amountA) external isOpen {
         require(amountA > 0, "Amount must be greater than zero");
 
-        // Calculate the amount of tokenFavour to be received
-        uint256 amountB = (reserveFavour * amountA) / reserveAgainst;
+        // Calculate the amount of tokenYes to be received
+        uint256 amountB = (reserveYes * amountA) / reserveNo;
 
-        reserveAgainst += amountA;
-        reserveFavour -= amountB;
+        reserveNo += amountA;
+        reserveYes -= amountB;
 
-        againstBalances[_msgSender()] += amountA;
-        favourBalances[_msgSender()] -= amountA;
+        NoBalances[_msgSender()] += amountA;
+        YesBalances[_msgSender()] -= amountA;
 
-        if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
+        if (reserveNo * reserveYes != CONSTANT_K) revert();
 
-        emit Swap(msg.sender, amountA, amountB);
+        emit SwapOrder(msg.sender, amountA, amountB);
     }
 
-    // External function to swap tokenFavour for tokenAgainst
-    function swapFavourForAgainst(uint256 amountB) external isOpen {
+    // External function to SwapOrder tokenYes for tokenNo
+    function swapYesForNo(uint256 amountB) external isOpen {
         require(amountB > 0, "Amount must be greater than zero");
 
-        // Calculate the amount of tokenAgainst to be received
-        uint256 amountA = (reserveAgainst * amountB) / reserveFavour;
+        // Calculate the amount of tokenNo to be received
+        uint256 amountA = (reserveNo * amountB) / reserveYes;
 
-        reserveAgainst -= amountA;
-        reserveFavour += amountB;
+        reserveNo -= amountA;
+        reserveYes += amountB;
 
-        againstBalances[_msgSender()] -= amountA;
-        favourBalances[_msgSender()] += amountA;
+        NoBalances[_msgSender()] -= amountA;
+        YesBalances[_msgSender()] += amountA;
 
-        if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
+        if (reserveNo * reserveYes != CONSTANT_K) revert();
 
-        // Emit swap event
-        emit Swap(msg.sender, amountA, amountB);
+        // Emit SwapOrder event
+        emit SwapOrder(msg.sender, amountA, amountB);
     }
 
-    function buyAgainstWithUSDC(uint256 amountUSDC) external isOpen {
+    function buyNoWithUSDC(uint256 amountUSDC) external isOpen {
         require(amountUSDC > 0, "Amount must be greater than zero");
 
         // Transfer USDC tokens from the user to the contract
@@ -113,23 +113,22 @@ contract ConstantProductAMM is Context, Ownable {
             "Failed to transfer USDC tokens"
         );
 
-        // Calculate the amount of Against tokens to be received
-        uint256 amountAgainst = (amountUSDC * reserveAgainst) /
-            (reserveFavour * PREDICTION_BASE_PRICE);
+        // Calculate the amount of No tokens to be received
+        uint256 amountNo = (amountUSDC * reserveNo) / (reserveYes);
 
-        reserveAgainst += amountAgainst;
-        reserveFavour -= amountUSDC;
+        reserveNo += amountNo;
+        reserveYes -= amountUSDC;
 
-        againstBalances[_msgSender()] += amountUSDC;
-        favourBalances[_msgSender()] -= amountUSDC;
+        NoBalances[_msgSender()] += amountUSDC;
+        YesBalances[_msgSender()] -= amountUSDC;
 
-        if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
+        if (reserveNo * reserveYes != CONSTANT_K) revert();
 
-        // Emit swap event
-        emit Swap(msg.sender, amountUSDC, amountAgainst);
+        // Emit SwapOrder event
+        emit SwapOrder(msg.sender, amountUSDC, amountNo);
     }
 
-    function buyFavourWithUSDC(uint256 amountUSDC) external isOpen {
+    function buyYesWithUSDC(uint256 amountUSDC) external isOpen {
         require(amountUSDC > 0, "Amount must be greater than zero");
 
         // Transfer USDC tokens from the user to the contract
@@ -138,43 +137,44 @@ contract ConstantProductAMM is Context, Ownable {
             "Failed to transfer USDC tokens"
         );
 
-        // Calculate the amount of Favour tokens to be received
-        uint256 amountFavour = (amountUSDC * reserveFavour) /
-            (reserveAgainst * PREDICTION_BASE_PRICE);
+        // Calculate the amount of Yes tokens to be received
+        uint256 amountYes = (amountUSDC * reserveYes) / (reserveNo);
 
-        reserveFavour += amountFavour;
-        reserveAgainst -= amountUSDC;
+        reserveYes += amountYes;
+        reserveNo -= amountUSDC;
 
-        againstBalances[_msgSender()] -= amountUSDC;
-        favourBalances[_msgSender()] += amountUSDC;
+        NoBalances[_msgSender()] -= amountUSDC;
+        YesBalances[_msgSender()] += amountUSDC;
 
-        if (reserveAgainst * reserveFavour != CONSTANT_K) revert();
+        if (reserveNo * reserveYes != CONSTANT_K) revert();
 
-        // Emit swap event
-        emit Swap(msg.sender, amountUSDC, amountFavour);
+        // Emit SwapOrder event
+        emit SwapOrder(msg.sender, amountUSDC, amountYes);
     }
 
     /// @notice THIS IS WHERE DAPIS WILL BE CALLED TO BALANCE THINGS OUT
-    function concludePrediction() external isClosed {}
+    function conclude(bool vote) external isClosed returns (bool) {
+        //Settlements
+    }
 
-    // External view function to get the current price of tokenAgainst in terms of tokenFavour
+    // External view function to get the current price of tokenNo in terms of tokenYes
     function getPriceA() external view returns (uint256) {
-        return reserveFavour / reserveAgainst;
+        return reserveYes / reserveNo;
     }
 
-    // External view function to get the current price of tokenFavour in terms of tokenAgainst
+    // External view function to get the current price of tokenYes in terms of tokenNo
     function getPriceB() external view returns (uint256) {
-        return reserveAgainst / reserveFavour;
+        return reserveNo / reserveYes;
     }
 
-    // External view function to get the current price of tokenAgainst in terms of USDC
+    // External view function to get the current price of tokenNo in terms of USDC
     function getPriceAInUSDC() external view returns (uint256) {
-        return (reserveFavour * PREDICTION_BASE_PRICE) / reserveAgainst;
+        return (reserveYes) / reserveNo;
     }
 
-    // External view function to get the current price of tokenFavour in terms of USDC
+    // External view function to get the current price of tokenYes in terms of USDC
     function getPriceBInUSDC() external view returns (uint256) {
-        return (reserveAgainst * PREDICTION_BASE_PRICE) / reserveFavour;
+        return (reserveNo) / reserveYes;
     }
 
     receive() external payable {}

@@ -2,6 +2,21 @@
 # yarn lockfile v1
 
 
+"@api3/airnode-protocol-v1@^2.3.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@api3/airnode-protocol-v1/-/airnode-protocol-v1-2.5.0.tgz#280186da94c944847d5153ec12150baa344e7b41"
+  integrity sha512-K2OYY0Pycj2gIjNrWSLDGD6CqbhYghcgmeVBucnSSa3Eq93xcU+P48PhYMQhdxaULh6IzPxHxunU8EHvos+E5g==
+  dependencies:
+    "@openzeppelin/contracts" "4.8.2"
+
+"@api3/contracts@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/@api3/contracts/-/contracts-0.9.1.tgz#c2a5b14501cb7bc8496c9695e02d9c015adfc102"
+  integrity sha512-7D6/BaDvWjupERJ26lcCJuIwze0W90g3mV0NF5tWcoFCagsGvhuL0uYeYy89cl1Um5gE1yFt2vE7TUX4lYh4jA==
+  dependencies:
+    "@api3/airnode-protocol-v1" "^2.3.0"
+    ethers "^5.4.7"
+
 "@chainsafe/as-sha256@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@chainsafe/as-sha256/-/as-sha256-0.3.1.tgz#3639df0e1435cab03f4d9870cc3ac079e57a6fc9"
@@ -673,6 +688,11 @@
     semver "^6.3.0"
     table "^6.8.0"
     undici "^5.14.0"
+
+"@openzeppelin/contracts@4.8.2":
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.8.2.tgz#d815ade0027b50beb9bcca67143c6bcc3e3923d6"
+  integrity sha512-kEUOgPQszC0fSYWpbh2kT94ltOJwj1qfT2DWo+zVttmGmf97JZ99LspePNaeeaLhCImaHVeBbjaQFZQn7+Zc5g==
 
 "@openzeppelin/contracts@^4.8.3":
   version "4.8.3"

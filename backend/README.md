@@ -1,13 +1,10 @@
-# Sample Hardhat Project
+# Prediction Markets Using dAPIs
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This specific project only targets tokens tradable and not real-world political/geographical events.
 
-Try running some of the following tasks:
+Implementing Prediction Markets by allowing users to create new predictions or trade available predictions.
+dAPIs are the source of settling the predictions after the time has surpassed for a given prediction.
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+### Resources
+
+1. https://github.com/runtimeverification/verified-smart-contracts/blob/uniswap/uniswap/x-y-k.pdf
