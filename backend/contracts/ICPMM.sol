@@ -12,7 +12,7 @@ interface ICPMM {
 
     function buyYesWithUSDC(uint256 amountUSDC) external;
 
-    function conclude(bool winner) external returns (bool);
+    function concludePrediction_3(bool winner) external returns (bool);
 
     function getPriceA() external view returns (uint256);
 

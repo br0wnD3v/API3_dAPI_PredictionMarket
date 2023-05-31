@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@api3/contracts/v0.8/interfaces/IProxy.sol";
 
 interface ITrading {
-    function settlePrediction(uint256, bool) external;
+    function concludePrediction_2(uint256, bool) external;
 
     function getPrediction(uint256) external view returns (Prediction memory);
 }
@@ -31,13 +31,17 @@ contract PM_Settlement is Ownable {
         tradingContract = ITrading(_trading);
     }
 
-    // We can add an incentive to whoever calls it get some % of the original fee. This function is
-    function evaluatePrediction(uint256 _predictionId) external {
+    /// @dev We can add an incentive to whoever calls it get some % of overall protocol fee for a given prediction.
+    /// Note that this should come out > gas fee to run the txn in the first place. Or we use CRON job, EAC,
+    /// Cloud-based scheduler.
+    /// @dev Personally think that the 1st and 3rd options are good candidates.
+    function concludePrediction_1(uint256 _predictionId) external {
         Prediction memory associatedPrediction = tradingContract.getPrediction(
             _predictionId
         );
         address associatedProxyAddress = associatedPrediction.proxyAddress;
 
+        /// API3 FTW
         (int224 value, uint256 timestamp) = IProxy(associatedProxyAddress)
             .read();
 
@@ -50,12 +54,12 @@ contract PM_Settlement is Ownable {
         //The price was predicted to be above the target point
         if (associatedPrediction.isAbove) {
             if (associatedPrediction.targetPricePoint > value)
-                tradingContract.settlePrediction(_predictionId, true);
-            else tradingContract.settlePrediction(_predictionId, false);
+                tradingContract.concludePrediction_2(_predictionId, true);
+            else tradingContract.concludePrediction_2(_predictionId, false);
         } else {
             if (associatedPrediction.targetPricePoint < value)
-                tradingContract.settlePrediction(_predictionId, true);
-            else tradingContract.settlePrediction(_predictionId, false);
+                tradingContract.concludePrediction_2(_predictionId, true);
+            else tradingContract.concludePrediction_2(_predictionId, false);
         }
     }
 }

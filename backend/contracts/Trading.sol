@@ -12,7 +12,7 @@ struct Prediction {
     int224 targetPricePoint; // The target price point
     bool isAbove; // This boolean is responsible for defining if the prediction is below or above the price point
     address proxyAddress; // Address of the relevant proxy contract for each asset.
-    uint256 fee; // 1 = 0.01%, 100 = 1%
+    uint256 fee; // 1 = 0.01%, 100 = 1%, Creator's cut which is further divided as a 20:80 ratio where 20% goes to the protcol and remaining is held by the prediction creator.
     uint256 timestamp; // Timestamp of the creation of prediction
     uint256 deadline; // Timestamp when the prediction is to end
     bool isActive; // Check if the prediction is open or closed
@@ -31,6 +31,11 @@ contract PredictionMarket is Context, Ownable {
     mapping(uint256 => Prediction) private predictions;
     mapping(uint256 => address) private predictionIdToProxy;
 
+    event PredictionCreated(
+        uint256 indexed predictionId,
+        address indexed creator,
+        uint256 timestamp
+    );
     event ConcludeFatalError(
         uint256 indexed predictionId,
         uint256 timestamp,
@@ -53,16 +58,17 @@ contract PredictionMarket is Context, Ownable {
 
     function createPrediction(
         string memory _tokenSymbol,
-        int224 _targetPricePoint,
-        bool _isAbove,
         address _proxyAddress,
+        bool _isAbove,
+        int224 _targetPricePoint,
         uint256 _initialSupply,
         uint256 _liquidity,
         uint256 _fee,
-        uint256 _deadline
+        uint256 _deadline,
+        address _caller
     ) external onlyOwner returns (uint256) {
         require(
-            usdcContract.allowance(_msgSender(), address(this)) >= _liquidity,
+            usdcContract.allowance(_caller, address(this)) >= _liquidity,
             "Allowance not set!"
         );
         require(
@@ -75,19 +81,18 @@ contract PredictionMarket is Context, Ownable {
 
         require(prediction.timestamp != 0, "Prediction already exists.");
 
+        bool success = usdcContract.transferFrom(
+            _caller,
+            address(this),
+            _liquidity
+        );
+        if (!success) revert PM_InsufficientApprovedAmount();
+
         PM_CPMM predictionCPMM = new PM_CPMM(
             predictionId,
             _fee,
             address(usdcContract)
         );
-
-        bool success = usdcContract.transferFrom(
-            _msgSender(),
-            address(this),
-            _liquidity
-        );
-
-        if (!success) revert PM_InsufficientApprovedAmount();
 
         Prediction memory toAdd = Prediction({
             tokenSymbol: _tokenSymbol,
@@ -107,6 +112,7 @@ contract PredictionMarket is Context, Ownable {
 
         nextPredictionId.increment();
 
+        emit PredictionCreated(predictionId, _caller, block.timestamp);
         return predictionId;
     }
 
@@ -121,11 +127,10 @@ contract PredictionMarket is Context, Ownable {
 
     function leavePrediction(uint256 _predictiunId, bool vote) external {}
 
-    /// @notice Function for the dAPI. Should be called by the Settlement contract which is indirectly
-    /// based off of the dAPI.
-    function settlePrediction(
+    /// @notice Called by the Settlement contract which concludes the prediction and returns the vote i.e if the
+    /// prediction was in the favour of 'Yes' or 'No'.
+    function concludePrediction_2(
         uint256 _predictionId,
-        int224 _currentPrice,
         bool vote
     ) external callerIsSettlement(_msgSender()) {
         require(predictions[_predictionId].deadline > block.timestamp);
@@ -133,15 +138,8 @@ contract PredictionMarket is Context, Ownable {
         address associatedCPMMAddress = predictions[_predictionId].cpmm;
         ICPMM cpmmInstance = ICPMM(associatedCPMMAddress);
 
-        bool success = cpmmInstance.conclude(vote);
+        bool success = cpmmInstance.concludePrediction_3(vote);
         if (!success) revert PM_Conclude_FUCKED_UP();
-
-        emit ConcludeFatalError(
-            _predictionId,
-            block.timestamp,
-            _currentPrice,
-            predictions[_predictionId].targetPricePoint
-        );
     }
 
     /// @notice Setter function

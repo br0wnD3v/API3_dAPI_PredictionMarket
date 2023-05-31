@@ -153,7 +153,7 @@ contract PM_CPMM is Context, Ownable, ICPMM {
     }
 
     /// @notice THIS IS WHERE DAPIS WILL BE CALLED TO BALANCE THINGS OUT
-    function conclude(bool vote) external isClosed returns (bool) {
+    function concludePrediction_3(bool vote) external isClosed returns (bool) {
         //Settlements
     }
 
