@@ -4,13 +4,11 @@
 pragma solidity ^0.8.0;
 
 interface ICPMM {
-    function swapNoForYes(uint256 amountA) external;
+    function swapTokens(uint amountIn, bool isYesToNo) external;
 
-    function swapYesForNo(uint256 amountB) external;
+    function buyNoToken(uint256 amountUSDC, address caller) external;
 
-    function buyNoWithUSDC(uint256 amountUSDC) external;
-
-    function buyYesWithUSDC(uint256 amountUSDC) external;
+    function buyYesToken(uint256 amountUSDC, address caller) external;
 
     function concludePrediction_3(bool winner) external returns (bool);
 
