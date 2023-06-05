@@ -15,7 +15,7 @@ struct Prediction {
     uint256 timestamp; // Timestamp of the creation of prediction
     uint256 deadline; // Timestamp when the prediction is to end
     bool isActive; // Check if the prediction is open or closed
-    address cpmm; // The contract responsible for prediction functionality
+    address marketHandler; // The contract responsible for betting on the prediction.
 }
 
 // error PM_InsufficientApprovedAmount();
@@ -43,7 +43,9 @@ contract PredictionMarket is Context, Ownable {
     );
 
     IERC20 usdcContract;
+
     address public settlementAddress;
+    address public vaultAddress;
 
     modifier callerIsSettlement(address _caller) {
         require(_caller == settlementAddress);
@@ -86,12 +88,13 @@ contract PredictionMarket is Context, Ownable {
         );
         if (!success) revert PM_InsufficientApprovedAmount();
 
-        PM_MarketHandler predictionCPMM = new PM_MarketHandler(
+        PM_MarketHandler predictionMH = new PM_MarketHandler(
             predictionId,
             _fee,
             _deadline,
             _basePrice,
-            address(usdcContract)
+            address(usdcContract),
+            vaultAddress
         );
 
         Prediction memory toAdd = Prediction({
@@ -102,7 +105,7 @@ contract PredictionMarket is Context, Ownable {
             fee: _fee,
             timestamp: block.timestamp,
             deadline: _deadline,
-            cpmm: address(predictionCPMM),
+            marketHandler: address(predictionMH),
             isActive: true
         });
         predictions[predictionId] = toAdd;
@@ -118,31 +121,35 @@ contract PredictionMarket is Context, Ownable {
     // vote - True : The people who voted for 'Yes' for a given prediction.
     // vote - False : The people who voted for 'No' for a given prediction.
 
-    // Functions for the traders
-    function enterPrediction(uint256 _predictionId, bool vote) external {}
+    // Functions for the traders. Shifted to the individual MarketHandlers.
+    // function enterPrediction(uint256 _predictionId, bool vote) external {}
 
-    function swapPrediction(uint256 _predictionId, bool vote) external {}
+    // function swapPrediction(uint256 _predictionId, bool vote) external {}
 
-    function leavePrediction(uint256 _predictiunId, bool vote) external {}
+    // function leavePrediction(uint256 _predictiunId, bool vote) external {}
 
     /// @notice Called by the Settlement contract which concludes the prediction and returns the vote i.e if the
     /// prediction was in the favour of 'Yes' or 'No'.
     function concludePrediction_2(
         uint256 _predictionId,
         bool vote
-    ) external callerIsSettlement(_msgSender()) {
+    ) external callerIsSettlement(_msgSender()) returns (bool) {
         require(predictions[_predictionId].deadline > block.timestamp);
 
-        address associatedCPMMAddress = predictions[_predictionId].cpmm;
-        IMarketHandler cpmmInstance = IMarketHandler(associatedCPMMAddress);
+        address associatedMHAddress = predictions[_predictionId].marketHandler;
+        IMarketHandler mhInstance = IMarketHandler(associatedMHAddress);
 
-        bool success = cpmmInstance.concludePrediction_3(vote);
-        if (!success) revert PM_Conclude_FUCKED_UP();
+        bool success = mhInstance.concludePrediction_3(vote);
+        return success;
     }
 
     /// @notice Setter function
-    function setSettlementContract(address _settlement) external onlyOwner {
+    function setSettlementAddress(address _settlement) external onlyOwner {
         settlementAddress = _settlement;
+    }
+
+    function setVaultAddress(address _vault) external onlyOwner {
+        vaultAddress = _vault;
     }
 
     /// @notice Getter functions

@@ -20,7 +20,7 @@ struct Prediction {
     uint256 timestamp;
     uint256 deadline;
     bool isActive;
-    address cpmm;
+    address marketHandler;
 }
 
 /// @dev The contract is inherently a data feed reader
