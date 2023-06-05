@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./CPMM.sol";
+import "./MarketHandler.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 struct Prediction {
     string tokenSymbol; // The token symbol in question
@@ -19,14 +18,14 @@ struct Prediction {
     address cpmm; // The contract responsible for prediction functionality
 }
 
-error PM_InsufficientApprovedAmount();
+// error PM_InsufficientApprovedAmount();
 error PM_Conclude_FUCKED_UP();
 
 contract PredictionMarket is Context, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private nextPredictionId;
 
-    uint256 TARGET_DECIMALS = 18;
+    uint256 public constant PLATFORM_FEE = 50 * 10 ** 6;
 
     mapping(uint256 => Prediction) private predictions;
     mapping(uint256 => address) private predictionIdToProxy;
@@ -61,14 +60,13 @@ contract PredictionMarket is Context, Ownable {
         address _proxyAddress,
         bool _isAbove,
         int224 _targetPricePoint,
-        uint256 _initialSupply,
-        uint256 _liquidity,
         uint256 _fee,
         uint256 _deadline,
+        uint256 _basePrice,
         address _caller
     ) external onlyOwner returns (uint256) {
         require(
-            usdcContract.allowance(_caller, address(this)) >= _liquidity,
+            usdcContract.allowance(_caller, address(this)) >= PLATFORM_FEE,
             "Allowance not set!"
         );
         require(
@@ -84,13 +82,15 @@ contract PredictionMarket is Context, Ownable {
         bool success = usdcContract.transferFrom(
             _caller,
             address(this),
-            _liquidity
+            PLATFORM_FEE
         );
         if (!success) revert PM_InsufficientApprovedAmount();
 
-        PM_CPMM predictionCPMM = new PM_CPMM(
+        PM_MarketHandler predictionCPMM = new PM_MarketHandler(
             predictionId,
             _fee,
+            _deadline,
+            _basePrice,
             address(usdcContract)
         );
 
@@ -107,8 +107,6 @@ contract PredictionMarket is Context, Ownable {
         });
         predictions[predictionId] = toAdd;
         predictionIdToProxy[predictionId] = _proxyAddress;
-
-        predictionCPMM.enableForTrades(_initialSupply, _deadline);
 
         nextPredictionId.increment();
 
@@ -136,7 +134,7 @@ contract PredictionMarket is Context, Ownable {
         require(predictions[_predictionId].deadline > block.timestamp);
 
         address associatedCPMMAddress = predictions[_predictionId].cpmm;
-        ICPMM cpmmInstance = ICPMM(associatedCPMMAddress);
+        IMarketHandler cpmmInstance = IMarketHandler(associatedCPMMAddress);
 
         bool success = cpmmInstance.concludePrediction_3(vote);
         if (!success) revert PM_Conclude_FUCKED_UP();

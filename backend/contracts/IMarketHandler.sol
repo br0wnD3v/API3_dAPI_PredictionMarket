@@ -12,5 +12,9 @@ interface IMarketHandler {
 
     function buyYesToken(uint256) external;
 
+    function sellNoToken(uint256) external;
+
+    function sellYesToken(uint256) external;
+
     function concludePrediction_3(bool winner) external returns (bool);
 }
