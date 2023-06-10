@@ -133,14 +133,13 @@ contract PredictionMarket is Context, Ownable {
     function concludePrediction_2(
         uint256 _predictionId,
         bool vote
-    ) external callerIsSettlement(_msgSender()) returns (bool) {
+    ) external callerIsSettlement(_msgSender()) {
         require(predictions[_predictionId].deadline > block.timestamp);
 
         address associatedMHAddress = predictions[_predictionId].marketHandler;
         IMarketHandler mhInstance = IMarketHandler(associatedMHAddress);
 
-        bool success = mhInstance.concludePrediction_3(vote);
-        return success;
+        mhInstance.concludePrediction_3(vote);
     }
 
     /// @notice Setter function
