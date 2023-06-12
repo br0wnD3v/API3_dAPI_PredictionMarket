@@ -278,21 +278,30 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     function collectRewards() external isClaimable {
         if (rewardCollected[_msgSender()]) revert PM_RewardAlreadyCollected();
 
+        uint256 finalPool = reserveUSDC;
+        uint256 initialPool;
+        uint256 userTokenCount;
+        uint256 userShare;
+
         if (winner == true) {
             if (YesBalances[_msgSender()] == 0) revert PM_UserDidNotWin();
+
+            initialPool = reserveYes;
+            userTokenCount = YesBalances[_msgSender()];
+            YesBalances[_msgSender()] = 0;
         } else {
             if (NoBalances[_msgSender()] == 0) revert PM_UserDidNotWin();
+
+            initialPool = reserveNo;
+            userTokenCount = NoBalances[_msgSender()];
+            NoBalances[_msgSender()] = 0;
         }
 
-        uint256 totalPool = reserveUSDC;
-        uint256 userTokenCount = YesBalances[_msgSender()];
-        uint256 userShare = (userTokenCount * I_DECIMALS) / totalPool;
+        userShare = (userTokenCount * finalPool) / initialPool;
 
-        YesBalances[_msgSender()] = 0;
         rewardCollected[_msgSender()] = true;
 
         I_USDC_CONTRACT.transfer(_msgSender(), userShare);
-
         emit RewardCollected(_msgSender(), userShare);
     }
 
