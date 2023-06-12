@@ -42,7 +42,7 @@ contract PredictionMarket is Context, Ownable {
         int224 priceTarget
     );
 
-    IERC20 usdcContract;
+    IERC20 immutable I_USDC_CONTRACT;
 
     address public settlementAddress;
     address public vaultAddress;
@@ -53,7 +53,8 @@ contract PredictionMarket is Context, Ownable {
     }
 
     constructor(address _usdc) {
-        usdcContract = IERC20(_usdc);
+        I_USDC_CONTRACT = IERC20(_usdc);
+
         nextPredictionId.increment();
     }
 
@@ -68,7 +69,7 @@ contract PredictionMarket is Context, Ownable {
         address _caller
     ) external onlyOwner returns (uint256) {
         require(
-            usdcContract.allowance(_caller, address(this)) >= PLATFORM_FEE,
+            I_USDC_CONTRACT.allowance(_caller, address(this)) >= PLATFORM_FEE,
             "Allowance not set!"
         );
         require(
@@ -81,7 +82,7 @@ contract PredictionMarket is Context, Ownable {
 
         require(prediction.timestamp != 0, "Prediction already exists.");
 
-        bool success = usdcContract.transferFrom(
+        bool success = I_USDC_CONTRACT.transferFrom(
             _caller,
             address(this),
             PLATFORM_FEE
@@ -93,7 +94,7 @@ contract PredictionMarket is Context, Ownable {
             _fee,
             _deadline,
             _basePrice,
-            address(usdcContract),
+            address(I_USDC_CONTRACT),
             vaultAddress
         );
 

@@ -81,7 +81,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         _;
     }
 
-    // _fee * 0.1% of the tokens regardless of the decimals value.
+    // _fee * 0.1% of the tokens regardless of the decimals value. Should be a natural number N.
     constructor(
         uint256 _id,
         uint256 _fee,
@@ -103,6 +103,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         noIndex.increment();
     }
 
+    /// @dev ALL THE AMOUNTS MENTIONED AS PARAM SHOULD BE IN A FORM OF x * 10**I_DECIMALS.
     function swapTokenNoWithYes(
         uint256 _amountToSwap
     ) external override isOpen {

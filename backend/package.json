@@ -2,7 +2,8 @@
   "dependencies": {
     "@api3/contracts": "^0.9.1",
     "@openzeppelin/contracts": "^4.8.3",
-    "hardhat": "^2.14.0"
+    "hardhat": "^2.14.0",
+    "hardhat-deploy": "^0.11.30"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
