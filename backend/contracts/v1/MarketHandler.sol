@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 // import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./IMarketHandler.sol";
-import "./IERC20.sol";
+import "../common/IERC20.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";

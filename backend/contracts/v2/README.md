@@ -1,0 +1,1 @@
+The v2 version is based on CPMM and changes the price of tokens 'Yes' or 'No' based on the current proportion of both of them. The token which is being bought actively is set at a higher price and the other one is traded at a cheaper price.
