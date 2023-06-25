@@ -81,7 +81,8 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         _;
     }
 
-    // _fee * 0.1% of the tokens regardless of the decimals value. Should be a natural number N.
+    // 10**6 = 1 USDC, 10**4 = 0.01 USDC or 1 Cent. Therefore base price = A x 1 cent.
+    // _fee * 0.01% of the tokens regardless of the decimals value. Should be a natural number N.
     constructor(
         uint256 _id,
         uint256 _fee,
@@ -91,22 +92,21 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         address _vaultAddress
     ) {
         I_SELF_ID = _id;
-        I_BASE_PRICE = _basePrice;
+        I_BASE_PRICE = _basePrice * 10 ** 4;
         I_DEADLINE = _deadline;
         I_VAULT_ADDRESS = _vaultAddress;
         IERC20 usdcContract = IERC20(_usdcTokenAddress);
         I_USDC_CONTRACT = usdcContract;
         I_DECIMALS = 10 ** usdcContract.decimals();
-        I_FEE = (_fee * 10 ** usdcContract.decimals()) / 10 ** 3;
+        I_FEE = (_fee * 10 ** usdcContract.decimals()) / 10 ** 4;
 
         yesIndex.increment();
         noIndex.increment();
     }
 
-    /// @dev ALL THE AMOUNTS MENTIONED AS PARAM SHOULD BE IN A FORM OF x * 10**I_DECIMALS.
-    function swapTokenNoWithYes(
-        uint256 _amountToSwap
-    ) external override isOpen {
+    function swapTokenNoWithYes(uint256 _amount) external override isOpen {
+        uint256 _amountToSwap = _amount * I_BASE_PRICE;
+
         if (NoBalances[_msgSender()] < _amountToSwap)
             revert PM_InsufficienTradeTokens();
 
@@ -126,9 +126,9 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit SwapOrder(_msgSender(), amountYes, -1 * amountNo);
     }
 
-    function swapTokenYesWithNo(
-        uint256 _amountToSwap
-    ) external override isOpen {
+    function swapTokenYesWithNo(uint256 _amount) external override isOpen {
+        uint256 _amountToSwap = _amount * I_BASE_PRICE;
+
         if (YesBalances[_msgSender()] < _amountToSwap)
             revert PM_InsufficienTradeTokens();
 
@@ -149,23 +149,27 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     }
 
     function buyNoToken(uint256 _amount) external override isOpen {
-        if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < _amount)
+        if (_amount < 1) revert();
+
+        uint256 owedAmount = _amount * I_BASE_PRICE;
+
+        if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < owedAmount)
             revert PM_InsufficientApprovedAmount();
         bool success = I_USDC_CONTRACT.transferFrom(
             _msgSender(),
             address(this),
-            _amount
+            owedAmount
         );
         if (!success) revert PM_TokenTransferFailed();
 
-        uint256 fee = getFee(_amount);
+        uint256 fee = getFee(owedAmount);
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);
 
         reserveFEE += fee;
-        reserveUSDC += _amount - fee;
-        reserveNo += _amount - fee;
+        reserveUSDC += owedAmount - fee;
+        reserveNo += owedAmount - fee;
 
-        uint256 finalAmount = _amount - fee;
+        uint256 finalAmount = owedAmount - fee;
         NoBalances[_msgSender()] += finalAmount;
 
         if (noTokenAddressToIndex[_msgSender()] == 0) {
@@ -181,23 +185,27 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     }
 
     function buyYesToken(uint256 _amount) external override isOpen {
-        if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < _amount)
+        if (_amount < 1) revert();
+
+        uint256 owedAmount = _amount * I_BASE_PRICE;
+
+        if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < owedAmount)
             revert PM_InsufficientApprovedAmount();
         bool success = I_USDC_CONTRACT.transferFrom(
             _msgSender(),
             address(this),
-            _amount
+            owedAmount
         );
         if (!success) revert PM_TokenTransferFailed();
 
-        uint256 fee = getFee(_amount);
+        uint256 fee = getFee(owedAmount);
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);
 
         reserveFEE += fee;
-        reserveUSDC += _amount - fee;
-        reserveYes += _amount - fee;
+        reserveUSDC += owedAmount - fee;
+        reserveYes += owedAmount - fee;
 
-        uint256 finalAmount = _amount - fee;
+        uint256 finalAmount = owedAmount - fee;
         YesBalances[_msgSender()] += finalAmount;
 
         if (yesTokenAddressToIndex[_msgSender()] == 0) {
@@ -209,18 +217,21 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             yesIndex.increment();
         }
 
-        emit BuyOrder(_msgSender(), _amount, 0);
+        emit BuyOrder(_msgSender(), finalAmount, 0);
     }
 
     function sellNoToken(uint256 _amount) external override isOpen {
-        if (NoBalances[_msgSender()] < _amount) revert PM_InvalidAmountSet();
+        uint256 totalAmount = _amount * I_BASE_PRICE;
 
-        uint256 fee = getFee(_amount);
+        if (NoBalances[_msgSender()] < totalAmount)
+            revert PM_InvalidAmountSet();
+
+        uint256 fee = getFee(totalAmount);
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);
         reserveFEE += fee;
 
-        uint256 toSend = _amount - fee;
-        NoBalances[_msgSender()] -= _amount;
+        uint256 toSend = totalAmount - fee;
+        NoBalances[_msgSender()] -= totalAmount;
 
         if (NoBalances[_msgSender()] == 0) {
             uint256 index = noTokenAddressToIndex[_msgSender()];
@@ -232,20 +243,23 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         bool success = I_USDC_CONTRACT.transfer(_msgSender(), toSend);
         if (!success) revert PM_TokenTransferFailed();
 
-        reserveUSDC -= _amount;
+        reserveUSDC -= totalAmount;
 
         emit SellOrder(_msgSender(), 0, toSend);
     }
 
     function sellYesToken(uint256 _amount) external override isOpen {
-        if (YesBalances[_msgSender()] < _amount) revert PM_InvalidAmountSet();
+        uint256 totalAmount = _amount * I_BASE_PRICE;
 
-        uint256 fee = getFee(_amount);
+        if (YesBalances[_msgSender()] < totalAmount)
+            revert PM_InvalidAmountSet();
+
+        uint256 fee = getFee(totalAmount);
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);
         reserveFEE += fee;
 
-        uint256 toSend = _amount - fee;
-        YesBalances[_msgSender()] -= _amount;
+        uint256 toSend = totalAmount - fee;
+        YesBalances[_msgSender()] -= totalAmount;
 
         if (YesBalances[_msgSender()] == 0) {
             uint256 index = yesTokenAddressToIndex[_msgSender()];
@@ -257,13 +271,13 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         bool success = I_USDC_CONTRACT.transfer(_msgSender(), toSend);
         if (!success) revert PM_TokenTransferFailed();
 
-        reserveUSDC -= _amount;
+        reserveUSDC -= totalAmount;
 
         emit SellOrder(_msgSender(), toSend, 0);
     }
 
     /// @notice The trading contract call this function for each individual prediction.
-    /// Owner beign the trading contract.
+    /// Owner being the trading contract.
     /// vote - True => Yes won
     /// vote - False => No won
     function concludePrediction_3(
@@ -273,6 +287,8 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit WinnerDeclared(vote);
 
         RewardsClaimable = true;
+        // All the collected fee for the current prediction is sent back to the vault.
+        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, reserveFEE);
     }
 
     function collectRewards() external isClaimable {
