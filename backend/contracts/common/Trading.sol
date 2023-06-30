@@ -46,6 +46,7 @@ contract PredictionMarket is Context, Ownable {
 
     address public settlementAddress;
     address public vaultAddress;
+    address public USDCAddress;
 
     modifier callerIsSettlement(address _caller) {
         require(_caller == settlementAddress);
@@ -54,6 +55,7 @@ contract PredictionMarket is Context, Ownable {
 
     constructor(address _usdc) {
         I_USDC_CONTRACT = IERC20(_usdc);
+        USDCAddress = _usdc;
 
         nextPredictionId.increment();
     }
@@ -80,7 +82,8 @@ contract PredictionMarket is Context, Ownable {
         uint256 predictionId = nextPredictionId.current();
         Prediction storage prediction = predictions[predictionId];
 
-        require(prediction.timestamp != 0, "Prediction already exists.");
+        /// This should probably check _deadline
+        require(prediction.timestamp == 0, "Prediction already exists.");
 
         bool success = I_USDC_CONTRACT.transferFrom(
             _caller,
