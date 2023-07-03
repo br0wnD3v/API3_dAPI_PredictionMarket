@@ -78,9 +78,9 @@ contract PredictionMarket is Context, Ownable {
         );
 
         uint256 predictionId = nextPredictionId.current();
-        Prediction storage prediction = predictions[predictionId];
+        Prediction memory prediction = predictions[predictionId];
 
-        require(prediction.timestamp != 0, "Prediction already exists.");
+        require(prediction.timestamp == 0, "Prediction already exists.");
 
         bool success = I_USDC_CONTRACT.transferFrom(
             _caller,

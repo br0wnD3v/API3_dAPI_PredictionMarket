@@ -101,7 +101,9 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_FEE = (_fee * 10 ** usdcContract.decimals()) / 10 ** 4;
 
         yesIndex.increment();
+        noHolders.push(address(0));
         noIndex.increment();
+        yesHolders.push(address(0));
     }
 
     function swapTokenNoWithYes(uint256 _amount) external override isOpen {
@@ -176,7 +178,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             uint256 index = noIndex.current();
 
             noTokenAddressToIndex[_msgSender()] = index;
-            noHolders[index] = _msgSender();
+            noHolders.push(_msgSender());
 
             noIndex.increment();
         }
@@ -212,7 +214,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             uint256 index = yesIndex.current();
 
             yesTokenAddressToIndex[_msgSender()] = index;
-            yesHolders[index] = _msgSender();
+            yesHolders.push(_msgSender());
 
             yesIndex.increment();
         }
