@@ -19,70 +19,105 @@ error PM_RewardsNotAvailable();
 error PM_RewardAlreadyCollected();
 error PM_UserDidNotWin();
 
+/// @notice Responsible for all the trading activity for a prediction created.
 contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     using Counters for Counters.Counter;
 
-    // ReserveUSDC = reserveYes + reserveNo
+    // reserveUSDC - reserveFEE = reserveYes + reserveNo
+    /// @notice Total USDC collected.
     uint256 public reserveUSDC;
+    /// @notice Total platform fee collected so far.
     uint256 public reserveFEE;
+    /// @notice Total USDC collected against Yes tokens.
     uint256 public reserveYes;
+    /// @notice Total USDC collected against No tokens.
     uint256 public reserveNo;
 
+    /// @notice If rewards are ready to be claimed.
     bool public RewardsClaimable;
+
+    /// @notice The context of the side that won.
     bool public winner;
 
+    /// @notice The id alloted in the Trading contract for each prediction as predictionId.
     uint256 public immutable I_SELF_ID;
-    /// Base price of 10^18. 1 token of either = base price.
+    /// @notice Price of 1 token of either side. Is a multiple of 10**4.
     uint256 public immutable I_BASE_PRICE;
+    /// @notice When the market will close down.
     uint256 public immutable I_DEADLINE;
+    /// @notice The decimal value set in the payment token. Is required to calculate the fee during any trading activity.
     uint256 public immutable I_DECIMALS;
-    /// 1000000 = 100%, 0.1% = 1000.
+
+    /// 100% = 10**decimals(), 0.1% = 10**decimals()/1000.
     /// This is the total fee and this further divided between the creator and the platform.
     uint256 public immutable I_FEE;
 
+    /// @notice The interface for the payment token.
     IERC20 public immutable I_USDC_CONTRACT;
-    address private immutable I_VAULT_ADDRESS;
+    /// @notice The vault address.
+    address private I_VAULT_ADDRESS;
 
+    /// @notice Variables to track the 'Yes' token and its holders
+    /// @notice The current valid index where new address is to be pushed in the yesHolders array.
     Counters.Counter private yesIndex;
+    ///@notice The array that holds all the address in possession of 'Yes' token.
     address[] private yesHolders;
+    /// @notice Get the index of an address in the yesHolders array
     mapping(address => uint256) private yesTokenAddressToIndex;
+    /// @notice Track the amount of 'Yes' tokens held by an address
     mapping(address => uint256) private YesBalances;
 
+    /// @notice SAME AS ABOVE BUT FOR 'NO' TOKENS.
     Counters.Counter private noIndex;
     address[] private noHolders;
     mapping(address => uint256) private noTokenAddressToIndex;
     mapping(address => uint256) private NoBalances;
 
+    /// @notice Check if a user collected their rewards to disable multiple withdrawls
     mapping(address => bool) private rewardCollected;
 
     // Events
+    /// @notice When a trader swaps their 'Yes' for 'No' or vica versa.
     event SwapOrder(address indexed trader, int256 amountYes, int256 amountNo);
+    /// @notice When a trader buys a token either 'Yes' or 'No'.
     event BuyOrder(address indexed trader, uint256 amountYes, uint256 amountNo);
+    /// @notice When a trader is looking to withdraw from the prediction and collected their invested amount.
     event SellOrder(
         address indexed trader,
         uint256 amountYes,
         uint256 amountNo
     );
+    /// @notice The bool value the tells the nature of the prediction result.
     event WinnerDeclared(bool winner);
+    /// @notice When a trader successfully collect their rewards.
     event RewardCollected(address indexed user, uint256 amountWon);
 
+    /// @notice Check if the collectRewards is open to be called by the winners.
     modifier isClaimable() {
         if (!RewardsClaimable) revert PM_RewardsNotAvailable();
         _;
     }
 
+    /// @notice Check if the market is Open for trades or not.
     modifier isOpen() {
         if (block.timestamp > I_DEADLINE) revert PM_IsClosedForTrading();
         _;
     }
 
+    /// @notice Check if the market is Closed for trades.
     modifier isClosed() {
         if (block.timestamp <= I_DEADLINE) revert PM_IsOpenForTrading();
         _;
     }
 
-    // 10**6 = 1 USDC, 10**4 = 0.01 USDC or 1 Cent. Therefore base price = A x 1 cent.
+    /// @param _id The unique predictionId set in the parent Trading contract.
     // _fee * 0.01% of the tokens regardless of the decimals value. Should be a natural number N.
+    /// @param _fee The multiple of 0.01% to declare the final trading fee the platform collects.
+    /// @param _deadline The timestamp upto which the market is open for trades.
+    // 10**6 = 1 USDC, 10**4 = 0.01 USDC or 1 Cent. Therefore base price = A x 1 cent.
+    /// @param _basePrice Multiple of 1 cent. Price of either of the token.
+    /// @param _usdcTokenAddress The payment token address.
+    /// @param _vaultAddress The vault address that will collect the reserveFEE on conclude.
     constructor(
         uint256 _id,
         uint256 _fee,
@@ -106,6 +141,8 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         yesHolders.push(address(0));
     }
 
+    /// @notice Function To Swap 'No' tokens for 'Yes' tokens.
+    /// @param _amount The amount of tokens to swap. Is a natural number N.
     function swapTokenNoWithYes(uint256 _amount) external override isOpen {
         uint256 _amountToSwap = _amount * I_BASE_PRICE;
 
@@ -128,6 +165,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit SwapOrder(_msgSender(), amountYes, -1 * amountNo);
     }
 
+    /// @notice SAME AS ABOVE BUT TO SWAP 'Yes' for 'No' tokens.
     function swapTokenYesWithNo(uint256 _amount) external override isOpen {
         uint256 _amountToSwap = _amount * I_BASE_PRICE;
 
@@ -150,6 +188,8 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit SwapOrder(_msgSender(), -1 * amountYes, amountNo);
     }
 
+    /// @notice To enable the purchase of _amount of 'No' tokens. The total fee is based on _amount * I_BASE_PRICE.
+    /// @param _amount Total tokens the trader is looking to buy.
     function buyNoToken(uint256 _amount) external override isOpen {
         if (_amount < 1) revert();
 
@@ -186,6 +226,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit BuyOrder(_msgSender(), 0, finalAmount);
     }
 
+    /// @notice SAME AS ABOVE BUT TO PURCHASE 'Yes' TOKENS.
     function buyYesToken(uint256 _amount) external override isOpen {
         if (_amount < 1) revert();
 
@@ -222,6 +263,8 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit BuyOrder(_msgSender(), finalAmount, 0);
     }
 
+    /// @notice Function that allows a trader to dump their tokens.
+    /// @param _amount The amount of 'No' Tokens the trader is willing to dump.
     function sellNoToken(uint256 _amount) external override isOpen {
         uint256 totalAmount = _amount * I_BASE_PRICE;
 
@@ -250,6 +293,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit SellOrder(_msgSender(), 0, toSend);
     }
 
+    /// @notice SAME AS ABOVE BUT FOR 'Yes' TOKENS.
     function sellYesToken(uint256 _amount) external override isOpen {
         uint256 totalAmount = _amount * I_BASE_PRICE;
 
@@ -280,6 +324,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
 
     /// @notice The trading contract call this function for each individual prediction.
     /// Owner being the trading contract.
+    /// @param vote The nature of the winning side.
     /// vote - True => Yes won
     /// vote - False => No won
     function concludePrediction_3(
@@ -289,10 +334,16 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         emit WinnerDeclared(vote);
 
         RewardsClaimable = true;
+
+        //// IGNORE THIS.
         // All the collected fee for the current prediction is sent back to the vault.
-        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, reserveFEE);
+        // I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, reserveFEE);
     }
 
+    /// @notice The function each winner can call to get their share of the total pool.
+    /// @notice Based on  how much was the initial pool of winner token and the final pool
+    /// @notice being the sum of both the winner and losing side. The final cut of the user is based on the
+    /// @notice amount of tokens they held of the winning side.
     function collectRewards() external isClaimable {
         if (rewardCollected[_msgSender()]) revert PM_RewardAlreadyCollected();
 
@@ -315,6 +366,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             NoBalances[_msgSender()] = 0;
         }
 
+        // Calculate the final proportion of the pool they are rewarded.
         userShare = (userTokenCount * finalPool) / initialPool;
 
         rewardCollected[_msgSender()] = true;
