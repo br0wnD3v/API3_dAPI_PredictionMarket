@@ -42,7 +42,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const _isAbove = true;
   const _targetPricePoint = "1900000000000000000000";
   const _fee = "50";
-  const _deadline = "1688702119";
+  const _deadline = "1788802119";
   const _basePrice = "100";
   const _caller = deployer;
 
