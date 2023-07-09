@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./IMarketHandler.sol";
-import "../common/IERC20.sol";
+import "../interfaces/IMarketHandler.sol";
+import "../interfaces/ITrading.sol";
+import "../interfaces/IERC20.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -56,6 +56,8 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     IERC20 public immutable I_USDC_CONTRACT;
     /// @notice The vault address.
     address private I_VAULT_ADDRESS;
+
+    ITrading private I_TRADING_CONTRACT;
 
     /// @notice Variables to track the 'Yes' token and its holders
     /// @notice The current valid index where new address is to be pushed in the yesHolders array.
@@ -126,6 +128,8 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         address _usdcTokenAddress,
         address _vaultAddress
     ) {
+        I_TRADING_CONTRACT = ITrading(_msgSender());
+
         I_SELF_ID = _id;
         I_BASE_PRICE = _basePrice * 10 ** 4;
         I_DEADLINE = _deadline;
@@ -162,6 +166,12 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);
         reserveFEE += swapFee;
 
+        I_TRADING_CONTRACT.trackProgress(
+            I_SELF_ID,
+            _msgSender(),
+            int256(_amountToSwap),
+            -1 * int256(_amountToSwap)
+        );
         emit SwapOrder(_msgSender(), amountYes, -1 * amountNo);
     }
 
@@ -185,6 +195,12 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);
         reserveFEE += swapFee;
 
+        I_TRADING_CONTRACT.trackProgress(
+            I_SELF_ID,
+            _msgSender(),
+            -1 * int256(_amountToSwap),
+            int256(_amountToSwap)
+        );
         emit SwapOrder(_msgSender(), -1 * amountYes, amountNo);
     }
 
@@ -223,6 +239,12 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             noIndex.increment();
         }
 
+        I_TRADING_CONTRACT.trackProgress(
+            I_SELF_ID,
+            _msgSender(),
+            0,
+            int256(finalAmount)
+        );
         emit BuyOrder(_msgSender(), 0, finalAmount);
     }
 
@@ -260,6 +282,12 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             yesIndex.increment();
         }
 
+        I_TRADING_CONTRACT.trackProgress(
+            I_SELF_ID,
+            _msgSender(),
+            int256(finalAmount),
+            0
+        );
         emit BuyOrder(_msgSender(), finalAmount, 0);
     }
 
@@ -290,6 +318,12 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
 
         reserveUSDC -= totalAmount;
 
+        I_TRADING_CONTRACT.trackProgress(
+            I_SELF_ID,
+            _msgSender(),
+            0,
+            -1 * int256(toSend)
+        );
         emit SellOrder(_msgSender(), 0, toSend);
     }
 
@@ -319,6 +353,12 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
 
         reserveUSDC -= totalAmount;
 
+        I_TRADING_CONTRACT.trackProgress(
+            I_SELF_ID,
+            _msgSender(),
+            -1 * int256(toSend),
+            0
+        );
         emit SellOrder(_msgSender(), toSend, 0);
     }
 

@@ -2,6 +2,7 @@
   "dependencies": {
     "@api3/contracts": "^0.9.1",
     "@openzeppelin/contracts": "^4.8.3",
+    "dotenv": "^16.3.1",
     "hardhat": "^2.14.0",
     "hardhat-deploy": "^0.11.30"
   },

@@ -1,0 +1,790 @@
+{
+  "address": "0x6eB12E326f5bB56F668E48820F8f34536F812326",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_usdc",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "PM_InsufficientApprovedAmount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "predictionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isAbove",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "int224",
+          "name": "priceReading",
+          "type": "int224"
+        },
+        {
+          "indexed": false,
+          "internalType": "int224",
+          "name": "priceTarget",
+          "type": "int224"
+        }
+      ],
+      "name": "ConcludeFatalError",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "predictionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "marketHandler",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "trader",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "int256",
+          "name": "amountYes",
+          "type": "int256"
+        },
+        {
+          "indexed": false,
+          "internalType": "int256",
+          "name": "amountNo",
+          "type": "int256"
+        }
+      ],
+      "name": "HandlerProgress",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "predictionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "marketHandler",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "PredictionCreated",
+      "type": "event"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "inputs": [],
+      "name": "PLATFORM_FEE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_predictionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "_vote",
+          "type": "bool"
+        }
+      ],
+      "name": "concludePrediction_2",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_tokenSymbol",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "_proxyAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_isAbove",
+          "type": "bool"
+        },
+        {
+          "internalType": "int224",
+          "name": "_targetPricePoint",
+          "type": "int224"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_fee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_deadline",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_basePrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_caller",
+          "type": "address"
+        }
+      ],
+      "name": "createPrediction",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_predictionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPrediction",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "tokenSymbol",
+              "type": "string"
+            },
+            {
+              "internalType": "int224",
+              "name": "targetPricePoint",
+              "type": "int224"
+            },
+            {
+              "internalType": "bool",
+              "name": "isAbove",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "proxyAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "fee",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "isActive",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "marketHandler",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct Prediction",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_predictionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getProxyAddressForPrediction",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_settlement",
+          "type": "address"
+        }
+      ],
+      "name": "setSettlementAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_vault",
+          "type": "address"
+        }
+      ],
+      "name": "setVaultAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "settlementAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_caller",
+          "type": "address"
+        },
+        {
+          "internalType": "int256",
+          "name": "_amountYes",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "_amountNo",
+          "type": "int256"
+        }
+      ],
+      "name": "trackProgress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "vaultAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0x2a5447844089559beef075224f1d21ac5ed51ad4ec66e9817b9bf94d2358ca56",
+  "receipt": {
+    "to": null,
+    "from": "0x22b4fD82537573614340314f29bCb2fab182f409",
+    "contractAddress": "0x6eB12E326f5bB56F668E48820F8f34536F812326",
+    "transactionIndex": 3,
+    "gasUsed": "3489580",
+    "logsBloom": "0x00000000010000000000000000000000000000000000000000800810000000000000000000000020000000000000000000008000000000000000000000000000000000000000000000000000000000800001000000000000000100000000000000000000020000000000000000000800000000000000000080000000000000400000000000000000000000000000000000000000000000000000000000000000200000000000000000400000000000000000000000000000000000000000004000000000000000000001000000000000000000002000000000100000001020000000000000000000000000000000000000000040000000000000100000100000",
+    "blockHash": "0x2a53f455b5c4a571423614ecbfafafc2995cc1a14bafe975039ec93eecfe1803",
+    "transactionHash": "0x2a5447844089559beef075224f1d21ac5ed51ad4ec66e9817b9bf94d2358ca56",
+    "logs": [
+      {
+        "transactionIndex": 3,
+        "blockNumber": 37733437,
+        "transactionHash": "0x2a5447844089559beef075224f1d21ac5ed51ad4ec66e9817b9bf94d2358ca56",
+        "address": "0x6eB12E326f5bB56F668E48820F8f34536F812326",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x00000000000000000000000022b4fd82537573614340314f29bcb2fab182f409"
+        ],
+        "data": "0x",
+        "logIndex": 6,
+        "blockHash": "0x2a53f455b5c4a571423614ecbfafafc2995cc1a14bafe975039ec93eecfe1803"
+      },
+      {
+        "transactionIndex": 3,
+        "blockNumber": 37733437,
+        "transactionHash": "0x2a5447844089559beef075224f1d21ac5ed51ad4ec66e9817b9bf94d2358ca56",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x00000000000000000000000022b4fd82537573614340314f29bcb2fab182f409",
+          "0x000000000000000000000000f903ba9e006193c1527bfbe65fe2123704ea3f99"
+        ],
+        "data": "0x000000000000000000000000000000000000000000000000001298a1bc791400000000000000000000000000000000000000000000000000115d7a14bb9a63f5000000000000000000000000000000000000000000000fd4748b793ecb5dffe2000000000000000000000000000000000000000000000000114ae172ff214ff5000000000000000000000000000000000000000000000fd4749e11e087d713e2",
+        "logIndex": 7,
+        "blockHash": "0x2a53f455b5c4a571423614ecbfafafc2995cc1a14bafe975039ec93eecfe1803"
+      }
+    ],
+    "blockNumber": 37733437,
+    "cumulativeGasUsed": "6534820",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x31a0EDA48F467105EF31909465a7403d2e657bCC"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "931781c410f71d6a72a66438dbd0c2f9",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.18+commit.87f61d96\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_usdc\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"PM_InsufficientApprovedAmount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"predictionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"isAbove\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"int224\",\"name\":\"priceReading\",\"type\":\"int224\"},{\"indexed\":false,\"internalType\":\"int224\",\"name\":\"priceTarget\",\"type\":\"int224\"}],\"name\":\"ConcludeFatalError\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"predictionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"marketHandler\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"trader\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"amountYes\",\"type\":\"int256\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"amountNo\",\"type\":\"int256\"}],\"name\":\"HandlerProgress\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"predictionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"marketHandler\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"creator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"PredictionCreated\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[],\"name\":\"PLATFORM_FEE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_predictionId\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"_vote\",\"type\":\"bool\"}],\"name\":\"concludePrediction_2\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_tokenSymbol\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"_proxyAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_isAbove\",\"type\":\"bool\"},{\"internalType\":\"int224\",\"name\":\"_targetPricePoint\",\"type\":\"int224\"},{\"internalType\":\"uint256\",\"name\":\"_fee\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_basePrice\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_caller\",\"type\":\"address\"}],\"name\":\"createPrediction\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_predictionId\",\"type\":\"uint256\"}],\"name\":\"getPrediction\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"tokenSymbol\",\"type\":\"string\"},{\"internalType\":\"int224\",\"name\":\"targetPricePoint\",\"type\":\"int224\"},{\"internalType\":\"bool\",\"name\":\"isAbove\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"proxyAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"fee\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"marketHandler\",\"type\":\"address\"}],\"internalType\":\"struct Prediction\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_predictionId\",\"type\":\"uint256\"}],\"name\":\"getProxyAddressForPrediction\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_settlement\",\"type\":\"address\"}],\"name\":\"setSettlementAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_vault\",\"type\":\"address\"}],\"name\":\"setVaultAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"settlementAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_id\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_caller\",\"type\":\"address\"},{\"internalType\":\"int256\",\"name\":\"_amountYes\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"_amountNo\",\"type\":\"int256\"}],\"name\":\"trackProgress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vaultAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"events\":{\"ConcludeFatalError(uint256,uint256,bool,int224,int224)\":{\"params\":{\"isAbove\":\"The target orice was supposed to be above a set limit.\",\"predictionId\":\"The unique identifier of the prediction.\",\"priceReading\":\"The current price reading provided by a dAPI.\",\"priceTarget\":\"The target point that was the base for a prediction.\",\"timestamp\":\"The timestamp when conclude failed.\"}},\"PredictionCreated(uint256,address,address,uint256)\":{\"params\":{\"creator\":\"The creator responsible for creating the prediction.\",\"marketHandler\":\"The address of the MarketHandler that enables the prediction to be traded upon.\",\"predictionId\":\"The unique identifier of the prediction.\",\"timestamp\":\"The timestamp when the prediction was created to be traded upon.\"}}},\"kind\":\"dev\",\"methods\":{\"concludePrediction_2(uint256,bool)\":{\"params\":{\"_predictionId\":\"The unique identifier for each prediction created.\",\"_vote\":\"The final result of the prediction. vote - True : The target price was predicted to be BELOW/ABOVE a threshold AND IS BELOW/ABOVE the threshold respectively. vote - False : The target price was predicted to be BELOW/ABOVE a threshold BUT IS ABOVE/BELOW the threshold respectively.\"}},\"constructor\":{\"params\":{\"_usdc\":\"The payment token address.\"}},\"createPrediction(string,address,bool,int224,uint256,uint256,uint256,address)\":{\"params\":{\"_basePrice\":\"The minimum cost of one 'Yes' or 'No' token for the prediction market to be created. Is a multiple of 0.01 USD or 1 cent.\",\"_caller\":\"The address that is responsible for paying the platform a set fee and create a new prediction people can bet upon.\",\"_deadline\":\"The timestamp when the target and current price are to be checked against.\",\"_fee\":\"Set platform fee for a given prediction.\",\"_isAbove\":\"True if for a prediction the price will go above a set limit and false if otherwise.\",\"_proxyAddress\":\"The proxy address provided by API3's dAPIs for the _tokenSymbol asset.\",\"_tokenSymbol\":\"The symbol to represent the asset we are prediction upon. Eg : BTC / ETH / XRP etc.\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"trackProgress(uint256,address,int256,int256)\":{\"details\":\"Is important since its harder to track each market handler on 'The Graph' separately.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"events\":{\"ConcludeFatalError(uint256,uint256,bool,int224,int224)\":{\"notice\":\"To track if for some reason a certain prediction was not able to be concluded.\"},\"PredictionCreated(uint256,address,address,uint256)\":{\"notice\":\"Event to declare a prediction market is available to be traded.\"}},\"kind\":\"user\",\"methods\":{\"PLATFORM_FEE()\":{\"notice\":\"To avoid DDOS by adding some cost to the creation. Can't be changed once defined.\"},\"concludePrediction_2(uint256,bool)\":{\"notice\":\"Called by the Settlement contract which concludes the prediction and returns the vote i.e if the prediction was in the favour of 'Yes' or 'No'.\"},\"createPrediction(string,address,bool,int224,uint256,uint256,uint256,address)\":{\"notice\":\"Called by the owner on behalf of the _caller and create a market for them.Step necessary to make sure all the parameters are vaild and are true with no manipulation.\"},\"getPrediction(uint256)\":{\"notice\":\"Getter functions ------\"},\"setSettlementAddress(address)\":{\"notice\":\"Setter functions ------\"},\"settlementAddress()\":{\"notice\":\"The address that starts the chain of concluding a prediction.\"},\"trackProgress(uint256,address,int256,int256)\":{\"notice\":\"SPECIAL FUNCTION ====================================================Function provided to act as an aggregator and help track all the things that are happening on all of its child market handlers.\"},\"vaultAddress()\":{\"notice\":\"The address responsible for storing the funds collected.\"}},\"notice\":\"The centre point of Settlement and each new Market Handler\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/common/Trading.sol\":\"PredictionMarket\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":1000},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.7.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * By default, the owner account will be the one that deploys the contract. This\\n * can later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor() {\\n        _transferOwnership(_msgSender());\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        require(owner() == _msgSender(), \\\"Ownable: caller is not the owner\\\");\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby removing any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Counters.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/Counters.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @title Counters\\n * @author Matt Condon (@shrugs)\\n * @dev Provides counters that can only be incremented, decremented or reset. This can be used e.g. to track the number\\n * of elements in a mapping, issuing ERC721 ids, or counting request ids.\\n *\\n * Include with `using Counters for Counters.Counter;`\\n */\\nlibrary Counters {\\n    struct Counter {\\n        // This variable should never be directly accessed by users of the library: interactions must be restricted to\\n        // the library's function. As of Solidity v0.5.2, this cannot be enforced, though there is a proposal to add\\n        // this feature: see https://github.com/ethereum/solidity/issues/4637\\n        uint256 _value; // default: 0\\n    }\\n\\n    function current(Counter storage counter) internal view returns (uint256) {\\n        return counter._value;\\n    }\\n\\n    function increment(Counter storage counter) internal {\\n        unchecked {\\n            counter._value += 1;\\n        }\\n    }\\n\\n    function decrement(Counter storage counter) internal {\\n        uint256 value = counter._value;\\n        require(value > 0, \\\"Counter: decrement overflow\\\");\\n        unchecked {\\n            counter._value = value - 1;\\n        }\\n    }\\n\\n    function reset(Counter storage counter) internal {\\n        counter._value = 0;\\n    }\\n}\\n\",\"keccak256\":\"0xf0018c2440fbe238dd3a8732fa8e17a0f9dce84d31451dc8a32f6d62b349c9f1\",\"license\":\"MIT\"},\"contracts/common/IERC20.sol\":{\"content\":\"//SPDX-License-Identifier:MIT\\n\\npragma solidity ^0.8.0;\\n\\ninterface IERC20 {\\n    function decimals() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the amount of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the amount of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves `amount` tokens from the caller's account to `recipient`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(\\n        address recipient,\\n        uint256 amount\\n    ) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(\\n        address owner,\\n        address spender\\n    ) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * ////IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Moves `amount` tokens from `sender` to `recipient` using the\\n     * allowance mechanism. `amount` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(\\n        address sender,\\n        address recipient,\\n        uint256 amount\\n    ) external returns (bool);\\n\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(\\n        address indexed owner,\\n        address indexed spender,\\n        uint256 value\\n    );\\n}\\n\",\"keccak256\":\"0x6a463f8e07a3ad9ee4e101b1cc58abff3e4a328cdf6c2743d0abb37a6ecaffed\",\"license\":\"MIT\"},\"contracts/common/Trading.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"../v1/MarketHandler.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/Context.sol\\\";\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/Counters.sol\\\";\\n\\n/// @notice Structure to represent a given Prediction.\\nstruct Prediction {\\n    string tokenSymbol; // The token symbol in question\\n    int224 targetPricePoint; // The target price point\\n    bool isAbove; // This boolean is responsible for defining if the prediction is below or above the price point\\n    address proxyAddress; // Address of the relevant proxy contract for each asset.\\n    uint256 fee; // 1 = 0.01%, 100 = 1%, Creator's cut which is further divided as a 20:80 ratio where 20% goes to the protcol and remaining is held by the prediction creator.\\n    uint256 timestamp; // Timestamp of the creation of prediction\\n    uint256 deadline; // Timestamp when the prediction is to end\\n    bool isActive; // Check if the prediction is open or closed\\n    address marketHandler; // The contract responsible for betting on the prediction.\\n}\\n\\n/// @notice Error codes\\nerror PM_Conclude_Failed();\\n\\n/// @notice The centre point of Settlement and each new Market Handler\\ncontract PredictionMarket is Context, Ownable {\\n    /// @notice Counter to track each new prediction\\n    using Counters for Counters.Counter;\\n    Counters.Counter private nextPredictionId;\\n\\n    /// @notice To avoid DDOS by adding some cost to the creation. Can't be changed once defined.\\n    uint256 public constant PLATFORM_FEE = 50 * 10 ** 6;\\n\\n    /// @notice Mapping to track each Prediction with a unique Id.\\n    mapping(uint256 => Prediction) private predictions;\\n    /// @notice Mapping to track each Prediction's API3 dAPI proxy address. Only set in a function available\\n    /// to the owner to restrict any other address from creating a pseudo prediction and manipulate it how they see fit.\\n    mapping(uint256 => address) private predictionIdToProxy;\\n\\n    /// @notice To blacklist a certain address and disable their market creation feature.\\n    mapping(address => bool) private blacklisted;\\n\\n    /// @notice Event to declare a prediction market is available to be traded.\\n    /// @param predictionId The unique identifier of the prediction.\\n    /// @param marketHandler The address of the MarketHandler that enables the prediction to be traded upon.\\n    /// @param creator The creator responsible for creating the prediction.\\n    /// @param timestamp The timestamp when the prediction was created to be traded upon.\\n    event PredictionCreated(\\n        uint256 indexed predictionId,\\n        address indexed marketHandler,\\n        address indexed creator,\\n        uint256 timestamp\\n    );\\n\\n    /// @dev WILL ADD A BACKUP FORCE_CONCLUDE() TO MAKE SURE IF BECAUSE OF SOME ERROR A CERTAIN PREDICTION WASN'T ABLE\\n    /// @dev TO BE CONCLUDED EVEN AFTER ALL CONDITIONS PASS THE OWNER WILL STILL BE ABLE TO FORCE THE PREDICTION TO BE\\n    /// @dev CONCLUDED AND ALLOW THE PARTICIPANTS TO WITHDRAW THEIR REWARDS.\\n\\n    /// @notice To track if for some reason a certain prediction was not able to be concluded.\\n    /// @param predictionId The unique identifier of the prediction.\\n    /// @param isAbove The target orice was supposed to be above a set limit.\\n    /// @param timestamp The timestamp when conclude failed.\\n    /// @param priceReading The current price reading provided by a dAPI.\\n    /// @param priceTarget The target point that was the base for a prediction.\\n    event ConcludeFatalError(\\n        uint256 indexed predictionId,\\n        uint256 timestamp,\\n        bool isAbove,\\n        int224 priceReading,\\n        int224 priceTarget\\n    );\\n\\n    event HandlerProgress(\\n        uint256 indexed predictionId,\\n        address indexed marketHandler,\\n        address indexed trader,\\n        int256 amountYes,\\n        int256 amountNo\\n    );\\n\\n    /// @notice The payment token interface\\n    IERC20 immutable I_USDC_CONTRACT;\\n\\n    /// @notice The address that starts the chain of concluding a prediction.\\n    address public settlementAddress;\\n    /// @notice The address responsible for storing the funds collected.\\n    address public vaultAddress;\\n\\n    /// @notice Check if the address calling the function is the settlementAddress or not\\n    modifier callerIsSettlement(address _caller) {\\n        require(_caller == settlementAddress);\\n        _;\\n    }\\n\\n    modifier callerIsMarketHandler(uint256 _id, address _caller) {\\n        address marketHandlerAddress = predictions[_id].marketHandler;\\n        if (marketHandlerAddress == address(0))\\n            revert(\\\"Invalid Prediction Id!\\\");\\n        if (marketHandlerAddress != _caller)\\n            revert(\\\"Caller is not the market handler.\\\");\\n        _;\\n    }\\n\\n    /// @param _usdc The payment token address.\\n    constructor(address _usdc) {\\n        I_USDC_CONTRACT = IERC20(_usdc);\\n\\n        nextPredictionId.increment();\\n    }\\n\\n    /// @notice Called by the owner on behalf of the _caller and create a market for them.\\n    /// @notice Step necessary to make sure all the parameters are vaild and are true with no manipulation.\\n    /// @param _tokenSymbol The symbol to represent the asset we are prediction upon. Eg : BTC / ETH / XRP etc.\\n    /// @param _proxyAddress The proxy address provided by API3's dAPIs for the _tokenSymbol asset.\\n    /// @param _isAbove True if for a prediction the price will go above a set limit and false if otherwise.\\n    /// @param _fee Set platform fee for a given prediction.\\n    /// @param _deadline The timestamp when the target and current price are to be checked against.\\n    /// @param _basePrice The minimum cost of one 'Yes' or 'No' token for the prediction market to be created.\\n    /// Is a multiple of 0.01 USD or 1 cent.\\n    /// @param _caller The address that is responsible for paying the platform a set fee and create a new prediction\\n    /// people can bet upon.\\n    function createPrediction(\\n        string memory _tokenSymbol,\\n        address _proxyAddress,\\n        bool _isAbove,\\n        int224 _targetPricePoint,\\n        uint256 _fee,\\n        uint256 _deadline,\\n        uint256 _basePrice,\\n        address _caller\\n    ) external onlyOwner returns (uint256) {\\n        require(\\n            I_USDC_CONTRACT.allowance(_caller, address(this)) >= PLATFORM_FEE,\\n            \\\"Allowance not set!\\\"\\n        );\\n        require(\\n            _proxyAddress != address(0),\\n            \\\"Can't have address zero as the proxy's address.\\\"\\n        );\\n\\n        uint256 predictionId = nextPredictionId.current();\\n        Prediction memory prediction = predictions[predictionId];\\n\\n        require(prediction.timestamp == 0, \\\"Prediction already exists.\\\");\\n\\n        bool success = I_USDC_CONTRACT.transferFrom(\\n            _caller,\\n            address(this),\\n            PLATFORM_FEE\\n        );\\n        if (!success) revert PM_InsufficientApprovedAmount();\\n\\n        PM_MarketHandler predictionMH = new PM_MarketHandler(\\n            predictionId,\\n            _fee,\\n            _deadline,\\n            _basePrice,\\n            address(I_USDC_CONTRACT),\\n            vaultAddress\\n        );\\n\\n        Prediction memory toAdd = Prediction({\\n            tokenSymbol: _tokenSymbol,\\n            targetPricePoint: _targetPricePoint,\\n            isAbove: _isAbove,\\n            proxyAddress: _proxyAddress,\\n            fee: _fee,\\n            timestamp: block.timestamp,\\n            deadline: _deadline,\\n            marketHandler: address(predictionMH),\\n            isActive: true\\n        });\\n\\n        predictions[predictionId] = toAdd;\\n        predictionIdToProxy[predictionId] = _proxyAddress;\\n\\n        nextPredictionId.increment();\\n\\n        emit PredictionCreated(\\n            predictionId,\\n            address(predictionMH),\\n            _caller,\\n            block.timestamp\\n        );\\n        return predictionId;\\n    }\\n\\n    /// @notice Called by the Settlement contract which concludes the prediction and returns the vote i.e if the\\n    /// prediction was in the favour of 'Yes' or 'No'.\\n    /// @param _predictionId The unique identifier for each prediction created.\\n    /// @param _vote The final result of the prediction.\\n    /// vote - True : The target price was predicted to be BELOW/ABOVE a threshold AND IS BELOW/ABOVE the threshold respectively.\\n    /// vote - False : The target price was predicted to be BELOW/ABOVE a threshold BUT IS ABOVE/BELOW the threshold respectively.\\n    function concludePrediction_2(\\n        uint256 _predictionId,\\n        bool _vote\\n    ) external callerIsSettlement(_msgSender()) {\\n        require(predictions[_predictionId].deadline > block.timestamp);\\n\\n        address associatedMHAddress = predictions[_predictionId].marketHandler;\\n        IMarketHandler mhInstance = IMarketHandler(associatedMHAddress);\\n\\n        mhInstance.concludePrediction_3(_vote);\\n    }\\n\\n    /// @notice Setter functions ------\\n    function setSettlementAddress(address _settlement) external onlyOwner {\\n        settlementAddress = _settlement;\\n    }\\n\\n    function setVaultAddress(address _vault) external onlyOwner {\\n        vaultAddress = _vault;\\n    }\\n\\n    /// @notice Getter functions ------\\n    function getPrediction(\\n        uint256 _predictionId\\n    ) external view returns (Prediction memory) {\\n        return predictions[_predictionId];\\n    }\\n\\n    function getProxyAddressForPrediction(\\n        uint256 _predictionId\\n    ) external view returns (address) {\\n        return predictionIdToProxy[_predictionId];\\n    }\\n\\n    /// SPECIAL FUNCTION ====================================================\\n    ///\\n    ///\\n    /// @notice Function provided to act as an aggregator and help track all the things that are happening on\\n    /// all of its child market handlers.\\n    /// @dev Is important since its harder to track each market handler on 'The Graph' separately.\\n    function trackProgress(\\n        uint256 _id,\\n        address _caller,\\n        int256 _amountYes,\\n        int256 _amountNo\\n    ) external callerIsMarketHandler(_id, _msgSender()) {\\n        address marketHandlerAddress = predictions[_id].marketHandler;\\n        emit HandlerProgress(\\n            _id,\\n            marketHandlerAddress,\\n            _caller,\\n            _amountYes,\\n            _amountNo\\n        );\\n    }\\n\\n    receive() external payable {}\\n\\n    fallback() external payable {}\\n}\\n\",\"keccak256\":\"0x3ce3b58f028cbd608a7e65622a0f7c34670f29a722f3c157d83059c456983db0\",\"license\":\"MIT\"},\"contracts/v1/IMarketHandler.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\n\\ninterface IMarketHandler {\\n    function swapTokenNoWithYes(uint256) external;\\n\\n    function swapTokenYesWithNo(uint256) external;\\n\\n    function buyNoToken(uint256) external;\\n\\n    function buyYesToken(uint256) external;\\n\\n    function sellNoToken(uint256) external;\\n\\n    function sellYesToken(uint256) external;\\n\\n    function concludePrediction_3(bool winner) external;\\n}\\n\",\"keccak256\":\"0x52aded2514f9ec42151bff9aa4192c219deaa2bd97a424100939ec05d23f1907\",\"license\":\"MIT\"},\"contracts/v1/ITrading.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)\\n\\npragma solidity ^0.8.0;\\n\\ninterface ITrading {\\n    function trackProgress(\\n        uint256 _id,\\n        address _caller,\\n        int256 _amountYes,\\n        int256 _amountNo\\n    ) external;\\n}\\n\",\"keccak256\":\"0xa213c0002892e3a791ab97da8821665fec21b0c87328e38d995bf82866d1cbd5\",\"license\":\"MIT\"},\"contracts/v1/MarketHandler.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\n// import \\\"@openzeppelin/contracts/token/ERC20/IERC20.sol\\\";\\nimport \\\"./IMarketHandler.sol\\\";\\nimport \\\"./ITrading.sol\\\";\\nimport \\\"../common/IERC20.sol\\\";\\n\\nimport \\\"@openzeppelin/contracts/utils/Context.sol\\\";\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/Counters.sol\\\";\\n\\nerror PM_IsClosedForTrading();\\nerror PM_IsOpenForTrading();\\nerror PM_InsufficientApprovedAmount();\\nerror PM_TokenTransferFailed();\\nerror PM_InsufficienTradeTokens();\\nerror PM_InvalidAmountSet();\\nerror PM_RewardsNotAvailable();\\nerror PM_RewardAlreadyCollected();\\nerror PM_UserDidNotWin();\\n\\n/// @notice Responsible for all the trading activity for a prediction created.\\ncontract PM_MarketHandler is Context, Ownable, IMarketHandler {\\n    using Counters for Counters.Counter;\\n\\n    // reserveUSDC - reserveFEE = reserveYes + reserveNo\\n    /// @notice Total USDC collected.\\n    uint256 public reserveUSDC;\\n    /// @notice Total platform fee collected so far.\\n    uint256 public reserveFEE;\\n    /// @notice Total USDC collected against Yes tokens.\\n    uint256 public reserveYes;\\n    /// @notice Total USDC collected against No tokens.\\n    uint256 public reserveNo;\\n\\n    /// @notice If rewards are ready to be claimed.\\n    bool public RewardsClaimable;\\n\\n    /// @notice The context of the side that won.\\n    bool public winner;\\n\\n    /// @notice The id alloted in the Trading contract for each prediction as predictionId.\\n    uint256 public immutable I_SELF_ID;\\n    /// @notice Price of 1 token of either side. Is a multiple of 10**4.\\n    uint256 public immutable I_BASE_PRICE;\\n    /// @notice When the market will close down.\\n    uint256 public immutable I_DEADLINE;\\n    /// @notice The decimal value set in the payment token. Is required to calculate the fee during any trading activity.\\n    uint256 public immutable I_DECIMALS;\\n\\n    /// 100% = 10**decimals(), 0.1% = 10**decimals()/1000.\\n    /// This is the total fee and this further divided between the creator and the platform.\\n    uint256 public immutable I_FEE;\\n\\n    /// @notice The interface for the payment token.\\n    IERC20 public immutable I_USDC_CONTRACT;\\n    /// @notice The vault address.\\n    address private I_VAULT_ADDRESS;\\n\\n    ITrading private I_TRADING_CONTRACT;\\n\\n    /// @notice Variables to track the 'Yes' token and its holders\\n    /// @notice The current valid index where new address is to be pushed in the yesHolders array.\\n    Counters.Counter private yesIndex;\\n    ///@notice The array that holds all the address in possession of 'Yes' token.\\n    address[] private yesHolders;\\n    /// @notice Get the index of an address in the yesHolders array\\n    mapping(address => uint256) private yesTokenAddressToIndex;\\n    /// @notice Track the amount of 'Yes' tokens held by an address\\n    mapping(address => uint256) private YesBalances;\\n\\n    /// @notice SAME AS ABOVE BUT FOR 'NO' TOKENS.\\n    Counters.Counter private noIndex;\\n    address[] private noHolders;\\n    mapping(address => uint256) private noTokenAddressToIndex;\\n    mapping(address => uint256) private NoBalances;\\n\\n    /// @notice Check if a user collected their rewards to disable multiple withdrawls\\n    mapping(address => bool) private rewardCollected;\\n\\n    // Events\\n    /// @notice When a trader swaps their 'Yes' for 'No' or vica versa.\\n    event SwapOrder(address indexed trader, int256 amountYes, int256 amountNo);\\n    /// @notice When a trader buys a token either 'Yes' or 'No'.\\n    event BuyOrder(address indexed trader, uint256 amountYes, uint256 amountNo);\\n    /// @notice When a trader is looking to withdraw from the prediction and collected their invested amount.\\n    event SellOrder(\\n        address indexed trader,\\n        uint256 amountYes,\\n        uint256 amountNo\\n    );\\n    /// @notice The bool value the tells the nature of the prediction result.\\n    event WinnerDeclared(bool winner);\\n    /// @notice When a trader successfully collect their rewards.\\n    event RewardCollected(address indexed user, uint256 amountWon);\\n\\n    /// @notice Check if the collectRewards is open to be called by the winners.\\n    modifier isClaimable() {\\n        if (!RewardsClaimable) revert PM_RewardsNotAvailable();\\n        _;\\n    }\\n\\n    /// @notice Check if the market is Open for trades or not.\\n    modifier isOpen() {\\n        if (block.timestamp > I_DEADLINE) revert PM_IsClosedForTrading();\\n        _;\\n    }\\n\\n    /// @notice Check if the market is Closed for trades.\\n    modifier isClosed() {\\n        if (block.timestamp <= I_DEADLINE) revert PM_IsOpenForTrading();\\n        _;\\n    }\\n\\n    /// @param _id The unique predictionId set in the parent Trading contract.\\n    // _fee * 0.01% of the tokens regardless of the decimals value. Should be a natural number N.\\n    /// @param _fee The multiple of 0.01% to declare the final trading fee the platform collects.\\n    /// @param _deadline The timestamp upto which the market is open for trades.\\n    // 10**6 = 1 USDC, 10**4 = 0.01 USDC or 1 Cent. Therefore base price = A x 1 cent.\\n    /// @param _basePrice Multiple of 1 cent. Price of either of the token.\\n    /// @param _usdcTokenAddress The payment token address.\\n    /// @param _vaultAddress The vault address that will collect the reserveFEE on conclude.\\n    constructor(\\n        uint256 _id,\\n        uint256 _fee,\\n        uint256 _deadline,\\n        uint256 _basePrice,\\n        address _usdcTokenAddress,\\n        address _vaultAddress\\n    ) {\\n        I_TRADING_CONTRACT = ITrading(_msgSender());\\n\\n        I_SELF_ID = _id;\\n        I_BASE_PRICE = _basePrice * 10 ** 4;\\n        I_DEADLINE = _deadline;\\n        I_VAULT_ADDRESS = _vaultAddress;\\n        IERC20 usdcContract = IERC20(_usdcTokenAddress);\\n        I_USDC_CONTRACT = usdcContract;\\n        I_DECIMALS = 10 ** usdcContract.decimals();\\n        I_FEE = (_fee * 10 ** usdcContract.decimals()) / 10 ** 4;\\n\\n        yesIndex.increment();\\n        noHolders.push(address(0));\\n        noIndex.increment();\\n        yesHolders.push(address(0));\\n    }\\n\\n    /// @notice Function To Swap 'No' tokens for 'Yes' tokens.\\n    /// @param _amount The amount of tokens to swap. Is a natural number N.\\n    function swapTokenNoWithYes(uint256 _amount) external override isOpen {\\n        uint256 _amountToSwap = _amount * I_BASE_PRICE;\\n\\n        if (NoBalances[_msgSender()] < _amountToSwap)\\n            revert PM_InsufficienTradeTokens();\\n\\n        uint256 swapFee = getFee(_amountToSwap);\\n\\n        NoBalances[_msgSender()] -= _amountToSwap;\\n        reserveNo -= _amountToSwap;\\n        YesBalances[_msgSender()] += _amountToSwap - swapFee;\\n        reserveYes += _amountToSwap;\\n\\n        int256 amountYes = int256(_amountToSwap - swapFee);\\n        int256 amountNo = int256(_amountToSwap);\\n\\n        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);\\n        reserveFEE += swapFee;\\n\\n        I_TRADING_CONTRACT.trackProgress(\\n            I_SELF_ID,\\n            _msgSender(),\\n            int256(_amountToSwap),\\n            -1 * int256(_amountToSwap)\\n        );\\n        emit SwapOrder(_msgSender(), amountYes, -1 * amountNo);\\n    }\\n\\n    /// @notice SAME AS ABOVE BUT TO SWAP 'Yes' for 'No' tokens.\\n    function swapTokenYesWithNo(uint256 _amount) external override isOpen {\\n        uint256 _amountToSwap = _amount * I_BASE_PRICE;\\n\\n        if (YesBalances[_msgSender()] < _amountToSwap)\\n            revert PM_InsufficienTradeTokens();\\n\\n        uint256 swapFee = getFee(_amountToSwap);\\n\\n        NoBalances[_msgSender()] += _amountToSwap - swapFee;\\n        reserveNo += _amountToSwap;\\n        YesBalances[_msgSender()] -= _amountToSwap;\\n        reserveYes -= _amountToSwap;\\n\\n        int256 amountYes = int256(_amountToSwap);\\n        int256 amountNo = int256(_amountToSwap - swapFee);\\n\\n        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);\\n        reserveFEE += swapFee;\\n\\n        I_TRADING_CONTRACT.trackProgress(\\n            I_SELF_ID,\\n            _msgSender(),\\n            -1 * int256(_amountToSwap),\\n            int256(_amountToSwap)\\n        );\\n        emit SwapOrder(_msgSender(), -1 * amountYes, amountNo);\\n    }\\n\\n    /// @notice To enable the purchase of _amount of 'No' tokens. The total fee is based on _amount * I_BASE_PRICE.\\n    /// @param _amount Total tokens the trader is looking to buy.\\n    function buyNoToken(uint256 _amount) external override isOpen {\\n        if (_amount < 1) revert();\\n\\n        uint256 owedAmount = _amount * I_BASE_PRICE;\\n\\n        if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < owedAmount)\\n            revert PM_InsufficientApprovedAmount();\\n        bool success = I_USDC_CONTRACT.transferFrom(\\n            _msgSender(),\\n            address(this),\\n            owedAmount\\n        );\\n        if (!success) revert PM_TokenTransferFailed();\\n\\n        uint256 fee = getFee(owedAmount);\\n        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);\\n\\n        reserveFEE += fee;\\n        reserveUSDC += owedAmount - fee;\\n        reserveNo += owedAmount - fee;\\n\\n        uint256 finalAmount = owedAmount - fee;\\n        NoBalances[_msgSender()] += finalAmount;\\n\\n        if (noTokenAddressToIndex[_msgSender()] == 0) {\\n            uint256 index = noIndex.current();\\n\\n            noTokenAddressToIndex[_msgSender()] = index;\\n            noHolders.push(_msgSender());\\n\\n            noIndex.increment();\\n        }\\n\\n        I_TRADING_CONTRACT.trackProgress(\\n            I_SELF_ID,\\n            _msgSender(),\\n            0,\\n            int256(finalAmount)\\n        );\\n        emit BuyOrder(_msgSender(), 0, finalAmount);\\n    }\\n\\n    /// @notice SAME AS ABOVE BUT TO PURCHASE 'Yes' TOKENS.\\n    function buyYesToken(uint256 _amount) external override isOpen {\\n        if (_amount < 1) revert();\\n\\n        uint256 owedAmount = _amount * I_BASE_PRICE;\\n\\n        if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < owedAmount)\\n            revert PM_InsufficientApprovedAmount();\\n        bool success = I_USDC_CONTRACT.transferFrom(\\n            _msgSender(),\\n            address(this),\\n            owedAmount\\n        );\\n        if (!success) revert PM_TokenTransferFailed();\\n\\n        uint256 fee = getFee(owedAmount);\\n        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);\\n\\n        reserveFEE += fee;\\n        reserveUSDC += owedAmount - fee;\\n        reserveYes += owedAmount - fee;\\n\\n        uint256 finalAmount = owedAmount - fee;\\n        YesBalances[_msgSender()] += finalAmount;\\n\\n        if (yesTokenAddressToIndex[_msgSender()] == 0) {\\n            uint256 index = yesIndex.current();\\n\\n            yesTokenAddressToIndex[_msgSender()] = index;\\n            yesHolders.push(_msgSender());\\n\\n            yesIndex.increment();\\n        }\\n\\n        I_TRADING_CONTRACT.trackProgress(\\n            I_SELF_ID,\\n            _msgSender(),\\n            int256(finalAmount),\\n            0\\n        );\\n        emit BuyOrder(_msgSender(), finalAmount, 0);\\n    }\\n\\n    /// @notice Function that allows a trader to dump their tokens.\\n    /// @param _amount The amount of 'No' Tokens the trader is willing to dump.\\n    function sellNoToken(uint256 _amount) external override isOpen {\\n        uint256 totalAmount = _amount * I_BASE_PRICE;\\n\\n        if (NoBalances[_msgSender()] < totalAmount)\\n            revert PM_InvalidAmountSet();\\n\\n        uint256 fee = getFee(totalAmount);\\n        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);\\n        reserveFEE += fee;\\n\\n        uint256 toSend = totalAmount - fee;\\n        NoBalances[_msgSender()] -= totalAmount;\\n\\n        if (NoBalances[_msgSender()] == 0) {\\n            uint256 index = noTokenAddressToIndex[_msgSender()];\\n\\n            noHolders[index] = address(0);\\n            noTokenAddressToIndex[_msgSender()] = 0;\\n        }\\n\\n        bool success = I_USDC_CONTRACT.transfer(_msgSender(), toSend);\\n        if (!success) revert PM_TokenTransferFailed();\\n\\n        reserveUSDC -= totalAmount;\\n\\n        I_TRADING_CONTRACT.trackProgress(\\n            I_SELF_ID,\\n            _msgSender(),\\n            0,\\n            -1 * int256(toSend)\\n        );\\n        emit SellOrder(_msgSender(), 0, toSend);\\n    }\\n\\n    /// @notice SAME AS ABOVE BUT FOR 'Yes' TOKENS.\\n    function sellYesToken(uint256 _amount) external override isOpen {\\n        uint256 totalAmount = _amount * I_BASE_PRICE;\\n\\n        if (YesBalances[_msgSender()] < totalAmount)\\n            revert PM_InvalidAmountSet();\\n\\n        uint256 fee = getFee(totalAmount);\\n        I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);\\n        reserveFEE += fee;\\n\\n        uint256 toSend = totalAmount - fee;\\n        YesBalances[_msgSender()] -= totalAmount;\\n\\n        if (YesBalances[_msgSender()] == 0) {\\n            uint256 index = yesTokenAddressToIndex[_msgSender()];\\n\\n            yesHolders[index] = address(0);\\n            yesTokenAddressToIndex[_msgSender()] = 0;\\n        }\\n\\n        bool success = I_USDC_CONTRACT.transfer(_msgSender(), toSend);\\n        if (!success) revert PM_TokenTransferFailed();\\n\\n        reserveUSDC -= totalAmount;\\n\\n        I_TRADING_CONTRACT.trackProgress(\\n            I_SELF_ID,\\n            _msgSender(),\\n            -1 * int256(toSend),\\n            0\\n        );\\n        emit SellOrder(_msgSender(), toSend, 0);\\n    }\\n\\n    /// @notice The trading contract call this function for each individual prediction.\\n    /// Owner being the trading contract.\\n    /// @param vote The nature of the winning side.\\n    /// vote - True => Yes won\\n    /// vote - False => No won\\n    function concludePrediction_3(\\n        bool vote\\n    ) external override isClosed onlyOwner {\\n        winner = vote;\\n        emit WinnerDeclared(vote);\\n\\n        RewardsClaimable = true;\\n\\n        //// IGNORE THIS.\\n        // All the collected fee for the current prediction is sent back to the vault.\\n        // I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, reserveFEE);\\n    }\\n\\n    /// @notice The function each winner can call to get their share of the total pool.\\n    /// @notice Based on  how much was the initial pool of winner token and the final pool\\n    /// @notice being the sum of both the winner and losing side. The final cut of the user is based on the\\n    /// @notice amount of tokens they held of the winning side.\\n    function collectRewards() external isClaimable {\\n        if (rewardCollected[_msgSender()]) revert PM_RewardAlreadyCollected();\\n\\n        uint256 finalPool = reserveUSDC;\\n        uint256 initialPool;\\n        uint256 userTokenCount;\\n        uint256 userShare;\\n\\n        if (winner == true) {\\n            if (YesBalances[_msgSender()] == 0) revert PM_UserDidNotWin();\\n\\n            initialPool = reserveYes;\\n            userTokenCount = YesBalances[_msgSender()];\\n            YesBalances[_msgSender()] = 0;\\n        } else {\\n            if (NoBalances[_msgSender()] == 0) revert PM_UserDidNotWin();\\n\\n            initialPool = reserveNo;\\n            userTokenCount = NoBalances[_msgSender()];\\n            NoBalances[_msgSender()] = 0;\\n        }\\n\\n        // Calculate the final proportion of the pool they are rewarded.\\n        userShare = (userTokenCount * finalPool) / initialPool;\\n\\n        rewardCollected[_msgSender()] = true;\\n\\n        I_USDC_CONTRACT.transfer(_msgSender(), userShare);\\n        emit RewardCollected(_msgSender(), userShare);\\n    }\\n\\n    /// GETTER FUNCTIONS ==========================================\\n\\n    function getFee(uint256 _amount) public view returns (uint256) {\\n        return (_amount * I_FEE) / I_DECIMALS;\\n    }\\n\\n    function getNoReserve() external view returns (uint256) {\\n        return reserveNo;\\n    }\\n\\n    function getYesReserve() external view returns (uint256) {\\n        return reserveYes;\\n    }\\n\\n    function getYesTokenCount(address _add) external view returns (uint256) {\\n        return YesBalances[_add];\\n    }\\n\\n    function getNoTokenCount(address _add) external view returns (uint256) {\\n        return NoBalances[_add];\\n    }\\n\\n    receive() external payable {}\\n\\n    fallback() external payable {}\\n}\\n\",\"keccak256\":\"0xd2a813a3ea4e7056cad39617e9b5c71937be6a7ce39797c8e58cd4c5e9ba4e1d\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60a060405234801561001057600080fd5b5060405162003ec738038062003ec7833981016040819052610031916100bb565b61003a33610062565b6001600160a01b03811660805261005c60016100b2602090811b610ebe17901c565b506100eb565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80546001019055565b6000602082840312156100cd57600080fd5b81516001600160a01b03811681146100e457600080fd5b9392505050565b608051613db262000115600039600081816104140152818161073201526107e60152613db26000f3fe608060405260043610620000db5760003560e01c806385535cc51162000083578063dcb6b26a116200005d578063dcb6b26a1462000253578063f2fde38b1462000278578063f738c4a7146200029d578063fe83bece14620002bf57005b806385535cc514620001d45780638da5cb5b14620001f9578063d587d8af146200021957005b8063430bf08a11620000b5578063430bf08a146200015c578063715018a6146200019757806373a3cc2314620001af57005b80631f3372fe14620000e557806334849ead146200010a57806334fbc9a1146200014257005b36620000e357005b005b348015620000f257600080fd5b50620000e36200010436600462000faf565b620002f3565b3480156200011757600080fd5b506200012f6200012936600462001023565b620003c4565b6040519081526020015b60405180910390f35b3480156200014f57600080fd5b506200012f6302faf08081565b3480156200016957600080fd5b506006546200017e906001600160a01b031681565b6040516001600160a01b03909116815260200162000139565b348015620001a457600080fd5b50620000e362000ac2565b348015620001bc57600080fd5b50620000e3620001ce36600462001146565b62000ada565b348015620001e157600080fd5b50620000e3620001f336600462001146565b62000b13565b3480156200020657600080fd5b506000546001600160a01b03166200017e565b3480156200022657600080fd5b506200017e620002383660046200116b565b6000908152600360205260409020546001600160a01b031690565b3480156200026057600080fd5b50620000e36200027236600462001185565b62000b4c565b3480156200028557600080fd5b50620000e36200029736600462001146565b62000cb5565b348015620002aa57600080fd5b506005546200017e906001600160a01b031681565b348015620002cc57600080fd5b50620002e4620002de3660046200116b565b62000d4b565b6040516200013991906200120b565b60055433906001600160a01b031681146200030d57600080fd5b60008381526002602052604090206005015442106200032b57600080fd5b600083815260026020526040908190206006015490517f10d9350200000000000000000000000000000000000000000000000000000000815283151560048201526101009091046001600160a01b031690819081906310d9350290602401600060405180830381600087803b158015620003a457600080fd5b505af1158015620003b9573d6000803e3d6000fd5b505050505050505050565b6000620003d062000ec7565b6040517fdd62ed3e0000000000000000000000000000000000000000000000000000000081526001600160a01b0383811660048301523060248301526302faf080917f00000000000000000000000000000000000000000000000000000000000000009091169063dd62ed3e90604401602060405180830381865afa1580156200045e573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190620004849190620012b4565b1015620004d85760405162461bcd60e51b815260206004820152601260248201527f416c6c6f77616e6365206e6f742073657421000000000000000000000000000060448201526064015b60405180910390fd5b6001600160a01b038816620005565760405162461bcd60e51b815260206004820152602f60248201527f43616e277420686176652061646472657373207a65726f20617320746865207060448201527f726f7879277320616464726573732e00000000000000000000000000000000006064820152608401620004cf565b60006200056260015490565b9050600060026000838152602001908152602001600020604051806101200160405290816000820180546200059790620012ce565b80601f0160208091040260200160405190810160405280929190818152602001828054620005c590620012ce565b8015620006165780601f10620005ea5761010080835404028352916020019162000616565b820191906000526020600020905b815481529060010190602001808311620005f857829003601f168201915b50505091835250506001820154601b81900b602083015260ff600160e01b90910481161515604083015260028301546001600160a01b03908116606084015260038401546080840152600484015460a080850191909152600585015460c0850152600690940154918216151560e0840152610100918290041691015281015190915015620006e75760405162461bcd60e51b815260206004820152601a60248201527f50726564696374696f6e20616c7265616479206578697374732e0000000000006044820152606401620004cf565b6040517f23b872dd0000000000000000000000000000000000000000000000000000000081526001600160a01b0385811660048301523060248301526302faf08060448301526000917f0000000000000000000000000000000000000000000000000000000000000000909116906323b872dd906064016020604051808303816000875af11580156200077e573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190620007a491906200130a565b905080620007de576040517fca234f3900000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b6000838989897f0000000000000000000000000000000000000000000000000000000000000000600660009054906101000a90046001600160a01b0316604051620008299062000f80565b9586526020860194909452604085019290925260608401526001600160a01b0390811660808401521660a082015260c001604051809103906000f08015801562000877573d6000803e3d6000fd5b50905060006040518061012001604052808f81526020018c601b0b81526020018d151581526020018e6001600160a01b031681526020018b81526020014281526020018a8152602001600115158152602001836001600160a01b03168152509050806002600087815260200190815260200160002060008201518160000190816200090391906200137d565b5060208201518160010160006101000a8154817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff0219169083601b0b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff160217905550604082015181600101601c6101000a81548160ff02191690831515021790555060608201518160020160006101000a8154816001600160a01b0302191690836001600160a01b031602179055506080820151816003015560a0820151816004015560c0820151816005015560e08201518160060160006101000a81548160ff0219169083151502179055506101008201518160060160016101000a8154816001600160a01b0302191690836001600160a01b031602179055509050508c6003600087815260200190815260200160002060006101000a8154816001600160a01b0302191690836001600160a01b0316021790555062000a61600180546001019055565b866001600160a01b0316826001600160a01b0316867fbb3bfdf859a58dbd5ac3db4a321d1fe2147d29263ff3170cde87b25b906e1f604260405162000aa891815260200190565b60405180910390a450929c9b505050505050505050505050565b62000acc62000ec7565b62000ad8600062000f23565b565b62000ae462000ec7565b6005805473ffffffffffffffffffffffffffffffffffffffff19166001600160a01b0392909216919091179055565b62000b1d62000ec7565b6006805473ffffffffffffffffffffffffffffffffffffffff19166001600160a01b0392909216919091179055565b833360008281526002602052604090206006015461010090046001600160a01b03168062000bbd5760405162461bcd60e51b815260206004820152601660248201527f496e76616c69642050726564696374696f6e20496421000000000000000000006044820152606401620004cf565b816001600160a01b0316816001600160a01b03161462000c465760405162461bcd60e51b815260206004820152602160248201527f43616c6c6572206973206e6f7420746865206d61726b65742068616e646c657260448201527f2e000000000000000000000000000000000000000000000000000000000000006064820152608401620004cf565b60008781526002602090815260409182902060060154825188815291820187905261010090046001600160a01b03908116929089169183918b917faa4efaf794e3033902d020af57e79b057692c8db2827c81e7bebe89009630212910160405180910390a45050505050505050565b62000cbf62000ec7565b6001600160a01b03811662000d3d5760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f64647265737300000000000000000000000000000000000000000000000000006064820152608401620004cf565b62000d488162000f23565b50565b6040805161012081018252606080825260006020830181905292820183905281018290526080810182905260a0810182905260c0810182905260e08101829052610100810191909152600082815260026020526040908190208151610120810190925280548290829062000dbf90620012ce565b80601f016020809104026020016040519081016040528092919081815260200182805462000ded90620012ce565b801562000e3e5780601f1062000e125761010080835404028352916020019162000e3e565b820191906000526020600020905b81548152906001019060200180831162000e2057829003601f168201915b50505091835250506001820154601b81900b602083015260ff600160e01b90910481161515604083015260028301546001600160a01b03908116606084015260038401546080840152600484015460a0840152600584015460c0840152600690930154908116151560e08301526101009081900490921691015292915050565b80546001019055565b6000546001600160a01b0316331462000ad85760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152606401620004cf565b600080546001600160a01b0383811673ffffffffffffffffffffffffffffffffffffffff19831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b612932806200144b83390190565b801515811462000d4857600080fd5b803562000faa8162000f8e565b919050565b6000806040838503121562000fc357600080fd5b82359150602083013562000fd78162000f8e565b809150509250929050565b634e487b7160e01b600052604160045260246000fd5b80356001600160a01b038116811462000faa57600080fd5b8035601b81900b811462000faa57600080fd5b600080600080600080600080610100898b0312156200104157600080fd5b883567ffffffffffffffff808211156200105a57600080fd5b818b0191508b601f8301126200106f57600080fd5b81358181111562001084576200108462000fe2565b604051601f8201601f19908116603f01168101908382118183101715620010af57620010af62000fe2565b816040528281528e6020848701011115620010c957600080fd5b82602086016020830137600060208483010152809c505050505050620010f260208a0162000ff8565b96506200110260408a0162000f9d565b95506200111260608a0162001010565b94506080890135935060a0890135925060c089013591506200113760e08a0162000ff8565b90509295985092959890939650565b6000602082840312156200115957600080fd5b620011648262000ff8565b9392505050565b6000602082840312156200117e57600080fd5b5035919050565b600080600080608085870312156200119c57600080fd5b84359350620011ae6020860162000ff8565b93969395505050506040820135916060013590565b6000815180845260005b81811015620011eb57602081850181015186830182015201620011cd565b506000602082860101526020601f19601f83011685010191505092915050565b60208152600082516101208060208501526200122c610140850183620011c3565b91506020850151620012436040860182601b0b9052565b50604085015180151560608601525060608501516001600160a01b038116608086015250608085015160a085015260a085015160c085015260c085015160e085015260e08501516101006200129b8187018315159052565b909501516001600160a01b031693019290925250919050565b600060208284031215620012c757600080fd5b5051919050565b600181811c90821680620012e357607f821691505b6020821081036200130457634e487b7160e01b600052602260045260246000fd5b50919050565b6000602082840312156200131d57600080fd5b8151620011648162000f8e565b601f8211156200137857600081815260208120601f850160051c81016020861015620013535750805b601f850160051c820191505b8181101562001374578281556001016200135f565b5050505b505050565b815167ffffffffffffffff8111156200139a576200139a62000fe2565b620013b281620013ab8454620012ce565b846200132a565b602080601f831160018114620013ea5760008415620013d15750858301515b600019600386901b1c1916600185901b17855562001374565b600085815260208120601f198616915b828110156200141b57888601518255948401946001909101908401620013fa565b50858210156200143a5787850151600019600388901b60f8161c191681555b5050505050600190811b0190555056fe6101406040523480156200001257600080fd5b5060405162002932380380620029328339810160408190526200003591620002de565b620000403362000268565b600680546001600160a01b031916331790556080869052620000658361271062000351565b60a05260c0849052600580546001600160a01b03808416620100000262010000600160b01b03199092169190911790915582166101208190526040805163313ce56760e01b8152905184929163313ce5679160048083019260209291908290030181865afa158015620000dc573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019062000102919062000371565b6200010f90600a62000488565b60e08181525050612710816001600160a01b031663313ce5676040518163ffffffff1660e01b8152600401602060405180830381865afa15801562000158573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906200017e919062000371565b6200018b90600a62000488565b62000197908862000351565b620001a391906200049d565b6101008181525050620001c26007620002b860201b620020ca1760201c565b600c80546001810182556000919091527fdf6966c971051c3d54ec59162606531493a51404a002842f56009d7e5cf4a8c70180546001600160a01b03191690556200021a600b620002b8602090811b620020ca17901c565b5050600880546001810182556000919091527ff3f7a9fe364faab93b216da50a3214154f22a0a2b415b23a84c8169e8b636ee30180546001600160a01b031916905550620004c09350505050565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80546001019055565b80516001600160a01b0381168114620002d957600080fd5b919050565b60008060008060008060c08789031215620002f857600080fd5b865195506020870151945060408701519350606087015192506200031f60808801620002c1565b91506200032f60a08801620002c1565b90509295509295509295565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176200036b576200036b6200033b565b92915050565b6000602082840312156200038457600080fd5b5051919050565b600181815b80851115620003cc578160001904821115620003b057620003b06200033b565b80851615620003be57918102915b93841c939080029062000390565b509250929050565b600082620003e5575060016200036b565b81620003f4575060006200036b565b81600181146200040d5760028114620004185762000438565b60019150506200036b565b60ff8411156200042c576200042c6200033b565b50506001821b6200036b565b5060208310610133831016604e8410600b84101617156200045d575081810a6200036b565b6200046983836200038b565b80600019048211156200048057620004806200033b565b029392505050565b6000620004968383620003d4565b9392505050565b600082620004bb57634e487b7160e01b600052601260045260246000fd5b500490565b60805160a05160c05160e0516101005161012051612334620005fe60003960008181610528015281816107e201528181610b0501528181610ca701528181610de701528181611034015281816110f3015281816111ed015281816114e00152818161159f01528181611699015281816119e101528181611b210152611e560152600081816103ca015261209501526000818161022701526120710152600081816104f4015281816105ac0152818161066e01528181610bcc01528181610fae0152818161145a015281816119060152611ce80152600081816102bb015281816106b401528181610c1201528181611002015281816114ae0152818161194c0152611d2e0152600081816103040152818161087a01528181610ec8015281816113800152818161182c01528181611c020152611eee01526123346000f3fe6080604052600436106101a35760003560e01c8063b5d53709116100e0578063dfbf53ae11610084578063edd347cd11610061578063edd347cd14610516578063efdf3c171461054a578063f2fde38b1461056a578063fcee45f41461058a57005b8063dfbf53ae1461048d578063e1a51dff146104ac578063e8b2d47f146104e257005b8063c1ff549b116100bd578063c1ff549b14610417578063c87b502e14610437578063ca015b621461044d578063db29cd3d1461046d57005b8063b5d53709146103b8578063b6e35797146103ec578063b8fe4cfb1461040157005b806370bb45b31161014757806377ed46571161012457806377ed46571461033b5780638da5cb5b146103505780638fb182aa146103825780639473223e1461039857005b806370bb45b3146102dd57806370daf9a3146102f2578063715018a61461032657005b806353aaf54c1161018057806353aaf54c14610249578063578a68061461025f578063690aa8951461027f57806369d5bf6b146102a957005b806310d93502146101ac578063181a2ea1146101cc578063501ff1741461021557005b366101aa57005b005b3480156101b857600080fd5b506101aa6101c736600461218b565b6105aa565b3480156101d857600080fd5b506102026101e73660046121af565b6001600160a01b03166000908152600e602052604090205490565b6040519081526020015b60405180910390f35b34801561022157600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b34801561025557600080fd5b5061020260045481565b34801561026b57600080fd5b506101aa61027a3660046121d8565b61066c565b34801561028b57600080fd5b506005546102999060ff1681565b604051901515815260200161020c565b3480156102b557600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b3480156102e957600080fd5b506101aa610970565b3480156102fe57600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b34801561033257600080fd5b506101aa610bb6565b34801561034757600080fd5b50600354610202565b34801561035c57600080fd5b506000546001600160a01b03165b6040516001600160a01b03909116815260200161020c565b34801561038e57600080fd5b5061020260035481565b3480156103a457600080fd5b506101aa6103b33660046121d8565b610bca565b3480156103c457600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b3480156103f857600080fd5b50600454610202565b34801561040d57600080fd5b5061020260025481565b34801561042357600080fd5b506101aa6104323660046121d8565b610fac565b34801561044357600080fd5b5061020260015481565b34801561045957600080fd5b506101aa6104683660046121d8565b611458565b34801561047957600080fd5b506101aa6104883660046121d8565b611904565b34801561049957600080fd5b5060055461029990610100900460ff1681565b3480156104b857600080fd5b506102026104c73660046121af565b6001600160a01b03166000908152600a602052604090205490565b3480156104ee57600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b34801561052257600080fd5b5061036a7f000000000000000000000000000000000000000000000000000000000000000081565b34801561055657600080fd5b506101aa6105653660046121d8565b611ce6565b34801561057657600080fd5b506101aa6105853660046121af565b611fd8565b34801561059657600080fd5b506102026105a53660046121d8565b61206d565b7f00000000000000000000000000000000000000000000000000000000000000004211610603576040517fbfe082fc00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b61060b6120d3565b600580548215156101000261ff00199091161790556040517f029f9bb82bcc34b8fb93e2f45e19e0db433f6acd8b15ca883f0ef2143b58342c9061065490831515815260200190565b60405180910390a1506005805460ff19166001179055565b7f00000000000000000000000000000000000000000000000000000000000000004211156106ad5760405163700ec25b60e01b815260040160405180910390fd5b60006106d97f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600e602052604090205490915081111561070b576040516296118960e51b815260040160405180910390fd5b60006107168261206d565b336000908152600e602052604081208054929350849290919061073a90849061221e565b925050819055508160046000828254610753919061221e565b909155506107639050818361221e565b336000908152600a602052604081208054909190610782908490612231565b92505081905550816003600082825461079b9190612231565b90915550600090506107ad828461221e565b60055460405163a9059cbb60e01b8152620100009091046001600160a01b0390811660048301526024820185905291925084917f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af115801561082b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061084f9190612244565b5082600260008282546108629190612231565b90915550506006546001600160a01b031663dcb6b26a7f000000000000000000000000000000000000000000000000000000000000000033876108a781600019612261565b6040516001600160e01b031960e087901b16815260048101949094526001600160a01b03909216602484015260448301526064820152608401600060405180830381600087803b1580156108fa57600080fd5b505af115801561090e573d6000803e3d6000fd5b505050506109193390565b6001600160a01b03167fa19c60f7787bc349d4b0903c435f5372c0ec8bd2ac9878a60fbe838caee316668361095084600019612261565b604080519283526020830191909152015b60405180910390a25050505050565b60055460ff166109ac576040517f2ceb370f00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b336000908152600f602052604090205460ff16156109f6576040517f970f97c200000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b60018054600554909160009182918291610100900460ff1615159003610a6657336000908152600a60205260408120549003610a45576040516302ee147360e21b815260040160405180910390fd5b600354336000908152600a6020526040812080549190559093509150610ab2565b336000908152600e60205260408120549003610a95576040516302ee147360e21b815260040160405180910390fd5b600454336000908152600e60205260408120805491905590935091505b82610abd8584612207565b610ac791906122ad565b336000818152600f60209081526040808320805460ff19166001179055805163a9059cbb60e01b8152600481019490945260248401859052519394507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03169363a9059cbb936044808201949183900301908290875af1158015610b56573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610b7a9190612244565b5060405181815233907fe8354b169cd993d5cdfad1036a9a3f1ea7ed77e430bccb279200fd088243f5959060200160405180910390a250505050565b610bbe6120d3565b610bc8600061212d565b565b7f0000000000000000000000000000000000000000000000000000000000000000421115610c0b5760405163700ec25b60e01b815260040160405180910390fd5b6000610c377f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600a6020526040902054909150811115610c6a576040516327905ab760e21b815260040160405180910390fd5b6000610c758261206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015610cf0573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610d149190612244565b508060026000828254610d279190612231565b9091555060009050610d39828461221e565b336000908152600a6020526040812080549293508592909190610d5d90849061221e565b9091555050336000908152600a60205260408120549003610ddb57336000908152600960205260408120546008805491929183908110610d9f57610d9f6122cf565b600091825260208083209190910180546001600160a01b0319166001600160a01b03949094169390931790925533815260099091526040812055505b60006001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663a9059cbb336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152602481018590526044016020604051808303816000875af1158015610e5a573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610e7e9190612244565b905080610e9e5760405163c98df4e360e01b815260040160405180910390fd5b8360016000828254610eb0919061221e565b90915550506006546001600160a01b031663dcb6b26a7f000000000000000000000000000000000000000000000000000000000000000033610ef486600019612261565b6040516001600160e01b031960e086901b16815260048101939093526001600160a01b039091166024830152604482015260006064820152608401600060405180830381600087803b158015610f4957600080fd5b505af1158015610f5d573d6000803e3d6000fd5b50505050610f683390565b6001600160a01b03167fcbc0df49dd88ec0ba5b87a3c77ed66af6480b175df0f21649805ed6201c56145836000604051610961929190918252602082015260400190565b7f0000000000000000000000000000000000000000000000000000000000000000421115610fed5760405163700ec25b60e01b815260040160405180910390fd5b6001811015610ffb57600080fd5b60006110277f000000000000000000000000000000000000000000000000000000000000000083612207565b9050806001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663dd62ed3e336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604401602060405180830381865afa1580156110a4573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906110c891906122e5565b10156110e75760405163ca234f3960e01b815260040160405180910390fd5b60006001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000166323b872dd336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604481018590526064016020604051808303816000875af115801561116c573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906111909190612244565b9050806111b05760405163c98df4e360e01b815260040160405180910390fd5b60006111bb8361206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015611236573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061125a9190612244565b50806002600082825461126d9190612231565b9091555061127d9050818461221e565b6001600082825461128e9190612231565b9091555061129e9050818461221e565b600460008282546112af9190612231565b90915550600090506112c1828561221e565b336000908152600e60205260408120805492935083929091906112e5908490612231565b9091555050336000908152600d6020526040812054900361136d57600061130b600b5490565b336000818152600d6020526040812092909255600c805460018082018355919093527fdf6966c971051c3d54ec59162606531493a51404a002842f56009d7e5cf4a8c790920180546001600160a01b0319169091179055600b80549091019055505b6006546001600160a01b031663dcb6b26a7f0000000000000000000000000000000000000000000000000000000000000000336040516001600160e01b031960e085901b16815260048101929092526001600160a01b031660248201526000604482015260648101849052608401600060405180830381600087803b1580156113f557600080fd5b505af1158015611409573d6000803e3d6000fd5b505050506114143390565b6001600160a01b03167fc28482fd780ce54c9bfc165ed6ce12f1e7e4e07dc6270292223ac3275818dd0d600083604051610961929190918252602082015260400190565b7f00000000000000000000000000000000000000000000000000000000000000004211156114995760405163700ec25b60e01b815260040160405180910390fd5b60018110156114a757600080fd5b60006114d37f000000000000000000000000000000000000000000000000000000000000000083612207565b9050806001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663dd62ed3e336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604401602060405180830381865afa158015611550573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061157491906122e5565b10156115935760405163ca234f3960e01b815260040160405180910390fd5b60006001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000166323b872dd336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604481018590526064016020604051808303816000875af1158015611618573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061163c9190612244565b90508061165c5760405163c98df4e360e01b815260040160405180910390fd5b60006116678361206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af11580156116e2573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906117069190612244565b5080600260008282546117199190612231565b909155506117299050818461221e565b6001600082825461173a9190612231565b9091555061174a9050818461221e565b6003600082825461175b9190612231565b909155506000905061176d828561221e565b336000908152600a6020526040812080549293508392909190611791908490612231565b90915550503360009081526009602052604081205490036118195760006117b760075490565b336000818152600960205260408120929092556008805460018082018355919093527ff3f7a9fe364faab93b216da50a3214154f22a0a2b415b23a84c8169e8b636ee390920180546001600160a01b0319169091179055600780549091019055505b6006546001600160a01b031663dcb6b26a7f0000000000000000000000000000000000000000000000000000000000000000336040516001600160e01b031960e085901b16815260048101929092526001600160a01b031660248201526044810184905260006064820152608401600060405180830381600087803b1580156118a157600080fd5b505af11580156118b5573d6000803e3d6000fd5b505050506118c03390565b6001600160a01b03167fc28482fd780ce54c9bfc165ed6ce12f1e7e4e07dc6270292223ac3275818dd0d826000604051610961929190918252602082015260400190565b7f00000000000000000000000000000000000000000000000000000000000000004211156119455760405163700ec25b60e01b815260040160405180910390fd5b60006119717f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600e60205260409020549091508111156119a4576040516327905ab760e21b815260040160405180910390fd5b60006119af8261206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015611a2a573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611a4e9190612244565b508060026000828254611a619190612231565b9091555060009050611a73828461221e565b336000908152600e6020526040812080549293508592909190611a9790849061221e565b9091555050336000908152600e60205260408120549003611b1557336000908152600d6020526040812054600c805491929183908110611ad957611ad96122cf565b600091825260208083209190910180546001600160a01b0319166001600160a01b039490941693909317909255338152600d9091526040812055505b60006001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663a9059cbb336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152602481018590526044016020604051808303816000875af1158015611b94573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611bb89190612244565b905080611bd85760405163c98df4e360e01b815260040160405180910390fd5b8360016000828254611bea919061221e565b90915550506006546001600160a01b031663dcb6b26a7f0000000000000000000000000000000000000000000000000000000000000000336000611c3087600019612261565b6040516001600160e01b031960e087901b16815260048101949094526001600160a01b03909216602484015260448301526064820152608401600060405180830381600087803b158015611c8357600080fd5b505af1158015611c97573d6000803e3d6000fd5b50505050611ca23390565b6001600160a01b03167fcbc0df49dd88ec0ba5b87a3c77ed66af6480b175df0f21649805ed6201c56145600084604051610961929190918252602082015260400190565b7f0000000000000000000000000000000000000000000000000000000000000000421115611d275760405163700ec25b60e01b815260040160405180910390fd5b6000611d537f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600a6020526040902054909150811115611d85576040516296118960e51b815260040160405180910390fd5b6000611d908261206d565b9050611d9c818361221e565b336000908152600e602052604081208054909190611dbb908490612231565b925050819055508160046000828254611dd49190612231565b9091555050336000908152600a602052604081208054849290611df890849061221e565b925050819055508160036000828254611e11919061221e565b909155508290506000611e24838361221e565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018690529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015611e9f573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611ec39190612244565b508260026000828254611ed69190612231565b90915550506006546001600160a01b031663dcb6b26a7f000000000000000000000000000000000000000000000000000000000000000033611f1a88600019612261565b6040516001600160e01b031960e086901b16815260048101939093526001600160a01b039091166024830152604482015260648101879052608401600060405180830381600087803b158015611f6f57600080fd5b505af1158015611f83573d6000803e3d6000fd5b50505050611f8e3390565b6001600160a01b03167fa19c60f7787bc349d4b0903c435f5372c0ec8bd2ac9878a60fbe838caee31666611fc484600019612261565b604080519182526020820185905201610961565b611fe06120d3565b6001600160a01b0381166120615760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f646472657373000000000000000000000000000000000000000000000000000060648201526084015b60405180910390fd5b61206a8161212d565b50565b60007f00000000000000000000000000000000000000000000000000000000000000006120ba7f000000000000000000000000000000000000000000000000000000000000000084612207565b6120c491906122ad565b92915050565b80546001019055565b6000546001600160a01b03163314610bc85760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152606401612058565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b801515811461206a57600080fd5b60006020828403121561219d57600080fd5b81356121a88161217d565b9392505050565b6000602082840312156121c157600080fd5b81356001600160a01b03811681146121a857600080fd5b6000602082840312156121ea57600080fd5b5035919050565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176120c4576120c46121f1565b818103818111156120c4576120c46121f1565b808201808211156120c4576120c46121f1565b60006020828403121561225657600080fd5b81516121a88161217d565b808202600082127f800000000000000000000000000000000000000000000000000000000000000084141615612299576122996121f1565b81810583148215176120c4576120c46121f1565b6000826122ca57634e487b7160e01b600052601260045260246000fd5b500490565b634e487b7160e01b600052603260045260246000fd5b6000602082840312156122f757600080fd5b505191905056fea26469706673582212206e8ddab46b5a4f59b63e31731e05b8a50baba4bb11d27d2c6d4cf77ab12303a564736f6c63430008120033a2646970667358221220881dbf94c45c9d20fbd5384ac64db78ae4eb21ab7d001b4b441c931944d3469b64736f6c63430008120033",
+  "deployedBytecode": "0x608060405260043610620000db5760003560e01c806385535cc51162000083578063dcb6b26a116200005d578063dcb6b26a1462000253578063f2fde38b1462000278578063f738c4a7146200029d578063fe83bece14620002bf57005b806385535cc514620001d45780638da5cb5b14620001f9578063d587d8af146200021957005b8063430bf08a11620000b5578063430bf08a146200015c578063715018a6146200019757806373a3cc2314620001af57005b80631f3372fe14620000e557806334849ead146200010a57806334fbc9a1146200014257005b36620000e357005b005b348015620000f257600080fd5b50620000e36200010436600462000faf565b620002f3565b3480156200011757600080fd5b506200012f6200012936600462001023565b620003c4565b6040519081526020015b60405180910390f35b3480156200014f57600080fd5b506200012f6302faf08081565b3480156200016957600080fd5b506006546200017e906001600160a01b031681565b6040516001600160a01b03909116815260200162000139565b348015620001a457600080fd5b50620000e362000ac2565b348015620001bc57600080fd5b50620000e3620001ce36600462001146565b62000ada565b348015620001e157600080fd5b50620000e3620001f336600462001146565b62000b13565b3480156200020657600080fd5b506000546001600160a01b03166200017e565b3480156200022657600080fd5b506200017e620002383660046200116b565b6000908152600360205260409020546001600160a01b031690565b3480156200026057600080fd5b50620000e36200027236600462001185565b62000b4c565b3480156200028557600080fd5b50620000e36200029736600462001146565b62000cb5565b348015620002aa57600080fd5b506005546200017e906001600160a01b031681565b348015620002cc57600080fd5b50620002e4620002de3660046200116b565b62000d4b565b6040516200013991906200120b565b60055433906001600160a01b031681146200030d57600080fd5b60008381526002602052604090206005015442106200032b57600080fd5b600083815260026020526040908190206006015490517f10d9350200000000000000000000000000000000000000000000000000000000815283151560048201526101009091046001600160a01b031690819081906310d9350290602401600060405180830381600087803b158015620003a457600080fd5b505af1158015620003b9573d6000803e3d6000fd5b505050505050505050565b6000620003d062000ec7565b6040517fdd62ed3e0000000000000000000000000000000000000000000000000000000081526001600160a01b0383811660048301523060248301526302faf080917f00000000000000000000000000000000000000000000000000000000000000009091169063dd62ed3e90604401602060405180830381865afa1580156200045e573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190620004849190620012b4565b1015620004d85760405162461bcd60e51b815260206004820152601260248201527f416c6c6f77616e6365206e6f742073657421000000000000000000000000000060448201526064015b60405180910390fd5b6001600160a01b038816620005565760405162461bcd60e51b815260206004820152602f60248201527f43616e277420686176652061646472657373207a65726f20617320746865207060448201527f726f7879277320616464726573732e00000000000000000000000000000000006064820152608401620004cf565b60006200056260015490565b9050600060026000838152602001908152602001600020604051806101200160405290816000820180546200059790620012ce565b80601f0160208091040260200160405190810160405280929190818152602001828054620005c590620012ce565b8015620006165780601f10620005ea5761010080835404028352916020019162000616565b820191906000526020600020905b815481529060010190602001808311620005f857829003601f168201915b50505091835250506001820154601b81900b602083015260ff600160e01b90910481161515604083015260028301546001600160a01b03908116606084015260038401546080840152600484015460a080850191909152600585015460c0850152600690940154918216151560e0840152610100918290041691015281015190915015620006e75760405162461bcd60e51b815260206004820152601a60248201527f50726564696374696f6e20616c7265616479206578697374732e0000000000006044820152606401620004cf565b6040517f23b872dd0000000000000000000000000000000000000000000000000000000081526001600160a01b0385811660048301523060248301526302faf08060448301526000917f0000000000000000000000000000000000000000000000000000000000000000909116906323b872dd906064016020604051808303816000875af11580156200077e573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190620007a491906200130a565b905080620007de576040517fca234f3900000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b6000838989897f0000000000000000000000000000000000000000000000000000000000000000600660009054906101000a90046001600160a01b0316604051620008299062000f80565b9586526020860194909452604085019290925260608401526001600160a01b0390811660808401521660a082015260c001604051809103906000f08015801562000877573d6000803e3d6000fd5b50905060006040518061012001604052808f81526020018c601b0b81526020018d151581526020018e6001600160a01b031681526020018b81526020014281526020018a8152602001600115158152602001836001600160a01b03168152509050806002600087815260200190815260200160002060008201518160000190816200090391906200137d565b5060208201518160010160006101000a8154817bffffffffffffffffffffffffffffffffffffffffffffffffffffffff0219169083601b0b7bffffffffffffffffffffffffffffffffffffffffffffffffffffffff160217905550604082015181600101601c6101000a81548160ff02191690831515021790555060608201518160020160006101000a8154816001600160a01b0302191690836001600160a01b031602179055506080820151816003015560a0820151816004015560c0820151816005015560e08201518160060160006101000a81548160ff0219169083151502179055506101008201518160060160016101000a8154816001600160a01b0302191690836001600160a01b031602179055509050508c6003600087815260200190815260200160002060006101000a8154816001600160a01b0302191690836001600160a01b0316021790555062000a61600180546001019055565b866001600160a01b0316826001600160a01b0316867fbb3bfdf859a58dbd5ac3db4a321d1fe2147d29263ff3170cde87b25b906e1f604260405162000aa891815260200190565b60405180910390a450929c9b505050505050505050505050565b62000acc62000ec7565b62000ad8600062000f23565b565b62000ae462000ec7565b6005805473ffffffffffffffffffffffffffffffffffffffff19166001600160a01b0392909216919091179055565b62000b1d62000ec7565b6006805473ffffffffffffffffffffffffffffffffffffffff19166001600160a01b0392909216919091179055565b833360008281526002602052604090206006015461010090046001600160a01b03168062000bbd5760405162461bcd60e51b815260206004820152601660248201527f496e76616c69642050726564696374696f6e20496421000000000000000000006044820152606401620004cf565b816001600160a01b0316816001600160a01b03161462000c465760405162461bcd60e51b815260206004820152602160248201527f43616c6c6572206973206e6f7420746865206d61726b65742068616e646c657260448201527f2e000000000000000000000000000000000000000000000000000000000000006064820152608401620004cf565b60008781526002602090815260409182902060060154825188815291820187905261010090046001600160a01b03908116929089169183918b917faa4efaf794e3033902d020af57e79b057692c8db2827c81e7bebe89009630212910160405180910390a45050505050505050565b62000cbf62000ec7565b6001600160a01b03811662000d3d5760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f64647265737300000000000000000000000000000000000000000000000000006064820152608401620004cf565b62000d488162000f23565b50565b6040805161012081018252606080825260006020830181905292820183905281018290526080810182905260a0810182905260c0810182905260e08101829052610100810191909152600082815260026020526040908190208151610120810190925280548290829062000dbf90620012ce565b80601f016020809104026020016040519081016040528092919081815260200182805462000ded90620012ce565b801562000e3e5780601f1062000e125761010080835404028352916020019162000e3e565b820191906000526020600020905b81548152906001019060200180831162000e2057829003601f168201915b50505091835250506001820154601b81900b602083015260ff600160e01b90910481161515604083015260028301546001600160a01b03908116606084015260038401546080840152600484015460a0840152600584015460c0840152600690930154908116151560e08301526101009081900490921691015292915050565b80546001019055565b6000546001600160a01b0316331462000ad85760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152606401620004cf565b600080546001600160a01b0383811673ffffffffffffffffffffffffffffffffffffffff19831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b612932806200144b83390190565b801515811462000d4857600080fd5b803562000faa8162000f8e565b919050565b6000806040838503121562000fc357600080fd5b82359150602083013562000fd78162000f8e565b809150509250929050565b634e487b7160e01b600052604160045260246000fd5b80356001600160a01b038116811462000faa57600080fd5b8035601b81900b811462000faa57600080fd5b600080600080600080600080610100898b0312156200104157600080fd5b883567ffffffffffffffff808211156200105a57600080fd5b818b0191508b601f8301126200106f57600080fd5b81358181111562001084576200108462000fe2565b604051601f8201601f19908116603f01168101908382118183101715620010af57620010af62000fe2565b816040528281528e6020848701011115620010c957600080fd5b82602086016020830137600060208483010152809c505050505050620010f260208a0162000ff8565b96506200110260408a0162000f9d565b95506200111260608a0162001010565b94506080890135935060a0890135925060c089013591506200113760e08a0162000ff8565b90509295985092959890939650565b6000602082840312156200115957600080fd5b620011648262000ff8565b9392505050565b6000602082840312156200117e57600080fd5b5035919050565b600080600080608085870312156200119c57600080fd5b84359350620011ae6020860162000ff8565b93969395505050506040820135916060013590565b6000815180845260005b81811015620011eb57602081850181015186830182015201620011cd565b506000602082860101526020601f19601f83011685010191505092915050565b60208152600082516101208060208501526200122c610140850183620011c3565b91506020850151620012436040860182601b0b9052565b50604085015180151560608601525060608501516001600160a01b038116608086015250608085015160a085015260a085015160c085015260c085015160e085015260e08501516101006200129b8187018315159052565b909501516001600160a01b031693019290925250919050565b600060208284031215620012c757600080fd5b5051919050565b600181811c90821680620012e357607f821691505b6020821081036200130457634e487b7160e01b600052602260045260246000fd5b50919050565b6000602082840312156200131d57600080fd5b8151620011648162000f8e565b601f8211156200137857600081815260208120601f850160051c81016020861015620013535750805b601f850160051c820191505b8181101562001374578281556001016200135f565b5050505b505050565b815167ffffffffffffffff8111156200139a576200139a62000fe2565b620013b281620013ab8454620012ce565b846200132a565b602080601f831160018114620013ea5760008415620013d15750858301515b600019600386901b1c1916600185901b17855562001374565b600085815260208120601f198616915b828110156200141b57888601518255948401946001909101908401620013fa565b50858210156200143a5787850151600019600388901b60f8161c191681555b5050505050600190811b0190555056fe6101406040523480156200001257600080fd5b5060405162002932380380620029328339810160408190526200003591620002de565b620000403362000268565b600680546001600160a01b031916331790556080869052620000658361271062000351565b60a05260c0849052600580546001600160a01b03808416620100000262010000600160b01b03199092169190911790915582166101208190526040805163313ce56760e01b8152905184929163313ce5679160048083019260209291908290030181865afa158015620000dc573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019062000102919062000371565b6200010f90600a62000488565b60e08181525050612710816001600160a01b031663313ce5676040518163ffffffff1660e01b8152600401602060405180830381865afa15801562000158573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906200017e919062000371565b6200018b90600a62000488565b62000197908862000351565b620001a391906200049d565b6101008181525050620001c26007620002b860201b620020ca1760201c565b600c80546001810182556000919091527fdf6966c971051c3d54ec59162606531493a51404a002842f56009d7e5cf4a8c70180546001600160a01b03191690556200021a600b620002b8602090811b620020ca17901c565b5050600880546001810182556000919091527ff3f7a9fe364faab93b216da50a3214154f22a0a2b415b23a84c8169e8b636ee30180546001600160a01b031916905550620004c09350505050565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80546001019055565b80516001600160a01b0381168114620002d957600080fd5b919050565b60008060008060008060c08789031215620002f857600080fd5b865195506020870151945060408701519350606087015192506200031f60808801620002c1565b91506200032f60a08801620002c1565b90509295509295509295565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176200036b576200036b6200033b565b92915050565b6000602082840312156200038457600080fd5b5051919050565b600181815b80851115620003cc578160001904821115620003b057620003b06200033b565b80851615620003be57918102915b93841c939080029062000390565b509250929050565b600082620003e5575060016200036b565b81620003f4575060006200036b565b81600181146200040d5760028114620004185762000438565b60019150506200036b565b60ff8411156200042c576200042c6200033b565b50506001821b6200036b565b5060208310610133831016604e8410600b84101617156200045d575081810a6200036b565b6200046983836200038b565b80600019048211156200048057620004806200033b565b029392505050565b6000620004968383620003d4565b9392505050565b600082620004bb57634e487b7160e01b600052601260045260246000fd5b500490565b60805160a05160c05160e0516101005161012051612334620005fe60003960008181610528015281816107e201528181610b0501528181610ca701528181610de701528181611034015281816110f3015281816111ed015281816114e00152818161159f01528181611699015281816119e101528181611b210152611e560152600081816103ca015261209501526000818161022701526120710152600081816104f4015281816105ac0152818161066e01528181610bcc01528181610fae0152818161145a015281816119060152611ce80152600081816102bb015281816106b401528181610c1201528181611002015281816114ae0152818161194c0152611d2e0152600081816103040152818161087a01528181610ec8015281816113800152818161182c01528181611c020152611eee01526123346000f3fe6080604052600436106101a35760003560e01c8063b5d53709116100e0578063dfbf53ae11610084578063edd347cd11610061578063edd347cd14610516578063efdf3c171461054a578063f2fde38b1461056a578063fcee45f41461058a57005b8063dfbf53ae1461048d578063e1a51dff146104ac578063e8b2d47f146104e257005b8063c1ff549b116100bd578063c1ff549b14610417578063c87b502e14610437578063ca015b621461044d578063db29cd3d1461046d57005b8063b5d53709146103b8578063b6e35797146103ec578063b8fe4cfb1461040157005b806370bb45b31161014757806377ed46571161012457806377ed46571461033b5780638da5cb5b146103505780638fb182aa146103825780639473223e1461039857005b806370bb45b3146102dd57806370daf9a3146102f2578063715018a61461032657005b806353aaf54c1161018057806353aaf54c14610249578063578a68061461025f578063690aa8951461027f57806369d5bf6b146102a957005b806310d93502146101ac578063181a2ea1146101cc578063501ff1741461021557005b366101aa57005b005b3480156101b857600080fd5b506101aa6101c736600461218b565b6105aa565b3480156101d857600080fd5b506102026101e73660046121af565b6001600160a01b03166000908152600e602052604090205490565b6040519081526020015b60405180910390f35b34801561022157600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b34801561025557600080fd5b5061020260045481565b34801561026b57600080fd5b506101aa61027a3660046121d8565b61066c565b34801561028b57600080fd5b506005546102999060ff1681565b604051901515815260200161020c565b3480156102b557600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b3480156102e957600080fd5b506101aa610970565b3480156102fe57600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b34801561033257600080fd5b506101aa610bb6565b34801561034757600080fd5b50600354610202565b34801561035c57600080fd5b506000546001600160a01b03165b6040516001600160a01b03909116815260200161020c565b34801561038e57600080fd5b5061020260035481565b3480156103a457600080fd5b506101aa6103b33660046121d8565b610bca565b3480156103c457600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b3480156103f857600080fd5b50600454610202565b34801561040d57600080fd5b5061020260025481565b34801561042357600080fd5b506101aa6104323660046121d8565b610fac565b34801561044357600080fd5b5061020260015481565b34801561045957600080fd5b506101aa6104683660046121d8565b611458565b34801561047957600080fd5b506101aa6104883660046121d8565b611904565b34801561049957600080fd5b5060055461029990610100900460ff1681565b3480156104b857600080fd5b506102026104c73660046121af565b6001600160a01b03166000908152600a602052604090205490565b3480156104ee57600080fd5b506102027f000000000000000000000000000000000000000000000000000000000000000081565b34801561052257600080fd5b5061036a7f000000000000000000000000000000000000000000000000000000000000000081565b34801561055657600080fd5b506101aa6105653660046121d8565b611ce6565b34801561057657600080fd5b506101aa6105853660046121af565b611fd8565b34801561059657600080fd5b506102026105a53660046121d8565b61206d565b7f00000000000000000000000000000000000000000000000000000000000000004211610603576040517fbfe082fc00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b61060b6120d3565b600580548215156101000261ff00199091161790556040517f029f9bb82bcc34b8fb93e2f45e19e0db433f6acd8b15ca883f0ef2143b58342c9061065490831515815260200190565b60405180910390a1506005805460ff19166001179055565b7f00000000000000000000000000000000000000000000000000000000000000004211156106ad5760405163700ec25b60e01b815260040160405180910390fd5b60006106d97f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600e602052604090205490915081111561070b576040516296118960e51b815260040160405180910390fd5b60006107168261206d565b336000908152600e602052604081208054929350849290919061073a90849061221e565b925050819055508160046000828254610753919061221e565b909155506107639050818361221e565b336000908152600a602052604081208054909190610782908490612231565b92505081905550816003600082825461079b9190612231565b90915550600090506107ad828461221e565b60055460405163a9059cbb60e01b8152620100009091046001600160a01b0390811660048301526024820185905291925084917f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af115801561082b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061084f9190612244565b5082600260008282546108629190612231565b90915550506006546001600160a01b031663dcb6b26a7f000000000000000000000000000000000000000000000000000000000000000033876108a781600019612261565b6040516001600160e01b031960e087901b16815260048101949094526001600160a01b03909216602484015260448301526064820152608401600060405180830381600087803b1580156108fa57600080fd5b505af115801561090e573d6000803e3d6000fd5b505050506109193390565b6001600160a01b03167fa19c60f7787bc349d4b0903c435f5372c0ec8bd2ac9878a60fbe838caee316668361095084600019612261565b604080519283526020830191909152015b60405180910390a25050505050565b60055460ff166109ac576040517f2ceb370f00000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b336000908152600f602052604090205460ff16156109f6576040517f970f97c200000000000000000000000000000000000000000000000000000000815260040160405180910390fd5b60018054600554909160009182918291610100900460ff1615159003610a6657336000908152600a60205260408120549003610a45576040516302ee147360e21b815260040160405180910390fd5b600354336000908152600a6020526040812080549190559093509150610ab2565b336000908152600e60205260408120549003610a95576040516302ee147360e21b815260040160405180910390fd5b600454336000908152600e60205260408120805491905590935091505b82610abd8584612207565b610ac791906122ad565b336000818152600f60209081526040808320805460ff19166001179055805163a9059cbb60e01b8152600481019490945260248401859052519394507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03169363a9059cbb936044808201949183900301908290875af1158015610b56573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610b7a9190612244565b5060405181815233907fe8354b169cd993d5cdfad1036a9a3f1ea7ed77e430bccb279200fd088243f5959060200160405180910390a250505050565b610bbe6120d3565b610bc8600061212d565b565b7f0000000000000000000000000000000000000000000000000000000000000000421115610c0b5760405163700ec25b60e01b815260040160405180910390fd5b6000610c377f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600a6020526040902054909150811115610c6a576040516327905ab760e21b815260040160405180910390fd5b6000610c758261206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015610cf0573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610d149190612244565b508060026000828254610d279190612231565b9091555060009050610d39828461221e565b336000908152600a6020526040812080549293508592909190610d5d90849061221e565b9091555050336000908152600a60205260408120549003610ddb57336000908152600960205260408120546008805491929183908110610d9f57610d9f6122cf565b600091825260208083209190910180546001600160a01b0319166001600160a01b03949094169390931790925533815260099091526040812055505b60006001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663a9059cbb336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152602481018590526044016020604051808303816000875af1158015610e5a573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610e7e9190612244565b905080610e9e5760405163c98df4e360e01b815260040160405180910390fd5b8360016000828254610eb0919061221e565b90915550506006546001600160a01b031663dcb6b26a7f000000000000000000000000000000000000000000000000000000000000000033610ef486600019612261565b6040516001600160e01b031960e086901b16815260048101939093526001600160a01b039091166024830152604482015260006064820152608401600060405180830381600087803b158015610f4957600080fd5b505af1158015610f5d573d6000803e3d6000fd5b50505050610f683390565b6001600160a01b03167fcbc0df49dd88ec0ba5b87a3c77ed66af6480b175df0f21649805ed6201c56145836000604051610961929190918252602082015260400190565b7f0000000000000000000000000000000000000000000000000000000000000000421115610fed5760405163700ec25b60e01b815260040160405180910390fd5b6001811015610ffb57600080fd5b60006110277f000000000000000000000000000000000000000000000000000000000000000083612207565b9050806001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663dd62ed3e336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604401602060405180830381865afa1580156110a4573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906110c891906122e5565b10156110e75760405163ca234f3960e01b815260040160405180910390fd5b60006001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000166323b872dd336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604481018590526064016020604051808303816000875af115801561116c573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906111909190612244565b9050806111b05760405163c98df4e360e01b815260040160405180910390fd5b60006111bb8361206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015611236573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061125a9190612244565b50806002600082825461126d9190612231565b9091555061127d9050818461221e565b6001600082825461128e9190612231565b9091555061129e9050818461221e565b600460008282546112af9190612231565b90915550600090506112c1828561221e565b336000908152600e60205260408120805492935083929091906112e5908490612231565b9091555050336000908152600d6020526040812054900361136d57600061130b600b5490565b336000818152600d6020526040812092909255600c805460018082018355919093527fdf6966c971051c3d54ec59162606531493a51404a002842f56009d7e5cf4a8c790920180546001600160a01b0319169091179055600b80549091019055505b6006546001600160a01b031663dcb6b26a7f0000000000000000000000000000000000000000000000000000000000000000336040516001600160e01b031960e085901b16815260048101929092526001600160a01b031660248201526000604482015260648101849052608401600060405180830381600087803b1580156113f557600080fd5b505af1158015611409573d6000803e3d6000fd5b505050506114143390565b6001600160a01b03167fc28482fd780ce54c9bfc165ed6ce12f1e7e4e07dc6270292223ac3275818dd0d600083604051610961929190918252602082015260400190565b7f00000000000000000000000000000000000000000000000000000000000000004211156114995760405163700ec25b60e01b815260040160405180910390fd5b60018110156114a757600080fd5b60006114d37f000000000000000000000000000000000000000000000000000000000000000083612207565b9050806001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663dd62ed3e336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604401602060405180830381865afa158015611550573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061157491906122e5565b10156115935760405163ca234f3960e01b815260040160405180910390fd5b60006001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000166323b872dd336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152306024820152604481018590526064016020604051808303816000875af1158015611618573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061163c9190612244565b90508061165c5760405163c98df4e360e01b815260040160405180910390fd5b60006116678361206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af11580156116e2573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906117069190612244565b5080600260008282546117199190612231565b909155506117299050818461221e565b6001600082825461173a9190612231565b9091555061174a9050818461221e565b6003600082825461175b9190612231565b909155506000905061176d828561221e565b336000908152600a6020526040812080549293508392909190611791908490612231565b90915550503360009081526009602052604081205490036118195760006117b760075490565b336000818152600960205260408120929092556008805460018082018355919093527ff3f7a9fe364faab93b216da50a3214154f22a0a2b415b23a84c8169e8b636ee390920180546001600160a01b0319169091179055600780549091019055505b6006546001600160a01b031663dcb6b26a7f0000000000000000000000000000000000000000000000000000000000000000336040516001600160e01b031960e085901b16815260048101929092526001600160a01b031660248201526044810184905260006064820152608401600060405180830381600087803b1580156118a157600080fd5b505af11580156118b5573d6000803e3d6000fd5b505050506118c03390565b6001600160a01b03167fc28482fd780ce54c9bfc165ed6ce12f1e7e4e07dc6270292223ac3275818dd0d826000604051610961929190918252602082015260400190565b7f00000000000000000000000000000000000000000000000000000000000000004211156119455760405163700ec25b60e01b815260040160405180910390fd5b60006119717f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600e60205260409020549091508111156119a4576040516327905ab760e21b815260040160405180910390fd5b60006119af8261206d565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018390529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015611a2a573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611a4e9190612244565b508060026000828254611a619190612231565b9091555060009050611a73828461221e565b336000908152600e6020526040812080549293508592909190611a9790849061221e565b9091555050336000908152600e60205260408120549003611b1557336000908152600d6020526040812054600c805491929183908110611ad957611ad96122cf565b600091825260208083209190910180546001600160a01b0319166001600160a01b039490941693909317909255338152600d9091526040812055505b60006001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001663a9059cbb336040516001600160e01b031960e084901b1681526001600160a01b039091166004820152602481018590526044016020604051808303816000875af1158015611b94573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611bb89190612244565b905080611bd85760405163c98df4e360e01b815260040160405180910390fd5b8360016000828254611bea919061221e565b90915550506006546001600160a01b031663dcb6b26a7f0000000000000000000000000000000000000000000000000000000000000000336000611c3087600019612261565b6040516001600160e01b031960e087901b16815260048101949094526001600160a01b03909216602484015260448301526064820152608401600060405180830381600087803b158015611c8357600080fd5b505af1158015611c97573d6000803e3d6000fd5b50505050611ca23390565b6001600160a01b03167fcbc0df49dd88ec0ba5b87a3c77ed66af6480b175df0f21649805ed6201c56145600084604051610961929190918252602082015260400190565b7f0000000000000000000000000000000000000000000000000000000000000000421115611d275760405163700ec25b60e01b815260040160405180910390fd5b6000611d537f000000000000000000000000000000000000000000000000000000000000000083612207565b336000908152600a6020526040902054909150811115611d85576040516296118960e51b815260040160405180910390fd5b6000611d908261206d565b9050611d9c818361221e565b336000908152600e602052604081208054909190611dbb908490612231565b925050819055508160046000828254611dd49190612231565b9091555050336000908152600a602052604081208054849290611df890849061221e565b925050819055508160036000828254611e11919061221e565b909155508290506000611e24838361221e565b60055460405163a9059cbb60e01b81526001600160a01b036201000090920482166004820152602481018690529192507f0000000000000000000000000000000000000000000000000000000000000000169063a9059cbb906044016020604051808303816000875af1158015611e9f573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190611ec39190612244565b508260026000828254611ed69190612231565b90915550506006546001600160a01b031663dcb6b26a7f000000000000000000000000000000000000000000000000000000000000000033611f1a88600019612261565b6040516001600160e01b031960e086901b16815260048101939093526001600160a01b039091166024830152604482015260648101879052608401600060405180830381600087803b158015611f6f57600080fd5b505af1158015611f83573d6000803e3d6000fd5b50505050611f8e3390565b6001600160a01b03167fa19c60f7787bc349d4b0903c435f5372c0ec8bd2ac9878a60fbe838caee31666611fc484600019612261565b604080519182526020820185905201610961565b611fe06120d3565b6001600160a01b0381166120615760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f646472657373000000000000000000000000000000000000000000000000000060648201526084015b60405180910390fd5b61206a8161212d565b50565b60007f00000000000000000000000000000000000000000000000000000000000000006120ba7f000000000000000000000000000000000000000000000000000000000000000084612207565b6120c491906122ad565b92915050565b80546001019055565b6000546001600160a01b03163314610bc85760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152606401612058565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b801515811461206a57600080fd5b60006020828403121561219d57600080fd5b81356121a88161217d565b9392505050565b6000602082840312156121c157600080fd5b81356001600160a01b03811681146121a857600080fd5b6000602082840312156121ea57600080fd5b5035919050565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176120c4576120c46121f1565b818103818111156120c4576120c46121f1565b808201808211156120c4576120c46121f1565b60006020828403121561225657600080fd5b81516121a88161217d565b808202600082127f800000000000000000000000000000000000000000000000000000000000000084141615612299576122996121f1565b81810583148215176120c4576120c46121f1565b6000826122ca57634e487b7160e01b600052601260045260246000fd5b500490565b634e487b7160e01b600052603260045260246000fd5b6000602082840312156122f757600080fd5b505191905056fea26469706673582212206e8ddab46b5a4f59b63e31731e05b8a50baba4bb11d27d2c6d4cf77ab12303a564736f6c63430008120033a2646970667358221220881dbf94c45c9d20fbd5384ac64db78ae4eb21ab7d001b4b441c931944d3469b64736f6c63430008120033",
+  "devdoc": {
+    "events": {
+      "ConcludeFatalError(uint256,uint256,bool,int224,int224)": {
+        "params": {
+          "isAbove": "The target orice was supposed to be above a set limit.",
+          "predictionId": "The unique identifier of the prediction.",
+          "priceReading": "The current price reading provided by a dAPI.",
+          "priceTarget": "The target point that was the base for a prediction.",
+          "timestamp": "The timestamp when conclude failed."
+        }
+      },
+      "PredictionCreated(uint256,address,address,uint256)": {
+        "params": {
+          "creator": "The creator responsible for creating the prediction.",
+          "marketHandler": "The address of the MarketHandler that enables the prediction to be traded upon.",
+          "predictionId": "The unique identifier of the prediction.",
+          "timestamp": "The timestamp when the prediction was created to be traded upon."
+        }
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "concludePrediction_2(uint256,bool)": {
+        "params": {
+          "_predictionId": "The unique identifier for each prediction created.",
+          "_vote": "The final result of the prediction. vote - True : The target price was predicted to be BELOW/ABOVE a threshold AND IS BELOW/ABOVE the threshold respectively. vote - False : The target price was predicted to be BELOW/ABOVE a threshold BUT IS ABOVE/BELOW the threshold respectively."
+        }
+      },
+      "constructor": {
+        "params": {
+          "_usdc": "The payment token address."
+        }
+      },
+      "createPrediction(string,address,bool,int224,uint256,uint256,uint256,address)": {
+        "params": {
+          "_basePrice": "The minimum cost of one 'Yes' or 'No' token for the prediction market to be created. Is a multiple of 0.01 USD or 1 cent.",
+          "_caller": "The address that is responsible for paying the platform a set fee and create a new prediction people can bet upon.",
+          "_deadline": "The timestamp when the target and current price are to be checked against.",
+          "_fee": "Set platform fee for a given prediction.",
+          "_isAbove": "True if for a prediction the price will go above a set limit and false if otherwise.",
+          "_proxyAddress": "The proxy address provided by API3's dAPIs for the _tokenSymbol asset.",
+          "_tokenSymbol": "The symbol to represent the asset we are prediction upon. Eg : BTC / ETH / XRP etc."
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "trackProgress(uint256,address,int256,int256)": {
+        "details": "Is important since its harder to track each market handler on 'The Graph' separately."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "ConcludeFatalError(uint256,uint256,bool,int224,int224)": {
+        "notice": "To track if for some reason a certain prediction was not able to be concluded."
+      },
+      "PredictionCreated(uint256,address,address,uint256)": {
+        "notice": "Event to declare a prediction market is available to be traded."
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "PLATFORM_FEE()": {
+        "notice": "To avoid DDOS by adding some cost to the creation. Can't be changed once defined."
+      },
+      "concludePrediction_2(uint256,bool)": {
+        "notice": "Called by the Settlement contract which concludes the prediction and returns the vote i.e if the prediction was in the favour of 'Yes' or 'No'."
+      },
+      "createPrediction(string,address,bool,int224,uint256,uint256,uint256,address)": {
+        "notice": "Called by the owner on behalf of the _caller and create a market for them.Step necessary to make sure all the parameters are vaild and are true with no manipulation."
+      },
+      "getPrediction(uint256)": {
+        "notice": "Getter functions ------"
+      },
+      "setSettlementAddress(address)": {
+        "notice": "Setter functions ------"
+      },
+      "settlementAddress()": {
+        "notice": "The address that starts the chain of concluding a prediction."
+      },
+      "trackProgress(uint256,address,int256,int256)": {
+        "notice": "SPECIAL FUNCTION ====================================================Function provided to act as an aggregator and help track all the things that are happening on all of its child market handlers."
+      },
+      "vaultAddress()": {
+        "notice": "The address responsible for storing the funds collected."
+      }
+    },
+    "notice": "The centre point of Settlement and each new Market Handler",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 26,
+        "contract": "contracts/common/Trading.sol:PredictionMarket",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 1223,
+        "contract": "contracts/common/Trading.sol:PredictionMarket",
+        "label": "nextPredictionId",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_struct(Counter)849_storage"
+      },
+      {
+        "astId": 1237,
+        "contract": "contracts/common/Trading.sol:PredictionMarket",
+        "label": "predictions",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_uint256,t_struct(Prediction)1208_storage)"
+      },
+      {
+        "astId": 1242,
+        "contract": "contracts/common/Trading.sol:PredictionMarket",
+        "label": "predictionIdToProxy",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_mapping(t_uint256,t_address)"
+      },
+      {
+        "astId": 1247,
+        "contract": "contracts/common/Trading.sol:PredictionMarket",
+        "label": "blacklisted",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_address,t_bool)"
+      },
+      {
+        "astId": 1290,
+        "contract": "contracts/common/Trading.sol:PredictionMarket",
+        "label": "settlementAddress",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_address"
+      },
+      {
+        "astId": 1293,
+        "contract": "contracts/common/Trading.sol:PredictionMarket",
+        "label": "vaultAddress",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_int224": {
+        "encoding": "inplace",
+        "label": "int224",
+        "numberOfBytes": "28"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_uint256,t_address)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => address)",
+        "numberOfBytes": "32",
+        "value": "t_address"
+      },
+      "t_mapping(t_uint256,t_struct(Prediction)1208_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct Prediction)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Prediction)1208_storage"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(Counter)849_storage": {
+        "encoding": "inplace",
+        "label": "struct Counters.Counter",
+        "members": [
+          {
+            "astId": 848,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "_value",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "32"
+      },
+      "t_struct(Prediction)1208_storage": {
+        "encoding": "inplace",
+        "label": "struct Prediction",
+        "members": [
+          {
+            "astId": 1191,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "tokenSymbol",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 1193,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "targetPricePoint",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_int224"
+          },
+          {
+            "astId": 1195,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "isAbove",
+            "offset": 28,
+            "slot": "1",
+            "type": "t_bool"
+          },
+          {
+            "astId": 1197,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "proxyAddress",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address"
+          },
+          {
+            "astId": 1199,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "fee",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1201,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "timestamp",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1203,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "deadline",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1205,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "isActive",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_bool"
+          },
+          {
+            "astId": 1207,
+            "contract": "contracts/common/Trading.sol:PredictionMarket",
+            "label": "marketHandler",
+            "offset": 1,
+            "slot": "6",
+            "type": "t_address"
+          }
+        ],
+        "numberOfBytes": "224"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

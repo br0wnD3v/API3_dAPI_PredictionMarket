@@ -70,6 +70,14 @@ contract PredictionMarket is Context, Ownable {
         int224 priceTarget
     );
 
+    event HandlerProgress(
+        uint256 indexed predictionId,
+        address indexed marketHandler,
+        address indexed trader,
+        int256 amountYes,
+        int256 amountNo
+    );
+
     /// @notice The payment token interface
     IERC20 immutable I_USDC_CONTRACT;
 
@@ -81,6 +89,15 @@ contract PredictionMarket is Context, Ownable {
     /// @notice Check if the address calling the function is the settlementAddress or not
     modifier callerIsSettlement(address _caller) {
         require(_caller == settlementAddress);
+        _;
+    }
+
+    modifier callerIsMarketHandler(uint256 _id, address _caller) {
+        address marketHandlerAddress = predictions[_id].marketHandler;
+        if (marketHandlerAddress == address(0))
+            revert("Invalid Prediction Id!");
+        if (marketHandlerAddress != _caller)
+            revert("Caller is not the market handler.");
         _;
     }
 
@@ -206,6 +223,28 @@ contract PredictionMarket is Context, Ownable {
         uint256 _predictionId
     ) external view returns (address) {
         return predictionIdToProxy[_predictionId];
+    }
+
+    /// SPECIAL FUNCTION ====================================================
+    ///
+    ///
+    /// @notice Function provided to act as an aggregator and help track all the things that are happening on
+    /// all of its child market handlers.
+    /// @dev Is important since its harder to track each market handler on 'The Graph' separately.
+    function trackProgress(
+        uint256 _id,
+        address _caller,
+        int256 _amountYes,
+        int256 _amountNo
+    ) external callerIsMarketHandler(_id, _msgSender()) {
+        address marketHandlerAddress = predictions[_id].marketHandler;
+        emit HandlerProgress(
+            _id,
+            marketHandlerAddress,
+            _caller,
+            _amountYes,
+            _amountNo
+        );
     }
 
     receive() external payable {}
