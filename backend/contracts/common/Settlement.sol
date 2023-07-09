@@ -2,12 +2,30 @@
 
 pragma solidity ^0.8.0;
 
-import "../interfaces/ITrading.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@api3/contracts/v0.8/interfaces/IProxy.sol";
 
 /// @dev Current order of settling a market :
 /// Settlement : concludePrediction_1 -> Trading : conludePrediction_2 -> Each Unique MarketHandler : concludePrediction_3
+
+/// @notice We need to track certain properties of the prediction to make sure it it concluded after the deadline only.
+struct Prediction {
+    string tokenSymbol;
+    int224 targetPricePoint;
+    bool isAbove;
+    address proxyAddress;
+    uint256 fee;
+    uint256 timestamp;
+    uint256 deadline;
+    bool isActive;
+    address marketHandler;
+}
+
+interface ITrading {
+    function concludePrediction_2(uint256, bool) external;
+
+    function getPrediction(uint256) external view returns (Prediction memory);
+}
 
 /// @dev The contract is inherently a data feed reader
 contract PM_Settlement is Ownable {
