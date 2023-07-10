@@ -12,7 +12,7 @@ export default function HomeHeader({ setPage }) {
     <>
       <Flex direction="row" margin={5} align="center" justify="center">
         <Box fontFamily="Barlow" fontSize={50}>
-          Prediction Market
+          PM
         </Box>
         <Spacer />
         {isConnected ? (

@@ -1,5 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 
+import { useState, useEffect } from "react";
+
 const PROJECT_ID = process.env.WALLET_CLOUD_PROJECT_ID;
 
 import "@rainbow-me/rainbowkit/styles.css";
@@ -26,15 +28,24 @@ const wagmiConfig = createConfig({
 });
 
 export default function App({ Component, pageProps }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
   return (
     <>
-      <ChakraProvider>
-        <WagmiConfig config={wagmiConfig}>
-          <RainbowKitProvider chains={chains} modalSize="compact">
-            <Component {...pageProps} />
-          </RainbowKitProvider>
-        </WagmiConfig>
-      </ChakraProvider>
+      {ready ? (
+        <>
+          <ChakraProvider>
+            <WagmiConfig config={wagmiConfig}>
+              <RainbowKitProvider chains={chains} modalSize="compact">
+                <Component {...pageProps} />
+              </RainbowKitProvider>
+            </WagmiConfig>
+          </ChakraProvider>
+        </>
+      ) : null}
     </>
   );
 }

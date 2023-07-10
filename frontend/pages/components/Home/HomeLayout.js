@@ -1,5 +1,5 @@
-import HomeHeader from "./HomeHeader";
-import HomeHero from "./HomeHero";
+import HomeHeader from "./HomeHeader.js";
+import HomeHero from "./HomeHero.js";
 import { useState } from "react";
 
 export default function HomeLayout() {
