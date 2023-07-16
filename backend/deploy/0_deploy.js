@@ -14,9 +14,19 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     args: [Mock.address],
   });
 
+  /// THESE ARE ALL ON POLYGON TESTNET
+  const assetArray = ["AAVE", "API3", "BTC", "ETH", "MATIC"];
+  const proxyArray = [
+    "0x13d1Ed8c24911d88e6155cE32A66908399C97924",
+    "0xf25b7429406b24da879f0d1a008596b74fcb9c2f",
+    "0xe5Cf15fED24942E656dBF75165aF1851C89F21B5",
+    "0x26690F9f17FdC26D419371315bc17950a0FC90eD",
+    "0x3ACccB328Db79Af1B81a4801DAf9ac8370b9FBF8",
+  ];
+  const limit = 5;
   const Trading = await deploy("PredictionMarket", {
     from: deployer,
-    args: [Mock.address],
+    args: [Mock.address, assetArray, proxyArray, limit],
   });
 
   const Settlement = await deploy("PM_Settlement", {
@@ -36,10 +46,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const mock = new ethers.Contract(Mock.address, Mock.abi, signer);
   await mock.mint(deployer, 100000000000);
 
+  // const getProxyForETH = await trading.getAssetToProxy("ETH");
+  // console.log(getProxyForETH);
+
   // await mock.approve(Trading.address, 10000000000);
 
   // const _tokenSymbol = "ETH";
-  // const _proxyAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   // const _isAbove = true;
   // const _targetPricePoint = "1900000000000000000000";
   // const _fee = "50";

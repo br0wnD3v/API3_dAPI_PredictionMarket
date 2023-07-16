@@ -8,61 +8,154 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-import { usdcAddress, usdcABI } from "@/information/constants";
+import {
+  usdcAddress,
+  usdcABI,
+  tradingAddress,
+  tradingABI,
+} from "@/information/constants";
+
 import {
   usePrepareContractWrite,
   useContractWrite,
-  useContractRead,
-  useAccount,
+  useWaitForTransaction,
 } from "wagmi";
-import { tradingAddress } from "@/information/constants";
 
 import { useEffect, useState } from "react";
 
+import { toast } from "react-toastify";
+
+import { ethers } from "ethers";
+
 export default function Create() {
-  const { address } = useAccount();
+  const [createdPrediction, setCreatedPrediction] = useState(false);
+  const [approved, setApproved] = useState(false);
+  const [startOperation, setStartOperation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [error, setError] = useState("");
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [startOperation, setStartOperation] = useState(false);
-  const [approved, setApproved] = useState(false);
-
   const [tokenType, setTokenType] = useState("ETH");
   const [dueDate, setDueDate] = useState(null);
-  const [targetPrice, setTargetPrice] = useState(null);
-  const [isAbove, setIsAbove] = useState(false);
+  const [basePrice, setBasePrice] = useState(1);
+  const [targetPrice, setTargetPrice] = useState(0);
+  const [displayTargetPrice, setDisplayTargetPrice] = useState(100);
+  const [isAbove, setIsAbove] = useState(true);
 
-  const { config, error: contractWriteError } = usePrepareContractWrite({
-    address: usdcAddress,
-    abi: usdcABI,
-    functionName: "approve",
-    args: [tradingAddress, 50000000n],
+  async function timeout(delay) {
+    return new Promise((res) => setTimeout(res, delay));
+  }
+
+  // CREATION ====================
+  function resetVariables() {
+    setIsSubmitting(false);
+    setTokenType("ETH");
+    setDueDate(null);
+    setBasePrice(1);
+    setTargetPrice(0);
+    setDisplayTargetPrice(100);
+    setIsAbove(true);
+    setApproved(false);
+    setCreatedPrediction(false);
+    setStartOperation(false);
+  }
+
+  useEffect(() => {
+    if (createdPrediction) {
+      toast.success(
+        "Market Created Successfully! Can be viewed in the `Buy` section shortly."
+      );
+      resetVariables();
+    }
+  }, [createdPrediction]);
+
+  const { config: createPredictionConfig, error: createPredictionWriteError } =
+    usePrepareContractWrite({
+      address: tradingAddress,
+      abi: tradingABI,
+      functionName: "createPrediction",
+      args: [tokenType, isAbove, targetPrice, dueDate, basePrice],
+    });
+
+  const createPredictionWrite = useContractWrite(createPredictionConfig);
+
+  const waitCreatePrediction = useWaitForTransaction({
+    hash: createPredictionWrite.data?.hash,
+    onSuccess() {
+      console.log("Success Market Creation.");
+      setCreatedPrediction(true);
+    },
   });
 
-  // Get the write function
-  const {
-    data: writeData,
-    isLoading: writeLoading,
-    write,
-  } = useContractWrite(config);
+  useEffect(() => {
+    async function execute() {
+      await timeout(2000);
+      createPredictionWrite.write();
+    }
+
+    if (approved && !createdPrediction) {
+      execute();
+    }
+  }, [approved]);
+
+  // APPROVAL ====================
+
+  const { config: usdcApprovalConfig, error: usdcApprovalWriteError } =
+    usePrepareContractWrite({
+      address: usdcAddress,
+      abi: usdcABI,
+      functionName: "approve",
+      args: [tradingAddress, 50000000n],
+    });
+
+  const usdcApprovalWrite = useContractWrite(usdcApprovalConfig);
+
+  const waitUsdcApproval = useWaitForTransaction({
+    hash: usdcApprovalWrite.data?.hash,
+    onSuccess() {
+      console.log("Success");
+      setApproved(true);
+    },
+  });
 
   useEffect(() => {
     if (startOperation) {
-      write();
+      usdcApprovalWrite.write();
+
+      console.log(tokenType);
+      console.log(basePrice);
+      console.log(dueDate);
+      console.log(targetPrice);
+      console.log(displayTargetPrice);
+      console.log(isAbove);
     }
   }, [startOperation]);
+
+  // =====================
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setIsSubmitting(true);
     // validate form data
-    if (!dueDate || !tokenType || !targetPrice || !isAbove) {
+    if (
+      !dueDate ||
+      !tokenType ||
+      !displayTargetPrice ||
+      !isAbove ||
+      !basePrice
+    ) {
       setError("Please fill out all required fields.");
       setIsSubmitting(false);
       return;
     }
+
+    if (basePrice < 1) {
+      setError("Please set the base price >= 1.");
+      setIsSubmitting(false);
+      return;
+    }
+
     const dueDateObject = new Date(dueDate);
     const currentDateObject = new Date();
     if (dueDateObject <= currentDateObject) {
@@ -73,15 +166,19 @@ export default function Create() {
     const unixEpochTime = Math.floor(dueDateObject.getTime() / 1000).toString();
     setDueDate(unixEpochTime);
 
-    setError("");
+    const validatedValue = parseFloat(displayTargetPrice).toFixed(5);
+    const ethValue = ethers.parseUnits(validatedValue.toString(), "ether");
+    const weiValue = ethValue.toString();
+    setTargetPrice(weiValue);
 
+    setError("");
     setStartOperation(true);
   };
 
   return (
     <>
-      <Box align="center" justify="center" pt={5}>
-        <Box w="50%" border="2px solid black" borderRadius={10} p={10}>
+      <Box align="center" justify="center" pt={5} mb={100}>
+        <Box w="50%" border="2px solid gray" borderRadius={10} p={10}>
           <form onSubmit={handleSubmit}>
             <FormControl isRequired isInvalid={error}>
               <FormLabel>Asset To Predict</FormLabel>
@@ -90,9 +187,11 @@ export default function Create() {
                 value={tokenType}
                 onChange={(e) => setTokenType(e.target.value)}
               >
-                <option value="ETH">ETH</option>
                 <option value="AAVE">AAVE</option>
                 <option value="API3">API3</option>
+                <option value="BTC">BTC</option>
+                <option value="ETH">ETH</option>
+                <option value="MATIC">MATIC</option>
               </Select>
               <FormLabel mt={5}>Deadline</FormLabel>
               <Input
@@ -103,12 +202,13 @@ export default function Create() {
               />
               <FormLabel mt={5}>Target Price In USD</FormLabel>
               <Input
-                placeholder="1000"
                 type="number"
+                placeholder="1000.00000"
+                step="0.00001"
                 disabled={isSubmitting}
-                value={targetPrice}
-                onChange={(e) => setTargetPrice(e.target.value)}
-              />
+                value={displayTargetPrice}
+                onChange={(e) => setDisplayTargetPrice(e.target.value)}
+              />{" "}
               <FormLabel mt={5}>Will Be Above The Target?</FormLabel>
               <Select
                 disabled={isSubmitting}
@@ -118,6 +218,14 @@ export default function Create() {
                 <option value="true">True</option>
                 <option value="false">False</option>
               </Select>
+              <FormLabel mt={5}>Cost Of A Tradable Token In Cents</FormLabel>
+              <Input
+                type="number"
+                placeholder="100"
+                disabled={isSubmitting}
+                value={basePrice}
+                onChange={(e) => setBasePrice(e.target.value)}
+              />
               <Button colorScheme="green" onClick={handleSubmit} mt={5}>
                 Create
               </Button>

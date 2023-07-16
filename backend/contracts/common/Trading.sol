@@ -31,6 +31,12 @@ contract PredictionMarket is Context, Ownable {
     /// @notice To avoid DDOS by adding some cost to the creation. Can't be changed once defined.
     uint256 public constant PLATFORM_FEE = 50 * 10 ** 6;
 
+    /// @notice 0.01% * 50 = 0.5%.
+    uint256 public TRADING_FEE = 50;
+
+    /// @notice Mapping to get each proxy address associated with an asset.
+    mapping(string => address) private assetToProxy;
+
     /// @notice Mapping to track each Prediction with a unique Id.
     mapping(uint256 => Prediction) private predictions;
     /// @notice Mapping to track each Prediction's API3 dAPI proxy address. Only set in a function available
@@ -101,9 +107,17 @@ contract PredictionMarket is Context, Ownable {
         _;
     }
 
-    /// @param _usdc The payment token address.
-    constructor(address _usdc) {
+    /// @param _usdc The payment token addresTRADING_FEEs.
+    constructor(
+        address _usdc,
+        string[] memory _assets,
+        address[] memory _proxies,
+        uint256 _limit
+    ) {
         I_USDC_CONTRACT = IERC20(_usdc);
+
+        for (uint i = 0; i < _limit; i++)
+            assetToProxy[_assets[i]] = _proxies[i];
 
         nextPredictionId.increment();
     }
@@ -111,24 +125,22 @@ contract PredictionMarket is Context, Ownable {
     /// @notice Called by the owner on behalf of the _caller and create a market for them.
     /// @notice Step necessary to make sure all the parameters are vaild and are true with no manipulation.
     /// @param _tokenSymbol The symbol to represent the asset we are prediction upon. Eg : BTC / ETH / XRP etc.
-    /// @param _proxyAddress The proxy address provided by API3's dAPIs for the _tokenSymbol asset.
     /// @param _isAbove True if for a prediction the price will go above a set limit and false if otherwise.
-    /// @param _fee Set platform fee for a given prediction.
     /// @param _deadline The timestamp when the target and current price are to be checked against.
     /// @param _basePrice The minimum cost of one 'Yes' or 'No' token for the prediction market to be created.
     /// Is a multiple of 0.01 USD or 1 cent.
-    /// @param _caller The address that is responsible for paying the platform a set fee and create a new prediction
-    /// people can bet upon.
     function createPrediction(
         string memory _tokenSymbol,
-        address _proxyAddress,
         bool _isAbove,
         int224 _targetPricePoint,
-        uint256 _fee,
         uint256 _deadline,
-        uint256 _basePrice,
-        address _caller
-    ) external onlyOwner returns (uint256) {
+        uint256 _basePrice
+    ) external returns (uint256) {
+        /// @param _caller The address that is responsible for paying the platform a set fee and create a new prediction
+        /// people can bet upon.
+        address _caller = _msgSender();
+        address _proxyAddress = assetToProxy[_tokenSymbol];
+
         require(
             I_USDC_CONTRACT.allowance(_caller, address(this)) >= PLATFORM_FEE,
             "Allowance not set!"
@@ -137,6 +149,7 @@ contract PredictionMarket is Context, Ownable {
             _proxyAddress != address(0),
             "Can't have address zero as the proxy's address."
         );
+        require(_deadline > block.timestamp, "Deadline can't be in the past.");
 
         uint256 predictionId = nextPredictionId.current();
         Prediction memory prediction = predictions[predictionId];
@@ -152,7 +165,7 @@ contract PredictionMarket is Context, Ownable {
 
         PM_MarketHandler predictionMH = new PM_MarketHandler(
             predictionId,
-            _fee,
+            TRADING_FEE,
             _deadline,
             _basePrice,
             address(I_USDC_CONTRACT),
@@ -164,7 +177,7 @@ contract PredictionMarket is Context, Ownable {
             targetPricePoint: _targetPricePoint,
             isAbove: _isAbove,
             proxyAddress: _proxyAddress,
-            fee: _fee,
+            fee: TRADING_FEE,
             timestamp: block.timestamp,
             deadline: _deadline,
             marketHandler: address(predictionMH),
@@ -212,6 +225,18 @@ contract PredictionMarket is Context, Ownable {
         vaultAddress = _vault;
     }
 
+    function setProxyForAsseet(
+        string memory _asset,
+        address _proxy
+    ) external onlyOwner {
+        require(_proxy != address(0), "Can't be zero address.");
+        assetToProxy[_asset] = _proxy;
+    }
+
+    function setTradingFee(uint256 _newFee) external onlyOwner {
+        TRADING_FEE = _newFee;
+    }
+
     /// @notice Getter functions ------
     function getPrediction(
         uint256 _predictionId
@@ -223,6 +248,12 @@ contract PredictionMarket is Context, Ownable {
         uint256 _predictionId
     ) external view returns (address) {
         return predictionIdToProxy[_predictionId];
+    }
+
+    function getAssetToProxy(
+        string memory _asset
+    ) external view returns (address) {
+        return assetToProxy[_asset];
     }
 
     /// SPECIAL FUNCTION ====================================================

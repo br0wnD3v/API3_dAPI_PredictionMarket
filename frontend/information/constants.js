@@ -1,9 +1,3 @@
-export const assetToProxy = {
-  USD: "0x26690f9f17fdc26d419371315bc17950a0fc90ed",
-  AAVE: "0x13d1Ed8c24911d88e6155cE32A66908399C97924",
-  API3: "0xf25B7429406B24dA879F0D1a008596b74Fcb9C2F",
-};
-
 export const usdcAddress = "0x31a0EDA48F467105EF31909465a7403d2e657bCC";
 export const usdcABI = [
   {
@@ -304,7 +298,7 @@ export const usdcABI = [
   },
 ];
 
-export const tradingAddress = "0x027bE57490473534aDbb399c39eDBc91310fE99E";
+export const tradingAddress = "0x38fA0e68b9A1DBbBFED2Fce4ff87dF6d56B408AD";
 export const tradingABI = [
   {
     inputs: [
@@ -312,6 +306,21 @@ export const tradingABI = [
         internalType: "address",
         name: "_usdc",
         type: "address",
+      },
+      {
+        internalType: "string[]",
+        name: "_assets",
+        type: "string[]",
+      },
+      {
+        internalType: "address[]",
+        name: "_proxies",
+        type: "address[]",
+      },
+      {
+        internalType: "uint256",
+        name: "_limit",
+        type: "uint256",
       },
     ],
     stateMutability: "nonpayable",
@@ -464,6 +473,19 @@ export const tradingABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "TRADING_FEE",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -489,11 +511,6 @@ export const tradingABI = [
         type: "string",
       },
       {
-        internalType: "address",
-        name: "_proxyAddress",
-        type: "address",
-      },
-      {
         internalType: "bool",
         name: "_isAbove",
         type: "bool",
@@ -505,11 +522,6 @@ export const tradingABI = [
       },
       {
         internalType: "uint256",
-        name: "_fee",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
         name: "_deadline",
         type: "uint256",
       },
@@ -517,11 +529,6 @@ export const tradingABI = [
         internalType: "uint256",
         name: "_basePrice",
         type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "_caller",
-        type: "address",
       },
     ],
     name: "createPrediction",
@@ -533,6 +540,25 @@ export const tradingABI = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_asset",
+        type: "string",
+      },
+    ],
+    name: "getAssetToProxy",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -643,12 +669,43 @@ export const tradingABI = [
   {
     inputs: [
       {
+        internalType: "string",
+        name: "_asset",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "_proxy",
+        type: "address",
+      },
+    ],
+    name: "setProxyForAsseet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_settlement",
         type: "address",
       },
     ],
     name: "setSettlementAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_newFee",
+        type: "uint256",
+      },
+    ],
+    name: "setTradingFee",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
