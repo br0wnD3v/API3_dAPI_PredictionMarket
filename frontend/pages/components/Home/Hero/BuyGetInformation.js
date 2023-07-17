@@ -15,7 +15,7 @@ export default function BuyGetInformation() {
 
   const currentTime = Date.now();
   const unixEpoch = Math.floor(currentTime / 1000);
-  const queryFinal = `query AvailableMarkets\n{\n  predictionCreateds(orderBy: predictionId, where: {deadline_gt: ${unixEpoch}}) {\n  marketHandler\n  predictionId\n  }\n}`;
+  const queryFinal = `query AvailableMarkets\n{\n  predictionCreateds(orderBy: deadline, where: {deadline_gt: ${unixEpoch}}) {\n  marketHandler\n  predictionId\n  }\n}`;
 
   const client = new ApolloClient({
     uri: graphEndpoint,
