@@ -3,8 +3,6 @@ import { useAccount } from "wagmi";
 
 import { Flex, Spacer, Box, Text } from "@chakra-ui/react";
 
-import "@fontsource/barlow/600.css";
-
 export default function HomeHeader({ setPage }) {
   const { isConnected } = useAccount();
 

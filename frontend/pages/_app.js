@@ -1,4 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import "@fontsource/barlow/600.css";
 
 import { useState, useEffect } from "react";
 
@@ -32,7 +33,7 @@ const wagmiConfig = createConfig({
 
 export default function App({ Component, pageProps }) {
   const toastStyle = {
-    fontFamily: "Arial",
+    fontFamily: "Barlow",
   };
 
   const [ready, setReady] = useState(false);

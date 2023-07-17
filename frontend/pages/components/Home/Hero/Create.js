@@ -29,6 +29,7 @@ import { ethers } from "ethers";
 
 export default function Create() {
   const [createdPrediction, setCreatedPrediction] = useState(false);
+  const [startCreation, setStartCreation] = useState(false);
   const [approved, setApproved] = useState(false);
   const [startOperation, setStartOperation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,8 +47,6 @@ export default function Create() {
     return new Promise((res) => setTimeout(res, delay));
   }
 
-  // CREATION ====================
-
   function resetVariables() {
     setIsSubmitting(false);
     setTokenType("ETH");
@@ -61,6 +60,7 @@ export default function Create() {
     setStartOperation(false);
   }
 
+  // CREATION ====================
   const { config: createPredictionConfig, error: createPredictionWriteError } =
     usePrepareContractWrite({
       address: tradingAddress,
@@ -76,6 +76,8 @@ export default function Create() {
       setCreatedPrediction(true);
     },
   });
+
+  // APPROVAL ====================
 
   const { config: usdcApprovalConfig, error: usdcApprovalWriteError } =
     usePrepareContractWrite({
@@ -144,10 +146,20 @@ export default function Create() {
   }, [startOperation]);
 
   useEffect(() => {
+    async function execute() {
+      await timeout(5000);
+      setStartCreation(true);
+    }
     if (approved) {
-      createPredictionWrite.write();
+      execute();
     }
   }, [approved]);
+
+  useEffect(() => {
+    if (startCreation) {
+      createPredictionWrite.write();
+    }
+  }, [startCreation]);
 
   useEffect(() => {
     if (createdPrediction) {
@@ -161,7 +173,7 @@ export default function Create() {
   return (
     <>
       <Box align="center" justify="center" pt={5} mb={100}>
-        <Box w="50%" border="2px solid gray" borderRadius={10} p={10}>
+        <Box w="50%" border="1px solid gray" borderRadius={10} p={10}>
           <form onSubmit={handleSubmit}>
             <FormControl isRequired isInvalid={error}>
               <FormLabel>Asset To Predict</FormLabel>
