@@ -54,8 +54,9 @@ contract PredictionMarket is Context, Ownable {
     event PredictionCreated(
         uint256 indexed predictionId,
         address indexed marketHandler,
-        address indexed creator,
-        uint256 timestamp
+        address creator,
+        uint256 timestamp,
+        uint256 indexed deadline
     );
 
     /// @dev WILL ADD A BACKUP FORCE_CONCLUDE() TO MAKE SURE IF BECAUSE OF SOME ERROR A CERTAIN PREDICTION WASN'T ABLE
@@ -72,8 +73,8 @@ contract PredictionMarket is Context, Ownable {
         uint256 indexed predictionId,
         uint256 timestamp,
         bool isAbove,
-        int224 priceReading,
-        int224 priceTarget
+        int224 indexed priceReading,
+        int224 indexed priceTarget
     );
 
     event HandlerProgress(
@@ -193,7 +194,8 @@ contract PredictionMarket is Context, Ownable {
             predictionId,
             address(predictionMH),
             _caller,
-            block.timestamp
+            block.timestamp,
+            _deadline
         );
         return predictionId;
     }
@@ -244,10 +246,32 @@ contract PredictionMarket is Context, Ownable {
         return predictions[_predictionId];
     }
 
-    function getProxyAddressForPrediction(
+    function getPredictions(
+        uint256[] memory _ids,
+        uint256 _limit
+    ) external view returns (Prediction[] memory) {
+        Prediction[] memory toReturn;
+        for (uint256 i = 0; i < _limit; i++) {
+            toReturn[i] = (predictions[_ids[i]]);
+        }
+        return toReturn;
+    }
+
+    function getProxyForPrediction(
         uint256 _predictionId
     ) external view returns (address) {
         return predictionIdToProxy[_predictionId];
+    }
+
+    function getProxiesForPredictions(
+        uint256[] memory _ids,
+        uint256 _limit
+    ) external view returns (address[] memory) {
+        address[] memory toReturn;
+        for (uint256 i = 0; i < _limit; i++) {
+            toReturn[i] = predictionIdToProxy[_ids[i]];
+        }
+        return toReturn;
     }
 
     function getAssetToProxy(

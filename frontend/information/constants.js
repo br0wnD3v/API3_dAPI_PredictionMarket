@@ -298,7 +298,7 @@ export const usdcABI = [
   },
 ];
 
-export const tradingAddress = "0x38fA0e68b9A1DBbBFED2Fce4ff87dF6d56B408AD";
+export const tradingAddress = "0x900353b9FC5dFa3a09D9793129456c2e1710b68A";
 export const tradingABI = [
   {
     inputs: [
@@ -353,13 +353,13 @@ export const tradingABI = [
         type: "bool",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "int224",
         name: "priceReading",
         type: "int224",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "int224",
         name: "priceTarget",
         type: "int224",
@@ -440,7 +440,7 @@ export const tradingABI = [
         type: "address",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "address",
         name: "creator",
         type: "address",
@@ -449,6 +449,12 @@ export const tradingABI = [
         indexed: false,
         internalType: "uint256",
         name: "timestamp",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "deadline",
         type: "uint256",
       },
     ],
@@ -630,12 +636,107 @@ export const tradingABI = [
   {
     inputs: [
       {
+        internalType: "uint256[]",
+        name: "_ids",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256",
+        name: "_limit",
+        type: "uint256",
+      },
+    ],
+    name: "getPredictions",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "tokenSymbol",
+            type: "string",
+          },
+          {
+            internalType: "int224",
+            name: "targetPricePoint",
+            type: "int224",
+          },
+          {
+            internalType: "bool",
+            name: "isAbove",
+            type: "bool",
+          },
+          {
+            internalType: "address",
+            name: "proxyAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "fee",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "timestamp",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "isActive",
+            type: "bool",
+          },
+          {
+            internalType: "address",
+            name: "marketHandler",
+            type: "address",
+          },
+        ],
+        internalType: "struct Prediction[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "_ids",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256",
+        name: "_limit",
+        type: "uint256",
+      },
+    ],
+    name: "getProxiesForPredictions",
+    outputs: [
+      {
+        internalType: "address[]",
+        name: "",
+        type: "address[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "_predictionId",
         type: "uint256",
       },
     ],
-    name: "getProxyAddressForPrediction",
+    name: "getProxyForPrediction",
     outputs: [
       {
         internalType: "address",
@@ -795,3 +896,6 @@ export const tradingABI = [
     type: "receive",
   },
 ];
+
+export const graphEndpoint =
+  "https://api.studio.thegraph.com/query/44907/prediction_market_v2/v0.0.2";

@@ -47,6 +47,7 @@ export default function Create() {
   }
 
   // CREATION ====================
+
   function resetVariables() {
     setIsSubmitting(false);
     setTokenType("ETH");
@@ -60,15 +61,6 @@ export default function Create() {
     setStartOperation(false);
   }
 
-  useEffect(() => {
-    if (createdPrediction) {
-      toast.success(
-        "Market Created Successfully! Can be viewed in the `Buy` section shortly."
-      );
-      resetVariables();
-    }
-  }, [createdPrediction]);
-
   const { config: createPredictionConfig, error: createPredictionWriteError } =
     usePrepareContractWrite({
       address: tradingAddress,
@@ -76,9 +68,7 @@ export default function Create() {
       functionName: "createPrediction",
       args: [tokenType, isAbove, targetPrice, dueDate, basePrice],
     });
-
   const createPredictionWrite = useContractWrite(createPredictionConfig);
-
   const waitCreatePrediction = useWaitForTransaction({
     hash: createPredictionWrite.data?.hash,
     onSuccess() {
@@ -87,19 +77,6 @@ export default function Create() {
     },
   });
 
-  useEffect(() => {
-    async function execute() {
-      await timeout(2000);
-      createPredictionWrite.write();
-    }
-
-    if (approved && !createdPrediction) {
-      execute();
-    }
-  }, [approved]);
-
-  // APPROVAL ====================
-
   const { config: usdcApprovalConfig, error: usdcApprovalWriteError } =
     usePrepareContractWrite({
       address: usdcAddress,
@@ -107,9 +84,7 @@ export default function Create() {
       functionName: "approve",
       args: [tradingAddress, 50000000n],
     });
-
   const usdcApprovalWrite = useContractWrite(usdcApprovalConfig);
-
   const waitUsdcApproval = useWaitForTransaction({
     hash: usdcApprovalWrite.data?.hash,
     onSuccess() {
@@ -117,19 +92,6 @@ export default function Create() {
       setApproved(true);
     },
   });
-
-  useEffect(() => {
-    if (startOperation) {
-      usdcApprovalWrite.write();
-
-      console.log(tokenType);
-      console.log(basePrice);
-      console.log(dueDate);
-      console.log(targetPrice);
-      console.log(displayTargetPrice);
-      console.log(isAbove);
-    }
-  }, [startOperation]);
 
   // =====================
 
@@ -174,6 +136,27 @@ export default function Create() {
     setError("");
     setStartOperation(true);
   };
+
+  useEffect(() => {
+    if (startOperation) {
+      usdcApprovalWrite.write();
+    }
+  }, [startOperation]);
+
+  useEffect(() => {
+    if (approved) {
+      createPredictionWrite.write();
+    }
+  }, [approved]);
+
+  useEffect(() => {
+    if (createdPrediction) {
+      toast.success(
+        "Market Created Successfully! Can be viewed in the `Buy` section shortly."
+      );
+      resetVariables();
+    }
+  }, [createdPrediction]);
 
   return (
     <>
