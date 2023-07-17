@@ -29,7 +29,8 @@ import { ethers } from "ethers";
 
 export default function Create() {
   const [createdPrediction, setCreatedPrediction] = useState(false);
-  const [startCreation, setStartCreation] = useState(false);
+  const [createPredictionPrepared, setCreatePredictionPrepared] =
+    useState(false);
   const [approved, setApproved] = useState(false);
   const [startOperation, setStartOperation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,15 +44,11 @@ export default function Create() {
   const [displayTargetPrice, setDisplayTargetPrice] = useState(100);
   const [isAbove, setIsAbove] = useState(true);
 
-  async function timeout(delay) {
-    return new Promise((res) => setTimeout(res, delay));
-  }
-
   function resetVariables() {
     setIsSubmitting(false);
     setTokenType("ETH");
     setDueDate(null);
-    setBasePrice(1);
+    setBasePrice(100);
     setTargetPrice(0);
     setDisplayTargetPrice(100);
     setIsAbove(true);
@@ -60,13 +57,21 @@ export default function Create() {
     setStartOperation(false);
   }
 
+  async function timeout(delay) {
+    return new Promise((res) => setTimeout(res, delay));
+  }
+
   // CREATION ====================
+
   const { config: createPredictionConfig, error: createPredictionWriteError } =
     usePrepareContractWrite({
       address: tradingAddress,
       abi: tradingABI,
       functionName: "createPrediction",
       args: [tokenType, isAbove, targetPrice, dueDate, basePrice],
+      onSuccess() {
+        setCreatePredictionPrepared(true);
+      },
     });
   const createPredictionWrite = useContractWrite(createPredictionConfig);
   const waitCreatePrediction = useWaitForTransaction({
@@ -90,7 +95,7 @@ export default function Create() {
   const waitUsdcApproval = useWaitForTransaction({
     hash: usdcApprovalWrite.data?.hash,
     onSuccess() {
-      console.log("Success");
+      console.log("Success Approval");
       setApproved(true);
     },
   });
@@ -146,20 +151,11 @@ export default function Create() {
   }, [startOperation]);
 
   useEffect(() => {
-    async function execute() {
-      await timeout(5000);
-      setStartCreation(true);
-    }
-    if (approved) {
-      execute();
-    }
-  }, [approved]);
-
-  useEffect(() => {
-    if (startCreation) {
+    if (approved && createPredictionPrepared) {
+      toast.info("Please wait while we proceed further...");
       createPredictionWrite.write();
     }
-  }, [startCreation]);
+  }, [approved, createPredictionPrepared]);
 
   useEffect(() => {
     if (createdPrediction) {
