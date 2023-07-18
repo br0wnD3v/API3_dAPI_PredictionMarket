@@ -61,5 +61,11 @@ export default function BuyGetInformation() {
     execute();
   }, []);
 
-  return <>{dataFetched ? <BuyLanding ids={ids} length={length} /> : null}</>;
+  return (
+    <>
+      {dataFetched && ids && length ? (
+        <BuyLanding ids={ids} length={length} />
+      ) : null}
+    </>
+  );
 }

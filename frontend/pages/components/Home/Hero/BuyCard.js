@@ -4,14 +4,18 @@ import { tradingABI, tradingAddress } from "@/information/constants";
 
 import { useContractRead } from "wagmi";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function BuyCard({ data }) {
   const [dataFetched, setDataFetched] = useState(null);
   const [amount, setAmount] = useState(0);
+  const [direction, setDirection] = useState("");
 
   const id = data;
-  const direction = dataFetched.isAbove ? "Above" : "Below";
+
+  useEffect(() => {
+    if (dataFetched) setDirection(dataFetched.isAbove ? "Above" : "Below");
+  }, [dataFetched]);
 
   const contractRead = useContractRead({
     address: tradingAddress,
