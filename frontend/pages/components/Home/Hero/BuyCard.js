@@ -2,7 +2,11 @@ import { Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
 
 import { tradingABI, tradingAddress, mhABI } from "@/information/constants";
 
-import { useContractRead } from "wagmi";
+import {
+  useContractRead,
+  usePrepareContractWrite,
+  useContractWrite,
+} from "wagmi";
 
 import { useEffect, useState } from "react";
 
@@ -21,13 +25,12 @@ export default function BuyCard({ data }) {
     }
   }, [dataFetched]);
 
-  const contractRead = useContractRead({
+  useContractRead({
     address: tradingAddress,
     abi: tradingABI,
     functionName: "getPrediction",
     args: [id],
     onSuccess(data) {
-      console.log(data);
       setDataFetched(data);
     },
   });
@@ -60,6 +63,12 @@ export default function BuyCard({ data }) {
 
     return formattedDate;
   }
+
+  /// HANDLE BUY NO TOKEN
+  async function handleNoClick() {}
+
+  /// HANDLE BUY YES TOKEN
+  async function handleYesClick() {}
 
   return (
     <>

@@ -14,6 +14,8 @@ import {
   usePrepareContractWrite,
   useContractWrite,
   useWaitForTransaction,
+  useContractRead,
+  useAccount,
 } from "wagmi";
 
 import CreateProcess from "./CreateProcess";
@@ -25,8 +27,11 @@ import { toast } from "react-toastify";
 import { ethers } from "ethers";
 
 export default function CreateGetInformation() {
+  const { address } = useAccount();
+
   const [startReset, setStartReset] = useState(false);
   const [approved, setApproved] = useState(false);
+  const [currentApprovedAmount, setCurrentApprovedAmount] = useState(0);
   const [startOperation, setStartOperation] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,7 +39,7 @@ export default function CreateGetInformation() {
 
   const [tokenType, setTokenType] = useState("ETH");
   const [dueDate, setDueDate] = useState(0);
-  const [basePrice, setBasePrice] = useState(1);
+  const [basePrice, setBasePrice] = useState(100);
   const [targetPrice, setTargetPrice] = useState(0);
   const [displayTargetPrice, setDisplayTargetPrice] = useState(100);
   const [isAbove, setIsAbove] = useState(true);
@@ -42,17 +47,29 @@ export default function CreateGetInformation() {
   function resetVariables() {
     setIsSubmitting(false);
     setTokenType("ETH");
-    setDueDate(undefined);
+    setDueDate(0);
     setBasePrice(100);
     setTargetPrice(0);
     setDisplayTargetPrice(100);
     setIsAbove(true);
+    setCurrentApprovedAmount(0);
     setApproved(false);
     setStartOperation(false);
     setStartReset(false);
   }
 
   // APPROVAL ====================
+
+  const usdcRead = useContractRead({
+    address: usdcAddress,
+    abi: usdcABI,
+    functionName: "allowance",
+    args: [address, tradingAddress],
+    onSuccess(data) {
+      console.log(data);
+      setCurrentApprovedAmount(data);
+    },
+  });
 
   const { config } = usePrepareContractWrite({
     address: usdcAddress,
@@ -129,9 +146,10 @@ export default function CreateGetInformation() {
 
   useEffect(() => {
     if (startOperation) {
-      usdcApprovalWrite();
+      if (currentApprovedAmount == 0) usdcApprovalWrite();
+      else setApproved(true);
     }
-  }, [startOperation]);
+  }, [startOperation, currentApprovedAmount]);
 
   return (
     <>
