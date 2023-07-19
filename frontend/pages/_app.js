@@ -12,11 +12,18 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 const { chains, publicClient } = configureChains(
   [polygonMumbai],
-  [publicProvider()]
+  [
+    jsonRpcProvider({
+      rpc: (polygonMumbai) => ({
+        http: "https://polygon-mumbai-bor.publicnode.com",
+      }),
+    }),
+    // publicProvider(),
+  ]
 );
 
 const { connectors } = getDefaultWallets({

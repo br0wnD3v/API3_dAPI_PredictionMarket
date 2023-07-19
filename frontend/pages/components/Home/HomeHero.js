@@ -7,13 +7,13 @@ import {
   Link,
 } from "@chakra-ui/react";
 
-import Create from "./Hero/Create";
-
 import "@fontsource/barlow/800.css";
 import { useAccount } from "wagmi";
 import { FadeInWhenVisible } from "../TransitionBoxes";
 
 import BuyGetInformation from "./Hero/BuyGetInformation";
+import Create from "./Hero/Create";
+import CreateGetInformation from "./Hero/CreateGetInformation";
 
 export default function HomeHero({ page }) {
   const { isConnected } = useAccount();
@@ -64,7 +64,7 @@ export default function HomeHero({ page }) {
               </>
             ) : page == "Create" ? (
               <>
-                <Create />
+                <CreateGetInformation />
               </>
             ) : (
               <>

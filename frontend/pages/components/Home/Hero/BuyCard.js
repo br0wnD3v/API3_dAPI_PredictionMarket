@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
 
-import { tradingABI, tradingAddress } from "@/information/constants";
+import { tradingABI, tradingAddress, mhABI } from "@/information/constants";
 
 import { useContractRead } from "wagmi";
 
@@ -10,11 +10,15 @@ export default function BuyCard({ data }) {
   const [dataFetched, setDataFetched] = useState(null);
   const [amount, setAmount] = useState(0);
   const [direction, setDirection] = useState("");
+  const [marketHandler, setMarketHandler] = useState("");
 
   const id = data;
 
   useEffect(() => {
-    if (dataFetched) setDirection(dataFetched.isAbove ? "Above" : "Below");
+    if (dataFetched) {
+      setDirection(dataFetched.isAbove ? "Above" : "Below");
+      setMarketHandler(dataFetched.marketHandler);
+    }
   }, [dataFetched]);
 
   const contractRead = useContractRead({
