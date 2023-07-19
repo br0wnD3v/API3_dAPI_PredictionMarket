@@ -17,6 +17,7 @@ struct Prediction {
     uint256 deadline; // Timestamp when the prediction is to end
     bool isActive; // Check if the prediction is open or closed
     address marketHandler; // The contract responsible for betting on the prediction.
+    uint256 predictionTokenPrice; // The price of either of the token for a given market handler.
 }
 
 /// @notice Error codes
@@ -182,6 +183,7 @@ contract PredictionMarket is Context, Ownable {
             timestamp: block.timestamp,
             deadline: _deadline,
             marketHandler: address(predictionMH),
+            predictionTokenPrice: _basePrice,
             isActive: true
         });
 

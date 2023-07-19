@@ -1,6 +1,6 @@
-import { Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
+import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 
-import { tradingABI, tradingAddress, mhABI } from "@/information/constants";
+import { tradingABI, tradingAddress } from "@/information/constants";
 
 import {
   useContractRead,
@@ -9,6 +9,9 @@ import {
 } from "wagmi";
 
 import { useEffect, useState } from "react";
+
+import YesModal from "./YesModal";
+import NoModal from "./NoModal";
 
 export default function BuyCard({ data }) {
   const [dataFetched, setDataFetched] = useState(null);
@@ -20,6 +23,7 @@ export default function BuyCard({ data }) {
 
   useEffect(() => {
     if (dataFetched) {
+      console.log(dataFetched);
       setDirection(dataFetched.isAbove ? "Above" : "Below");
       setMarketHandler(dataFetched.marketHandler);
     }
@@ -50,6 +54,19 @@ export default function BuyCard({ data }) {
     // Round the result to 5 decimal places
     const final = result.substring(0, decimalIndex + 6);
     return final;
+  }
+
+  function addDecimalTwoPlacesFromRight(inputString) {
+    const length = inputString.length;
+    if (length <= 2) {
+      // If the length is less than or equal to 2, simply return the string as it is.
+      return inputString;
+    } else {
+      // Insert the decimal point at the appropriate position and return the modified string.
+      const modifiedString =
+        inputString.slice(0, length - 2) + "." + inputString.slice(length - 2);
+      return modifiedString;
+    }
   }
 
   function convertUnixEpochToDateString(epoch) {
@@ -103,6 +120,14 @@ export default function BuyCard({ data }) {
                   {convertToDecimal(dataFetched.targetPricePoint)}
                 </Text>
               </Flex>
+              <Flex direction="row">
+                <Text>Token Price In USDC : </Text>
+                <Text color="#3BC7A6">
+                  {addDecimalTwoPlacesFromRight(
+                    dataFetched.predictionTokenPrice.toString()
+                  )}
+                </Text>
+              </Flex>
               <Flex mb={4}>
                 <Text>
                   Price Predicted To Be{" "}
@@ -114,13 +139,13 @@ export default function BuyCard({ data }) {
               </Flex>
               <Text>Are You In Favour Of The Prediction?</Text>
               <Flex direction="row" mt={3}>
-                <Button bgColor="red.400" onClick={() => handleNoClick()}>
-                  No
-                </Button>
-                <Spacer />
-                <Button bgColor="green.400" onClick={() => handleYesClick()}>
-                  Yes
-                </Button>
+                {marketHandler ? (
+                  <>
+                    <NoModal mhAddress={marketHandler} />
+                    <Spacer />
+                    <YesModal mhAddress={marketHandler} />
+                  </>
+                ) : null}
               </Flex>
             </Flex>
           </>

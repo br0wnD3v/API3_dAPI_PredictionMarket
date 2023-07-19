@@ -9,11 +9,10 @@ import {
 
 import "@fontsource/barlow/800.css";
 import { useAccount } from "wagmi";
-import { FadeInWhenVisible } from "../TransitionBoxes";
+import { FadeInWhenVisible } from "../../TransitionBoxes";
 
-import BuyGetInformation from "./Hero/BuyGetInformation";
-import Create from "./Hero/Create";
-import CreateGetInformation from "./Hero/CreateGetInformation";
+import BuyGetInformation from "./buy/BuyGetInformation";
+import CreateGetInformation from "./create/CreateGetInformation";
 
 export default function HomeHero({ page }) {
   const { isConnected } = useAccount();

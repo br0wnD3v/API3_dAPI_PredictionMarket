@@ -1,4 +1,4 @@
-import HomeLayout from "./components/Home/HomeLayout";
+import HomeLayout from "./components/layout/HomeLayout";
 
 import { useState, useEffect } from "react";
 

@@ -298,7 +298,7 @@ export const usdcABI = [
   },
 ];
 
-export const tradingAddress = "0x900353b9FC5dFa3a09D9793129456c2e1710b68A";
+export const tradingAddress = "0x6d9C9574B896FDC45cc209EeA8a0BcE9f5826EC8";
 export const tradingABI = [
   {
     inputs: [
@@ -624,6 +624,11 @@ export const tradingABI = [
             name: "marketHandler",
             type: "address",
           },
+          {
+            internalType: "uint256",
+            name: "predictionTokenPrice",
+            type: "uint256",
+          },
         ],
         internalType: "struct Prediction",
         name: "",
@@ -694,6 +699,11 @@ export const tradingABI = [
             internalType: "address",
             name: "marketHandler",
             type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "predictionTokenPrice",
+            type: "uint256",
           },
         ],
         internalType: "struct Prediction[]",
@@ -898,7 +908,7 @@ export const tradingABI = [
 ];
 
 export const graphEndpoint =
-  "https://api.studio.thegraph.com/query/44907/prediction_market_v2/v0.0.2";
+  "https://api.studio.thegraph.com/query/44907/prediction_market_v2/v0.0.3";
 
 export const mhABI = [
   {

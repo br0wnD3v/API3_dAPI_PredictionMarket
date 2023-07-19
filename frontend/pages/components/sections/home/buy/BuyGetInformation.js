@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
-import { graphEndpoint } from "../../../../information/constants";
+import { graphEndpoint } from "@/information/constants";
 
 import { toast } from "react-toastify";
 
@@ -29,7 +29,7 @@ export default function BuyGetInformation() {
   }, [length]);
 
   useEffect(() => {
-    if (ids && ids.length > 1) {
+    if (ids && ids.length >= 1) {
       setLength(ids.length);
     }
   }, [ids]);
@@ -53,7 +53,6 @@ export default function BuyGetInformation() {
           ${queryFinal}
         `,
       });
-
       const finalArray = data.predictionCreateds;
       setGraphDataFetched(finalArray);
     }
