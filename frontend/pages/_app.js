@@ -19,7 +19,7 @@ const { chains, publicClient } = configureChains(
   [
     jsonRpcProvider({
       rpc: (polygonMumbai) => ({
-        http: "https://polygon-mumbai-bor.publicnode.com",
+        http: "https://rpc-mumbai.maticvigil.com",
       }),
     }),
     // publicProvider(),

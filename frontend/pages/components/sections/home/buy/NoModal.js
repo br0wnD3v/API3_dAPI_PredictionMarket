@@ -7,33 +7,141 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  FormLabel,
+  Flex,
   useDisclosure,
+  Input,
+  Text,
 } from "@chakra-ui/react";
 
-import { mhABI } from "@/information/constants";
+import { usdcABI, usdcAddress, mhABI } from "@/information/constants";
 
-import { usePrepareContractWrite, useContractWrite } from "wagmi";
+import { addDecimalTwoPlacesFromRight } from "@/helper/functions";
 
-export default function NoModal({ mhAddress }) {
+import {
+  usePrepareContractWrite,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+
+import { useEffect, useState } from "react";
+
+import { toast } from "react-toastify";
+
+export default function NoModal({ mhAddress, price }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [bought, setBought] = useState(false);
+  const [approved, setApproved] = useState(false);
+  const [amount, setAmount] = useState(0n);
+  const [estimate, setEstimate] = useState(undefined);
+
+  function generateEstimate() {
+    if (amount == 0n) {
+      toast.info("Please Enter An Amount.");
+    }
+    setEstimate(addDecimalTwoPlacesFromRight((price * amount).toString()));
+  }
+
+  // BUY      ================
+
+  const { data: buyNoTokenData, write: buyNoTokenWrite } = useContractWrite({
+    address: mhAddress,
+    abi: mhABI,
+    functionName: "buyNoToken",
+    args: [amount],
+  });
+
+  const buyNoTokenWait = useWaitForTransaction({
+    hash: buyNoTokenData?.hash,
+    onSuccess() {
+      setBought(true);
+    },
+  });
+
+  /// APPROVAL ===============
+
+  const { config: approvalConfig } = usePrepareContractWrite({
+    address: usdcAddress,
+    abi: usdcABI,
+    functionName: "approve",
+    args: [mhAddress, price * amount * 10000n],
+  });
+  const { data: usdcApprovalData, write: usdcApprovalWrite } =
+    useContractWrite(approvalConfig);
+
+  const usdcApprovalWait = useWaitForTransaction({
+    hash: usdcApprovalData?.hash,
+    onSuccess() {
+      console.log("Success Approval");
+      setApproved(true);
+    },
+  });
+
+  useEffect(() => {
+    if (bought) {
+      toast.success("Successfully Bought Token!");
+    }
+  }, [bought]);
+
+  useEffect(() => {
+    if (approved) {
+      buyNoTokenWrite();
+    }
+  }, [approved]);
+
+  console.log("--------------");
+  console.log(price);
+  console.log(amount);
+  console.log(price * amount * 10000n);
+  console.log("--------------");
 
   return (
     <>
       <Button bgColor="red.400" onClick={onOpen}>
         No
       </Button>{" "}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          setEstimate(undefined);
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader></ModalHeader>
+          <ModalHeader>Get An Estimate</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {/* Your modal content for Modal 2 */}
-            This is Modal 2 content.
+            <FormLabel mt={5} ml={1}>
+              Amount Of Tokens
+            </FormLabel>
+            <Flex direction="row" gap={5}>
+              <Input
+                type="number"
+                placeholder="10"
+                onChange={(e) => setAmount(BigInt(e.target.value))}
+              />
+              <Button onClick={() => generateEstimate()} fontSize={15}>
+                Calculate
+              </Button>
+            </Flex>
+            {estimate ? (
+              <Text color="gray" fontSize={14} mt={2} ml={1}>
+                $ {estimate}
+              </Text>
+            ) : null}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+            <Button
+              colorScheme="green"
+              mr={3}
+              onClick={() => {
+                generateEstimate();
+                usdcApprovalWrite();
+              }}
+            >
+              Initiate
             </Button>
           </ModalFooter>
         </ModalContent>

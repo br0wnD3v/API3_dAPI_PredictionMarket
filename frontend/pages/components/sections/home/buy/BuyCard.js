@@ -8,6 +8,8 @@ import {
   useContractWrite,
 } from "wagmi";
 
+import { addDecimalTwoPlacesFromRight } from "@/helper/functions";
+
 import { useEffect, useState } from "react";
 
 import YesModal from "./YesModal";
@@ -16,6 +18,7 @@ import NoModal from "./NoModal";
 export default function BuyCard({ data }) {
   const [dataFetched, setDataFetched] = useState(null);
   const [amount, setAmount] = useState(0);
+  const [tokenPrice, setTokenPrice] = useState(0n);
   const [direction, setDirection] = useState("");
   const [marketHandler, setMarketHandler] = useState("");
 
@@ -26,6 +29,7 @@ export default function BuyCard({ data }) {
       console.log(dataFetched);
       setDirection(dataFetched.isAbove ? "Above" : "Below");
       setMarketHandler(dataFetched.marketHandler);
+      setTokenPrice(dataFetched.predictionTokenPrice);
     }
   }, [dataFetched]);
 
@@ -56,18 +60,18 @@ export default function BuyCard({ data }) {
     return final;
   }
 
-  function addDecimalTwoPlacesFromRight(inputString) {
-    const length = inputString.length;
-    if (length <= 2) {
-      // If the length is less than or equal to 2, simply return the string as it is.
-      return inputString;
-    } else {
-      // Insert the decimal point at the appropriate position and return the modified string.
-      const modifiedString =
-        inputString.slice(0, length - 2) + "." + inputString.slice(length - 2);
-      return modifiedString;
-    }
-  }
+  // function addDecimalTwoPlacesFromRight(inputString) {
+  //   const length = inputString.length;
+  //   if (length <= 2) {
+  //     // If the length is less than or equal to 2, simply return the string as it is.
+  //     return inputString;
+  //   } else {
+  //     // Insert the decimal point at the appropriate position and return the modified string.
+  //     const modifiedString =
+  //       inputString.slice(0, length - 2) + "." + inputString.slice(length - 2);
+  //     return modifiedString;
+  //   }
+  // }
 
   function convertUnixEpochToDateString(epoch) {
     const bigEpoch = epoch.toString();
@@ -80,12 +84,6 @@ export default function BuyCard({ data }) {
 
     return formattedDate;
   }
-
-  /// HANDLE BUY NO TOKEN
-  async function handleNoClick() {}
-
-  /// HANDLE BUY YES TOKEN
-  async function handleYesClick() {}
 
   return (
     <>
@@ -141,9 +139,9 @@ export default function BuyCard({ data }) {
               <Flex direction="row" mt={3}>
                 {marketHandler ? (
                   <>
-                    <NoModal mhAddress={marketHandler} />
+                    <NoModal mhAddress={marketHandler} price={tokenPrice} />
                     <Spacer />
-                    <YesModal mhAddress={marketHandler} />
+                    <YesModal mhAddress={marketHandler} price={tokenPrice} />
                   </>
                 ) : null}
               </Flex>
