@@ -90,12 +90,6 @@ export default function NoModal({ mhAddress, price }) {
     }
   }, [approved]);
 
-  console.log("--------------");
-  console.log(price);
-  console.log(amount);
-  console.log(price * amount * 10000n);
-  console.log("--------------");
-
   return (
     <>
       <Button bgColor="red.400" onClick={onOpen}>

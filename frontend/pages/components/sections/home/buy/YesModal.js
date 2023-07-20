@@ -28,7 +28,7 @@ import { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 
-export default function NoModal({ mhAddress, price }) {
+export default function YesModal({ mhAddress, price }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [bought, setBought] = useState(false);
@@ -45,15 +45,15 @@ export default function NoModal({ mhAddress, price }) {
 
   // BUY      ================
 
-  const { data: buyNoTokenData, write: buyNoTokenWrite } = useContractWrite({
+  const { data: buyYesTokenData, write: buyYesTokenWrite } = useContractWrite({
     address: mhAddress,
     abi: mhABI,
     functionName: "buyYesToken",
     args: [amount],
   });
 
-  const buyNoTokenWait = useWaitForTransaction({
-    hash: buyNoTokenData?.hash,
+  const buyYesTokenWait = useWaitForTransaction({
+    hash: buyYesTokenData?.hash,
     onSuccess() {
       setBought(true);
     },
@@ -65,7 +65,7 @@ export default function NoModal({ mhAddress, price }) {
     address: usdcAddress,
     abi: usdcABI,
     functionName: "approve",
-    args: [mhAddress, estimate],
+    args: [mhAddress, price * amount * 10000n],
   });
   const { data: usdcApprovalData, write: usdcApprovalWrite } =
     useContractWrite(approvalConfig);
@@ -86,15 +86,15 @@ export default function NoModal({ mhAddress, price }) {
 
   useEffect(() => {
     if (approved) {
-      buyNoTokenWrite();
+      buyYesTokenWrite();
     }
   }, [approved]);
 
   return (
     <>
       <Button bgColor="green.400" onClick={onOpen}>
-        No
-      </Button>
+        Yes
+      </Button>{" "}
       <Modal
         isOpen={isOpen}
         onClose={() => {
