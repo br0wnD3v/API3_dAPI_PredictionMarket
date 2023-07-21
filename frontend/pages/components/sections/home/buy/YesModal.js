@@ -36,6 +36,13 @@ export default function YesModal({ mhAddress, price }) {
   const [amount, setAmount] = useState(0n);
   const [estimate, setEstimate] = useState(undefined);
 
+  function resetVariables() {
+    setBought(false);
+    setApproved(false);
+    setAmount(0n);
+    setEstimate(false);
+  }
+
   function generateEstimate() {
     if (amount == 0n) {
       toast.info("Please Enter An Amount.");
@@ -80,7 +87,9 @@ export default function YesModal({ mhAddress, price }) {
 
   useEffect(() => {
     if (bought) {
-      toast.success("Successfully Bought Token!");
+      toast.success("Successfully Bought Yes Token(s).");
+      onClose();
+      resetVariables();
     }
   }, [bought]);
 
@@ -94,7 +103,7 @@ export default function YesModal({ mhAddress, price }) {
     <>
       <Button bgColor="green.400" onClick={onOpen}>
         Yes
-      </Button>{" "}
+      </Button>
       <Modal
         isOpen={isOpen}
         onClose={() => {
@@ -132,7 +141,12 @@ export default function YesModal({ mhAddress, price }) {
               mr={3}
               onClick={() => {
                 generateEstimate();
-                usdcApprovalWrite();
+                if (amount != 0n) {
+                  toast.info(
+                    "Please click on the 'Use Default' when setting the approval."
+                  );
+                  usdcApprovalWrite();
+                }
               }}
             >
               Initiate
