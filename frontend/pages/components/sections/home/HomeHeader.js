@@ -34,6 +34,18 @@ export default function HomeHeader({ setPage }) {
               >
                 Buy
               </Text>
+              <Text
+                onClick={() => setPage("Dashboard")}
+                _hover={{ cursor: "pointer" }}
+              >
+                Dashboard
+              </Text>
+              <Text
+                onClick={() => setPage("Rewards")}
+                _hover={{ cursor: "pointer" }}
+              >
+                Rewards
+              </Text>
             </Flex>
           </>
         ) : null}

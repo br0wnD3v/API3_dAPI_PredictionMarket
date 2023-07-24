@@ -13,6 +13,8 @@ import { FadeInWhenVisible } from "../../TransitionBoxes";
 
 import BuyGetInformation from "./buy/BuyGetInformation";
 import CreateGetInformation from "./create/CreateGetInformation";
+import DashboardGetInformation from "./dashboard/DashboardGetInformation";
+import RewardsGetInformation from "./reward/RewardsGetInformation";
 
 export default function HomeHero({ page }) {
   const { isConnected } = useAccount();
@@ -65,11 +67,19 @@ export default function HomeHero({ page }) {
               <>
                 <CreateGetInformation />
               </>
-            ) : (
+            ) : page == "Buy" ? (
               <>
                 <BuyGetInformation />
               </>
-            )}
+            ) : page == "Dashboard" ? (
+              <>
+                <DashboardGetInformation />
+              </>
+            ) : page == "Rewards" ? (
+              <>
+                <RewardsGetInformation />
+              </>
+            ) : null}
           </>
         )}
       </Box>
