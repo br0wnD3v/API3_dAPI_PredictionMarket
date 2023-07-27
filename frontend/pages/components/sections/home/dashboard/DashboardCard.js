@@ -90,7 +90,7 @@ export default function DashboardCards({ data }) {
                   The Target Price.
                 </Text>
               </Flex>
-              <Text>Current Token Count Of Each Side </Text>
+              <Text>Tokens Held Per Each Side </Text>
               <Flex direction="row" mt={3}>
                 {marketHandler ? (
                   <>

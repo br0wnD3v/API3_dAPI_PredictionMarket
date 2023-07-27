@@ -1075,6 +1075,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/barlow/-/barlow-5.0.5.tgz#b2e66aea7a3d36067b4281d185418d5736ef5eeb"
   integrity sha512-nPwOFPAKrhAf712sUrhc6BcT51EB7nqxP+PPJmOQdapQo7bAIXgk8TFVs1duub/81dlA9tkZqVdSu8I58Pa2pw==
 
+"@fontsource/vt323@^5.0.5":
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/@fontsource/vt323/-/vt323-5.0.5.tgz#86525a17bc0e6ea5d11fc8a77507a381dc9cdc0d"
+  integrity sha512-v7PGhMis2rZ3CFJe0EFWG0Xw577xai6Ytf48pwFg4CkdmBbXScaPDurr25wweRpL05Cg3zrMeqUhFUuGmgngFQ==
+
 "@graphql-typed-document-node/core@^3.1.1":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"

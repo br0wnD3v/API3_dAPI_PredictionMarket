@@ -39,7 +39,7 @@ export function convertToDecimal(bigNumber) {
   return final;
 }
 
-export function addDecimalSixPlacesFromRight(inputString) {
+export function addDecimalSixPlacesFromRightAndRemoveTrail(inputString) {
   const length = inputString.length;
   if (length <= 6) {
     // If the length is less than or equal to 2, simply return the string as it is.
@@ -48,6 +48,7 @@ export function addDecimalSixPlacesFromRight(inputString) {
     // Insert the decimal point at the appropriate position and return the modified string.
     const modifiedString =
       inputString.slice(0, length - 6) + "." + inputString.slice(length - 6);
-    return modifiedString;
+
+    return modifiedString.replace(/(\.\d*?[1-9])0+$/, "$1").replace(/\.$/, "");
   }
 }

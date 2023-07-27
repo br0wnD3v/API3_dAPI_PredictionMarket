@@ -15,6 +15,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/barlow": "^5.0.5",
+    "@fontsource/vt323": "^5.0.5",
     "@rainbow-me/rainbowkit": "^1.0.5",
     "axios": "^1.4.0",
     "eslint": "8.44.0",

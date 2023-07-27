@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Flex, Box, Heading } from "@chakra-ui/react";
 import DashboardCard from "./DashboardCard";
+
+import "@fontsource/vt323";
 
 export default function DashboardLanding({ data }) {
   const [keys, setKeys] = useState([]);
@@ -62,7 +64,12 @@ export default function DashboardLanding({ data }) {
 
   return (
     <>
-      <Box m={10} maxH="max-content" bgColor="#F0FFF0" borderRadius={10}>
+      <Box m={10} maxH="max-content">
+        <Flex direction="row" ml={5}>
+          <Heading fontFamily="vt323" size="4xl" mb={5}>
+            Your Investments
+          </Heading>
+        </Flex>
         {cardObjects
           ? cardObjects.map((item, index) => (
               <DashboardCard key={index} data={item} />
