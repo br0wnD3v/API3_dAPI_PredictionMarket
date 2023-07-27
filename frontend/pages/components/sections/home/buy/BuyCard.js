@@ -2,13 +2,13 @@ import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 
 import { tradingABI, tradingAddress } from "@/information/constants";
 
-import {
-  useContractRead,
-  usePrepareContractWrite,
-  useContractWrite,
-} from "wagmi";
+import { useContractRead } from "wagmi";
 
-import { addDecimalTwoPlacesFromRight } from "@/helper/functions";
+import {
+  addDecimalTwoPlacesFromRight,
+  convertUnixEpochToDateString,
+  convertToDecimal,
+} from "@/helper/functions";
 
 import { useEffect, useState } from "react";
 
@@ -42,48 +42,6 @@ export default function BuyCard({ data }) {
       setDataFetched(data);
     },
   });
-
-  // marketHandler: "0xD8Ea6F3b0A2390675cf1353cef428038E94E23FF"
-  function convertToDecimal(bigNumber) {
-    const strNumber = bigNumber.toString(); // Convert to string
-    const decimalIndex = strNumber.length - 18; // Index to place decimal
-
-    // Insert decimal point at the appropriate index
-    const result = [
-      strNumber.slice(0, decimalIndex),
-      ".",
-      strNumber.slice(decimalIndex),
-    ].join("");
-
-    // Round the result to 5 decimal places
-    const final = result.substring(0, decimalIndex + 6);
-    return final;
-  }
-
-  // function addDecimalTwoPlacesFromRight(inputString) {
-  //   const length = inputString.length;
-  //   if (length <= 2) {
-  //     // If the length is less than or equal to 2, simply return the string as it is.
-  //     return inputString;
-  //   } else {
-  //     // Insert the decimal point at the appropriate position and return the modified string.
-  //     const modifiedString =
-  //       inputString.slice(0, length - 2) + "." + inputString.slice(length - 2);
-  //     return modifiedString;
-  //   }
-  // }
-
-  function convertUnixEpochToDateString(epoch) {
-    const bigEpoch = epoch.toString();
-
-    const date = new Date(parseInt(bigEpoch) * 1000);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear().toString();
-    const formattedDate = `${day}/${month}/${year}`;
-
-    return formattedDate;
-  }
 
   return (
     <>
