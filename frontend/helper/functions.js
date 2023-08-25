@@ -35,7 +35,7 @@ export function convertToDecimal(bigNumber) {
   ].join("");
 
   // Round the result to 5 decimal places
-  const final = result.substring(0, decimalIndex + 6);
+  const final = result.substring(0, decimalIndex + 7);
   return final;
 }
 
