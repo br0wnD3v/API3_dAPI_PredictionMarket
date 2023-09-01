@@ -35,9 +35,6 @@ contract PredictionMarket is Context, Ownable {
     /// @notice 0.01% * 50 = 0.5%.
     uint256 public TRADING_FEE = 50;
 
-    /// @notice Mapping to get each proxy address associated with an asset.
-    mapping(string => address) private assetToProxy;
-
     /// @notice Mapping to track each Prediction with a unique Id.
     mapping(uint256 => Prediction) private predictions;
     /// @notice Mapping to track each Prediction's API3 dAPI proxy address. Only set in a function available
@@ -110,16 +107,8 @@ contract PredictionMarket is Context, Ownable {
     }
 
     /// @param _usdc The payment token addresTRADING_FEEs.
-    constructor(
-        address _usdc,
-        string[] memory _assets,
-        address[] memory _proxies,
-        uint256 _limit
-    ) {
+    constructor(address _usdc) {
         I_USDC_CONTRACT = IERC20(_usdc);
-
-        for (uint i = 0; i < _limit; i++)
-            assetToProxy[_assets[i]] = _proxies[i];
 
         nextPredictionId.increment();
     }
@@ -133,6 +122,7 @@ contract PredictionMarket is Context, Ownable {
     /// Is a multiple of 0.01 USD or 1 cent.
     function createPrediction(
         string memory _tokenSymbol,
+        address _proxyAddress,
         bool _isAbove,
         int224 _targetPricePoint,
         uint256 _deadline,
@@ -141,7 +131,6 @@ contract PredictionMarket is Context, Ownable {
         /// @param _caller The address that is responsible for paying the platform a set fee and create a new prediction
         /// people can bet upon.
         address _caller = _msgSender();
-        address _proxyAddress = assetToProxy[_tokenSymbol];
 
         require(
             I_USDC_CONTRACT.allowance(_caller, address(this)) >= PLATFORM_FEE,
@@ -229,14 +218,6 @@ contract PredictionMarket is Context, Ownable {
         vaultAddress = _vault;
     }
 
-    function setProxyForAsseet(
-        string memory _asset,
-        address _proxy
-    ) external onlyOwner {
-        require(_proxy != address(0), "Can't be zero address.");
-        assetToProxy[_asset] = _proxy;
-    }
-
     function setTradingFee(uint256 _newFee) external onlyOwner {
         TRADING_FEE = _newFee;
     }
@@ -274,12 +255,6 @@ contract PredictionMarket is Context, Ownable {
             toReturn[i] = predictionIdToProxy[_ids[i]];
         }
         return toReturn;
-    }
-
-    function getAssetToProxy(
-        string memory _asset
-    ) external view returns (address) {
-        return assetToProxy[_asset];
     }
 
     /// SPECIAL FUNCTION ====================================================

@@ -8,6 +8,7 @@ import { tradingABI, tradingAddress } from "@/information/constants";
 
 export default function CreateProcess({
   tokenType,
+  proxyAddress,
   isAbove,
   targetPrice,
   dueDate,
@@ -20,7 +21,7 @@ export default function CreateProcess({
     address: tradingAddress,
     abi: tradingABI,
     functionName: "createPrediction",
-    args: [tokenType, isAbove, targetPrice, dueDate, basePrice],
+    args: [tokenType, proxyAddress, isAbove, targetPrice, dueDate, basePrice],
   });
 
   const waitCreatePrediction = useWaitForTransaction({

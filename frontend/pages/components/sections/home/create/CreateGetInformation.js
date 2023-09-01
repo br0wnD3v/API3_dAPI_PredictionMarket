@@ -6,6 +6,7 @@ import {
   Box,
   FormErrorMessage,
   Button,
+  Text,
 } from "@chakra-ui/react";
 
 import { usdcAddress, usdcABI, tradingAddress } from "@/information/constants";
@@ -25,6 +26,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import { ethers } from "ethers";
+import Link from "next/link";
 
 export default function CreateGetInformation() {
   const { address } = useAccount();
@@ -37,7 +39,8 @@ export default function CreateGetInformation() {
 
   const [error, setError] = useState("");
 
-  const [tokenType, setTokenType] = useState("ETH");
+  const [tokenType, setTokenType] = useState("");
+  const [proxy, setProxy] = useState("");
   const [dueDate, setDueDate] = useState(0);
   const [basePrice, setBasePrice] = useState(100);
   const [targetPrice, setTargetPrice] = useState(0);
@@ -46,7 +49,8 @@ export default function CreateGetInformation() {
 
   function resetVariables() {
     setIsSubmitting(false);
-    setTokenType("ETH");
+    setTokenType("");
+    setProxy("");
     setDueDate(0);
     setBasePrice(100);
     setTargetPrice(0);
@@ -158,17 +162,38 @@ export default function CreateGetInformation() {
           <form onSubmit={handleSubmit}>
             <FormControl isRequired isInvalid={error}>
               <FormLabel>Asset To Predict</FormLabel>
-              <Select
+              <Input
+                type="text"
+                placeholder="AAPL"
                 disabled={isSubmitting}
                 value={tokenType}
                 onChange={(e) => setTokenType(e.target.value)}
-              >
-                <option value="AAVE">AAVE</option>
-                <option value="API3">API3</option>
-                <option value="BTC">BTC</option>
-                <option value="ETH">ETH</option>
-                <option value="MATIC">MATIC</option>
-              </Select>
+              />
+              <FormLabel mt={5}>
+                Proxy Address{" "}
+                <Link
+                  href="https://market.api3.org/dapis?chains=polygon-testnet"
+                  target="_blank"
+                >
+                  (
+                  <Text color="blue" display="inline" textDecor="underline">
+                    https://market.api3.org/dapis
+                  </Text>
+                  )
+                </Link>
+              </FormLabel>
+              <Input
+                type="text"
+                placeholder="0xa34Aa31eb0d9c4414EaC3B4A4b56A7ca3752529d"
+                disabled={isSubmitting}
+                value={proxy}
+                onChange={(e) => setProxy(e.target.value)}
+                onBlur={() => {
+                  toast.info(
+                    "Please make sure the Proxy Address is correct or else it will lead to ambiguity."
+                  );
+                }}
+              />
               <FormLabel mt={5}>Deadline</FormLabel>
               <Input
                 disabled={isSubmitting}
@@ -213,6 +238,7 @@ export default function CreateGetInformation() {
       {approved && (
         <CreateProcess
           tokenType={tokenType}
+          proxyAddress={proxy}
           isAbove={isAbove}
           targetPrice={targetPrice}
           dueDate={dueDate}
