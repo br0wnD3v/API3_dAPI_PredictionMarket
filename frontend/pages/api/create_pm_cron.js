@@ -61,6 +61,6 @@ export default async function handler(req, res) {
     const success = await createCRONJob(predictionId, endingTimestamp);
 
     if (success) res.status(200).json({ url: success[0], cron: success[1] });
-    else res.status(400);
+    else res.status(400).json({ error: "Can't create CRON job." });
   }
 }

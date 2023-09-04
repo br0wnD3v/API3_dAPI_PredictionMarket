@@ -1,6 +1,6 @@
 import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 
-import { tradingABI, tradingAddress } from "@/information/constants";
+import { tradingABI, tradingAddress } from "@/constants/info";
 
 import { useContractRead } from "wagmi";
 

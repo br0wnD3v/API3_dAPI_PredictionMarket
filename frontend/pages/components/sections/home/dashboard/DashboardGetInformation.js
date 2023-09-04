@@ -1,7 +1,7 @@
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { graphEndpoint } from "@/information/constants";
+import { graphEndpoint } from "@/constants/info";
 
 import { toast } from "react-toastify";
 

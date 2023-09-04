@@ -14,7 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { usdcABI, usdcAddress, mhABI } from "@/information/constants";
+import { usdcABI, usdcAddress, mhABI } from "@/constants/info";
 
 import { addDecimalTwoPlacesFromRight } from "@/helper/functions";
 

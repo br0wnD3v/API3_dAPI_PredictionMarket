@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 import { useEffect, useState } from "react";
 
-import { tradingABI, tradingAddress } from "@/information/constants";
+import { tradingABI, tradingAddress } from "@/constants/info";
 
 export default function CreateProcess({
   tokenType,

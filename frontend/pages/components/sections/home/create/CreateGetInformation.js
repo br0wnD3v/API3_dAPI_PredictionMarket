@@ -9,7 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { usdcAddress, usdcABI, tradingAddress } from "@/information/constants";
+import { usdcAddress, usdcABI, tradingAddress } from "@/constants/info";
 
 import {
   usePrepareContractWrite,

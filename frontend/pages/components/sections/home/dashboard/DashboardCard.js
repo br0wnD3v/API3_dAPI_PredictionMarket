@@ -13,7 +13,7 @@ import {
   addDecimalTwoPlacesFromRight,
 } from "@/helper/functions";
 
-import { tradingABI, tradingAddress } from "@/information/constants";
+import { tradingABI, tradingAddress } from "@/constants/info";
 
 export default function DashboardCards({ data }) {
   const id = data[0];
