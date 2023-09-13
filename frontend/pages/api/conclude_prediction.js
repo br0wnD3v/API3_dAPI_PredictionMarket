@@ -1,4 +1,3 @@
-require("dotenv").config();
 const ethers = require("ethers");
 
 const { settlementAddress, settlementABI } = require("../../constants/info");
