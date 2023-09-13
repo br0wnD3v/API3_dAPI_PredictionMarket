@@ -15,18 +15,9 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
 
   /// THESE ARE ALL ON POLYGON TESTNET
-  const assetArray = ["AAVE", "API3", "BTC", "ETH", "MATIC"];
-  const proxyArray = [
-    "0x13d1Ed8c24911d88e6155cE32A66908399C97924",
-    "0xf25b7429406b24da879f0d1a008596b74fcb9c2f",
-    "0xe5Cf15fED24942E656dBF75165aF1851C89F21B5",
-    "0x26690F9f17FdC26D419371315bc17950a0FC90eD",
-    "0x3ACccB328Db79Af1B81a4801DAf9ac8370b9FBF8",
-  ];
-  const limit = 5;
   const Trading = await deploy("PredictionMarket", {
     from: deployer,
-    args: [Mock.address, assetArray, proxyArray, limit],
+    args: [Mock.address],
   });
 
   const Settlement = await deploy("PM_Settlement", {

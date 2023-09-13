@@ -11,18 +11,19 @@ import "react-toastify/dist/ReactToastify.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { polygonMumbai } from "wagmi/chains";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { goerli } from "wagmi/chains";
+import { publicProvider } from "wagmi/providers/public";
+// import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
 const { chains, publicClient } = configureChains(
-  [polygonMumbai],
+  [goerli],
   [
-    jsonRpcProvider({
-      rpc: (polygonMumbai) => ({
-        http: "https://rpc-mumbai.maticvigil.com",
-      }),
-    }),
-    // publicProvider(),
+    // jsonRpcProvider({
+    //   rpc: (polygonMumbai) => ({
+    //     http: "https://rpc-mumbai.maticvigil.com",
+    //   }),
+    // }),
+    publicProvider(),
   ]
 );
 

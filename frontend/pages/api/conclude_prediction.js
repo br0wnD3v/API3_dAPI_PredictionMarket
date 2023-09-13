@@ -3,7 +3,7 @@ const ethers = require("ethers");
 
 const { settlementAddress, settlementABI } = require("../../constants/info");
 
-const PROVIDER = process.env.MUMBI_RPC;
+const PROVIDER = process.env.GOERLI_RPC;
 const DEPLOYER = process.env.PK_DEPLOYER;
 
 const provider = new ethers.providers.JsonRpcProvider(PROVIDER);

@@ -172,7 +172,7 @@ export default function CreateGetInformation() {
               <FormLabel mt={5}>
                 Proxy Address{" "}
                 <Link
-                  href="https://market.api3.org/dapis?chains=polygon-testnet"
+                  href="https://market.api3.org/dapis?chains=goerli"
                   target="_blank"
                 >
                   (

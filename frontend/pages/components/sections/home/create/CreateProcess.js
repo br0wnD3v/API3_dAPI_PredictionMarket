@@ -36,6 +36,7 @@ export default function CreateProcess({
       toast.success(
         "Market Created Successfully! Can be viewed in the `Buy` section shortly."
       );
+      setCreatedPrediction(false);
       setStartReset(true);
     }
   }, [createdPrediction]);

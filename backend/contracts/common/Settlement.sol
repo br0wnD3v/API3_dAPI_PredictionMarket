@@ -24,8 +24,12 @@ struct Prediction {
 interface ITrading {
     function concludePrediction_2(uint256, bool) external;
 
+    function getNextPredictionId() external view returns (uint256);
+
     function getPrediction(uint256) external view returns (Prediction memory);
 }
+
+error PM_InvalidPredictionId();
 
 /// @dev The contract is inherently a data feed reader
 contract PM_Settlement is Ownable {
@@ -37,12 +41,20 @@ contract PM_Settlement is Ownable {
         tradingContract = ITrading(_trading);
     }
 
+    modifier isValidPredictionId(uint256 _id) {
+        uint256 currentUpper = tradingContract.getNextPredictionId();
+        if (_id >= currentUpper) revert PM_InvalidPredictionId();
+        _;
+    }
+
     /// @dev We can add an incentive to whoever calls it get some % of overall protocol fee for a given prediction.
     /// Note that this should come out > gas fee to run the txn in the first place. Or we use CRON job, EAC,
     /// Cloud-based scheduler.
     /// @dev Personally think that the 1st and 3rd options are good candidates.
     /// @param _predictionId The unique identifier for the prediction to be concluded.
-    function concludePrediction_1(uint256 _predictionId) external {
+    function concludePrediction_1(
+        uint256 _predictionId
+    ) external isValidPredictionId(_predictionId) {
         Prediction memory associatedPrediction = tradingContract.getPrediction(
             _predictionId
         );

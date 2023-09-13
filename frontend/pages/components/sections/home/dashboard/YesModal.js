@@ -21,6 +21,9 @@ export default function YesModal({ data }) {
         <Button bgColor="green.300" _hover={{ bgColor: "green.400" }}>
           {amountYes}
         </Button>
+        {amountYes.toString() != 0 ? (
+          <Button fontSize="12px">Swap To Against</Button>
+        ) : null}
       </Flex>
     </>
   );

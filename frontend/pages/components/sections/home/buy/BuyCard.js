@@ -14,19 +14,23 @@ import { useEffect, useState } from "react";
 
 import YesModal from "./YesModal";
 import NoModal from "./NoModal";
+import Link from "next/link";
 
 export default function BuyCard({ data }) {
+  console.log(data);
+
   const [dataFetched, setDataFetched] = useState(null);
-  const [amount, setAmount] = useState(0);
   const [tokenPrice, setTokenPrice] = useState(0n);
   const [direction, setDirection] = useState("");
   const [marketHandler, setMarketHandler] = useState("");
+  const [proxy, setProxy] = useState("");
 
   const id = data;
 
   useEffect(() => {
     if (dataFetched) {
       console.log(dataFetched);
+      setProxy(dataFetched.proxyAddress);
       setDirection(dataFetched.isAbove ? "Above" : "Below");
       setMarketHandler(dataFetched.marketHandler);
       setTokenPrice(dataFetched.predictionTokenPrice);
@@ -84,7 +88,7 @@ export default function BuyCard({ data }) {
                   )}
                 </Text>
               </Flex>
-              <Flex mb={4}>
+              <Flex>
                 <Text>
                   Price Predicted To Be{" "}
                   <Text display="inline" color="#3BC7A6">
@@ -92,6 +96,18 @@ export default function BuyCard({ data }) {
                   </Text>{" "}
                   The Target Price.
                 </Text>
+              </Flex>
+              <Flex mb={4}>
+                <Text>Proxy Address : </Text>
+                <Link
+                  display="inline"
+                  target="_blank"
+                  href={`https://market.api3.org/dapis?chains=goerli&search=${dataFetched.tokenSymbol}`}
+                >
+                  <Text decoration="underline" color="#3BC7A6">
+                    {proxy.slice(0, 6) + "..." + proxy.slice(-4)}
+                  </Text>
+                </Link>{" "}
               </Flex>
               <Text>Are You In Favour Of The Prediction?</Text>
               <Flex direction="row" mt={3}>

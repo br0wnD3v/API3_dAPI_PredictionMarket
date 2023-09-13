@@ -1,4 +1,4 @@
-export const usdcAddress = "0x31a0EDA48F467105EF31909465a7403d2e657bCC";
+export const usdcAddress = "0x5E723bac7e84B85f81667E8c032ba6E52C41A0DB";
 export const usdcABI = [
   {
     inputs: [],
@@ -298,7 +298,7 @@ export const usdcABI = [
   },
 ];
 
-export const tradingAddress = "0x6d9C9574B896FDC45cc209EeA8a0BcE9f5826EC8";
+export const tradingAddress = "0xD15444a7ff0564AD8b283a94e8033F1ce31cd2E9";
 export const tradingABI = [
   {
     inputs: [
@@ -306,21 +306,6 @@ export const tradingABI = [
         internalType: "address",
         name: "_usdc",
         type: "address",
-      },
-      {
-        internalType: "string[]",
-        name: "_assets",
-        type: "string[]",
-      },
-      {
-        internalType: "address[]",
-        name: "_proxies",
-        type: "address[]",
-      },
-      {
-        internalType: "uint256",
-        name: "_limit",
-        type: "uint256",
       },
     ],
     stateMutability: "nonpayable",
@@ -434,6 +419,25 @@ export const tradingABI = [
         type: "uint256",
       },
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "PredictionConcluded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "predictionId",
+        type: "uint256",
+      },
+      {
         indexed: true,
         internalType: "address",
         name: "marketHandler",
@@ -517,6 +521,11 @@ export const tradingABI = [
         type: "string",
       },
       {
+        internalType: "address",
+        name: "_proxyAddress",
+        type: "address",
+      },
+      {
         internalType: "bool",
         name: "_isAbove",
         type: "bool",
@@ -549,19 +558,13 @@ export const tradingABI = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_asset",
-        type: "string",
-      },
-    ],
-    name: "getAssetToProxy",
+    inputs: [],
+    name: "getNextPredictionId",
     outputs: [
       {
-        internalType: "address",
+        internalType: "uint256",
         name: "",
-        type: "address",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -780,24 +783,6 @@ export const tradingABI = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_asset",
-        type: "string",
-      },
-      {
-        internalType: "address",
-        name: "_proxy",
-        type: "address",
-      },
-    ],
-    name: "setProxyForAsseet",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "address",
         name: "_settlement",
         type: "address",
@@ -907,7 +892,7 @@ export const tradingABI = [
   },
 ];
 
-export const settlementAddress = "0xAd4C14DBb3A17d7f5495177a2861645d2165B2d2";
+export const settlementAddress = "0xEF13330A0d46cc5c80B9009EbF6a8a8cf280a8eE";
 export const settlementABI = [
   {
     inputs: [
@@ -919,6 +904,11 @@ export const settlementABI = [
     ],
     stateMutability: "nonpayable",
     type: "constructor",
+  },
+  {
+    inputs: [],
+    name: "PM_InvalidPredictionId",
+    type: "error",
   },
   {
     anonymous: false,
@@ -999,9 +989,6 @@ export const settlementABI = [
     type: "function",
   },
 ];
-
-export const graphEndpoint =
-  "https://api.studio.thegraph.com/query/44907/prediction_market_v2/v0.0.3";
 
 export const mhABI = [
   {
@@ -1590,3 +1577,6 @@ export const mhABI = [
     type: "receive",
   },
 ];
+
+export const graphEndpoint =
+  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.1";

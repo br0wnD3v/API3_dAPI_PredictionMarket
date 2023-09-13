@@ -21,6 +21,9 @@ export default function NoModal({ data }) {
         <Button bgColor="red.300" _hover={{ bgColor: "red.400" }}>
           {amountNo}
         </Button>
+        {amountNo.toString() != 0 ? (
+          <Button fontSize="12px">Swap To Favour</Button>
+        ) : null}
       </Flex>
     </>
   );

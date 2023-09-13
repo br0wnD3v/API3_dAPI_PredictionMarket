@@ -15,6 +15,7 @@ import BuyGetInformation from "./buy/BuyGetInformation";
 import CreateGetInformation from "./create/CreateGetInformation";
 import DashboardGetInformation from "./dashboard/DashboardGetInformation";
 import RewardsGetInformation from "./reward/RewardsGetInformation";
+import ConcludeGetInformation from "./conclude/ConcludeGetInformation";
 
 export default function HomeHero({ page }) {
   const { isConnected } = useAccount();
@@ -78,6 +79,10 @@ export default function HomeHero({ page }) {
             ) : page == "Rewards" ? (
               <>
                 <RewardsGetInformation />
+              </>
+            ) : page == "Conclude" ? (
+              <>
+                <ConcludeGetInformation />
               </>
             ) : null}
           </>

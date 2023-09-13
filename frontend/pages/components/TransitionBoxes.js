@@ -6,6 +6,7 @@ export default function TransitionBoxes() {
 export function FadeInWhenVisible({ children }) {
   return (
     <motion.div
+      is="custom"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
@@ -23,6 +24,7 @@ export function FadeInWhenVisible({ children }) {
 export function ComeFromTopWhenVisible({ children }) {
   return (
     <motion.div
+      is="custom"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
@@ -40,6 +42,7 @@ export function ComeFromTopWhenVisible({ children }) {
 export function ComeFromBottomWhenVisible({ children }) {
   return (
     <motion.div
+      is="custom"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
@@ -57,6 +60,7 @@ export function ComeFromBottomWhenVisible({ children }) {
 export function ComeFromLeftWhenVisible({ children }) {
   return (
     <motion.div
+      is="custom"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
@@ -74,6 +78,7 @@ export function ComeFromLeftWhenVisible({ children }) {
 export function ComeFromRightWhenVisible({ children }) {
   return (
     <motion.div
+      is="custom"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}

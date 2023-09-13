@@ -6,12 +6,16 @@ import { graphEndpoint } from "@/constants/info";
 import { toast } from "react-toastify";
 
 import BuyLanding from "./BuyLanding";
+import { Flex, Heading } from "@chakra-ui/react";
+import { FadeInWhenVisible } from "@/pages/components/TransitionBoxes";
 
 export default function BuyGetInformation() {
   const [dataFetched, setDataFetched] = useState(null);
   const [length, setLength] = useState(0);
   const [ids, setIds] = useState(null);
   const [graphDataFetched, setGraphDataFetched] = useState(null);
+
+  const [displayNone, setDisplayNone] = useState(false);
 
   const currentTime = Date.now();
   const unixEpoch = Math.floor(currentTime / 1000);
@@ -54,15 +58,34 @@ export default function BuyGetInformation() {
         `,
       });
       const finalArray = data.predictionCreateds;
+      if (finalArray.length == 0) {
+        setDisplayNone(true);
+      }
       setGraphDataFetched(finalArray);
     }
-    toast.info("Sit back and relax while we fetch recent details :) ...");
+    toast.info("Sit back and relax while we fetch recent details...");
     execute();
   }, []);
 
   return (
     <>
-      {dataFetched && ids && length ? (
+      {displayNone ? (
+        <>
+          <FadeInWhenVisible>
+            <Flex
+              direction="column"
+              align="center"
+              justify="center"
+              h={500}
+              w="70%"
+            >
+              <Heading fontFamily="Barlow" fontSize="90px">
+                It looks like there are no available markets :(
+              </Heading>
+            </Flex>
+          </FadeInWhenVisible>
+        </>
+      ) : dataFetched && ids && length ? (
         <BuyLanding ids={ids} length={length} />
       ) : null}
     </>

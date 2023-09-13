@@ -45,6 +45,12 @@ export default function HomeHeader({ setPage }) {
                 _hover={{ cursor: "pointer" }}
               >
                 Rewards
+              </Text>{" "}
+              <Text
+                onClick={() => setPage("Conclude")}
+                _hover={{ cursor: "pointer" }}
+              >
+                Conclude
               </Text>
             </Flex>
           </>

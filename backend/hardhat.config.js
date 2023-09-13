@@ -24,6 +24,11 @@ module.exports = {
       url: "https://polygon-mumbai.g.alchemy.com/v2/eH-QZss2iiTRnRLoHooQbkOcb6IBDFtf",
       accounts: [PK_DEPLOYER],
     },
+    goerli: {
+      chainId: 5,
+      url: "https://eth-goerli.g.alchemy.com/v2/Py5g-Lx7Yk4QzMHNLZ8SGMcj5ovkdZLL",
+      accounts: [PK_DEPLOYER],
+    },
   },
   namedAccounts: {
     deployer: {

@@ -83,6 +83,8 @@ contract PredictionMarket is Context, Ownable {
         int256 amountNo
     );
 
+    event PredictionConcluded(uint256 indexed predictionId, uint256 timestamp);
+
     /// @notice The payment token interface
     IERC20 immutable I_USDC_CONTRACT;
 
@@ -207,6 +209,8 @@ contract PredictionMarket is Context, Ownable {
         IMarketHandler mhInstance = IMarketHandler(associatedMHAddress);
 
         mhInstance.concludePrediction_3(_vote);
+
+        emit PredictionConcluded(_predictionId, block.timestamp);
     }
 
     /// @notice Setter functions ------
@@ -223,6 +227,11 @@ contract PredictionMarket is Context, Ownable {
     }
 
     /// @notice Getter functions ------
+
+    function getNextPredictionId() external view returns (uint256) {
+        return nextPredictionId.current();
+    }
+
     function getPrediction(
         uint256 _predictionId
     ) external view returns (Prediction memory) {
