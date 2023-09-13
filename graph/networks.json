@@ -1,0 +1,8 @@
+{
+  "goerli": {
+    "PredictionMarket": {
+      "address": "0xD15444a7ff0564AD8b283a94e8033F1ce31cd2E9",
+      "startBlock": 9689458
+    }
+  }
+}
