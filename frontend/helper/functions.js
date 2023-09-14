@@ -42,7 +42,7 @@ export function convertToDecimal(bigNumber) {
 export function addDecimalSixPlacesFromRightAndRemoveTrail(inputString) {
   const length = inputString.length;
   if (length <= 6) {
-    // If the length is less than or equal to 2, simply return the string as it is.
+    // If the length is less than or equal to 6, simply return the string as it is.
     return inputString;
   } else {
     // Insert the decimal point at the appropriate position and return the modified string.
