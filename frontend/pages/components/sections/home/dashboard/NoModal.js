@@ -7,6 +7,8 @@ import Sell from "./Sell";
 import Swap from "./Swap";
 
 export default function NoModal({ data }) {
+  console.log(data);
+
   const [amountNo, setAmountNo] = useState("");
   const [startSwap, setStartSwap] = useState(false);
   const [startSell, setStartSell] = useState(false);

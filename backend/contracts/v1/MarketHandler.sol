@@ -145,23 +145,25 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         yesHolders.push(address(0));
     }
 
+    /// @notice No => Yes
     /// @notice Function To Swap 'No' tokens for 'Yes' tokens.
     /// @param _amount The amount of tokens to swap. Is a natural number N.
     function swapTokenNoWithYes(uint256 _amount) external override isOpen {
-        uint256 _amountToSwap = _amount * I_BASE_PRICE;
+        uint256 equivalentUSDC = (_amount * I_BASE_PRICE) / I_DECIMALS;
+        uint256 swapFee = getFee(equivalentUSDC);
 
-        if (NoBalances[_msgSender()] < _amountToSwap)
+        uint256 swapTokenDeduction = getFee(_amount);
+
+        if (NoBalances[_msgSender()] < _amount)
             revert PM_InsufficienTradeTokens();
 
-        uint256 swapFee = getFee(_amountToSwap);
+        NoBalances[_msgSender()] -= _amount;
+        reserveNo -= equivalentUSDC;
+        YesBalances[_msgSender()] += _amount - swapTokenDeduction;
+        reserveYes += equivalentUSDC - swapFee;
 
-        NoBalances[_msgSender()] -= _amountToSwap;
-        reserveNo -= _amountToSwap;
-        YesBalances[_msgSender()] += _amountToSwap - swapFee;
-        reserveYes += _amountToSwap;
-
-        int256 amountYes = int256(_amountToSwap - swapFee);
-        int256 amountNo = int256(_amountToSwap);
+        int256 amountYes = int256(_amount - swapTokenDeduction);
+        int256 amountNo = int256(_amount);
 
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);
         reserveFEE += swapFee;
@@ -169,28 +171,30 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_TRADING_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
-            int256(_amountToSwap),
-            -1 * int256(_amountToSwap)
+            amountYes,
+            -1 * amountNo
         );
         emit SwapOrder(_msgSender(), amountYes, -1 * amountNo);
     }
 
+    /// @notice Yes => No
     /// @notice SAME AS ABOVE BUT TO SWAP 'Yes' for 'No' tokens.
     function swapTokenYesWithNo(uint256 _amount) external override isOpen {
-        uint256 _amountToSwap = _amount * I_BASE_PRICE;
+        uint256 equivalentUSDC = (_amount * I_BASE_PRICE) / I_DECIMALS;
+        uint256 swapFee = getFee(equivalentUSDC);
 
-        if (YesBalances[_msgSender()] < _amountToSwap)
+        uint256 swapTokenDeduction = getFee(_amount);
+
+        if (YesBalances[_msgSender()] < _amount)
             revert PM_InsufficienTradeTokens();
 
-        uint256 swapFee = getFee(_amountToSwap);
+        NoBalances[_msgSender()] += _amount - swapTokenDeduction;
+        reserveNo += equivalentUSDC - swapFee;
+        YesBalances[_msgSender()] -= _amount;
+        reserveYes -= equivalentUSDC;
 
-        NoBalances[_msgSender()] += _amountToSwap - swapFee;
-        reserveNo += _amountToSwap;
-        YesBalances[_msgSender()] -= _amountToSwap;
-        reserveYes -= _amountToSwap;
-
-        int256 amountYes = int256(_amountToSwap);
-        int256 amountNo = int256(_amountToSwap - swapFee);
+        int256 amountYes = int256(_amount);
+        int256 amountNo = int256(_amount - swapTokenDeduction);
 
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);
         reserveFEE += swapFee;
@@ -198,18 +202,18 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_TRADING_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
-            -1 * int256(_amountToSwap),
-            int256(_amountToSwap)
+            -1 * amountYes,
+            amountNo
         );
         emit SwapOrder(_msgSender(), -1 * amountYes, amountNo);
     }
 
     /// @notice To enable the purchase of _amount of 'No' tokens. The total fee is based on _amount * I_BASE_PRICE.
-    /// @param _amount Total tokens the trader is looking to buy.
+    /// @param _amount Total tokens the trader is looking to buy. Is a multiple of 10**decimals()
     function buyNoToken(uint256 _amount) external override isOpen {
         if (_amount < 1) revert();
 
-        uint256 owedAmount = _amount * I_BASE_PRICE;
+        uint256 owedAmount = (_amount * I_BASE_PRICE) / I_DECIMALS;
 
         if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < owedAmount)
             revert PM_InsufficientApprovedAmount();
@@ -227,7 +231,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         reserveUSDC += owedAmount - fee;
         reserveNo += owedAmount - fee;
 
-        uint256 finalAmount = owedAmount - fee;
+        uint256 finalAmount = _amount - getFee(_amount);
         NoBalances[_msgSender()] += finalAmount;
 
         if (noTokenAddressToIndex[_msgSender()] == 0) {
@@ -252,7 +256,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     function buyYesToken(uint256 _amount) external override isOpen {
         if (_amount < 1) revert();
 
-        uint256 owedAmount = _amount * I_BASE_PRICE;
+        uint256 owedAmount = (_amount * I_BASE_PRICE) / I_DECIMALS;
 
         if (I_USDC_CONTRACT.allowance(_msgSender(), address(this)) < owedAmount)
             revert PM_InsufficientApprovedAmount();
@@ -270,7 +274,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         reserveUSDC += owedAmount - fee;
         reserveYes += owedAmount - fee;
 
-        uint256 finalAmount = owedAmount - fee;
+        uint256 finalAmount = _amount - getFee(_amount);
         YesBalances[_msgSender()] += finalAmount;
 
         if (yesTokenAddressToIndex[_msgSender()] == 0) {
@@ -294,17 +298,16 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     /// @notice Function that allows a trader to dump their tokens.
     /// @param _amount The amount of 'No' Tokens the trader is willing to dump.
     function sellNoToken(uint256 _amount) external override isOpen {
-        uint256 totalAmount = _amount * I_BASE_PRICE;
+        uint256 totalAmount = (_amount * I_BASE_PRICE) / I_DECIMALS;
 
-        if (NoBalances[_msgSender()] < totalAmount)
-            revert PM_InvalidAmountSet();
+        if (NoBalances[_msgSender()] < _amount) revert PM_InvalidAmountSet();
 
         uint256 fee = getFee(totalAmount);
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);
         reserveFEE += fee;
 
         uint256 toSend = totalAmount - fee;
-        NoBalances[_msgSender()] -= totalAmount;
+        NoBalances[_msgSender()] -= _amount;
 
         if (NoBalances[_msgSender()] == 0) {
             uint256 index = noTokenAddressToIndex[_msgSender()];
@@ -322,24 +325,23 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             I_SELF_ID,
             _msgSender(),
             0,
-            -1 * int256(toSend)
+            -1 * int256(_amount)
         );
-        emit SellOrder(_msgSender(), 0, toSend);
+        emit SellOrder(_msgSender(), 0, _amount);
     }
 
     /// @notice SAME AS ABOVE BUT FOR 'Yes' TOKENS.
     function sellYesToken(uint256 _amount) external override isOpen {
-        uint256 totalAmount = _amount * I_BASE_PRICE;
+        uint256 totalAmount = (_amount * I_BASE_PRICE) / I_DECIMALS;
 
-        if (YesBalances[_msgSender()] < totalAmount)
-            revert PM_InvalidAmountSet();
+        if (YesBalances[_msgSender()] < _amount) revert PM_InvalidAmountSet();
 
         uint256 fee = getFee(totalAmount);
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, fee);
         reserveFEE += fee;
 
         uint256 toSend = totalAmount - fee;
-        YesBalances[_msgSender()] -= totalAmount;
+        YesBalances[_msgSender()] -= _amount;
 
         if (YesBalances[_msgSender()] == 0) {
             uint256 index = yesTokenAddressToIndex[_msgSender()];
@@ -356,10 +358,10 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_TRADING_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
-            -1 * int256(toSend),
+            -1 * int256(_amount),
             0
         );
-        emit SellOrder(_msgSender(), toSend, 0);
+        emit SellOrder(_msgSender(), _amount, 0);
     }
 
     /// @notice The trading contract call this function for each individual prediction.
