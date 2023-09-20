@@ -56,7 +56,7 @@ export default function YesModal({ mhAddress, price }) {
     address: mhAddress,
     abi: mhABI,
     functionName: "buyYesToken",
-    args: [amount],
+    args: [amount * 1000000n],
   });
 
   const buyYesTokenWait = useWaitForTransaction({
@@ -123,7 +123,7 @@ export default function YesModal({ mhAddress, price }) {
               <Input
                 type="number"
                 placeholder="10"
-                onChange={(e) => setAmount(BigInt(e.target.value))}
+                onChange={(e) => setAmount(BigInt(e.target.value * 1000000))}
               />
               <Button onClick={() => generateEstimate()} fontSize={15}>
                 Calculate

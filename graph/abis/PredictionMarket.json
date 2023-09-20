@@ -173,6 +173,15 @@
   },
   {
     "inputs": [
+      { "internalType": "bytes32", "name": "_bytes32Data", "type": "bytes32" }
+    ],
+    "name": "bytes32ToString",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "uint256", "name": "_predictionId", "type": "uint256" },
       { "internalType": "bool", "name": "_vote", "type": "bool" }
     ],
@@ -183,7 +192,7 @@
   },
   {
     "inputs": [
-      { "internalType": "string", "name": "_tokenSymbol", "type": "string" },
+      { "internalType": "bytes32", "name": "_tokenSymbol", "type": "bytes32" },
       { "internalType": "address", "name": "_proxyAddress", "type": "address" },
       { "internalType": "bool", "name": "_isAbove", "type": "bool" },
       {

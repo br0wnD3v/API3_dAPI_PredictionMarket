@@ -197,6 +197,25 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "_bytes32Data",
+        "type": "bytes32"
+      }
+    ],
+    "name": "bytes32ToString",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_predictionId",
         "type": "uint256"
@@ -215,9 +234,9 @@
   {
     "inputs": [
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "_tokenSymbol",
-        "type": "string"
+        "type": "bytes32"
       },
       {
         "internalType": "address",

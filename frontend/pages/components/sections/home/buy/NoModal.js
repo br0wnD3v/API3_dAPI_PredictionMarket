@@ -56,7 +56,7 @@ export default function NoModal({ mhAddress, price }) {
     address: mhAddress,
     abi: mhABI,
     functionName: "buyNoToken",
-    args: [amount],
+    args: [amount * 1000000n],
   });
 
   const buyNoTokenWait = useWaitForTransaction({

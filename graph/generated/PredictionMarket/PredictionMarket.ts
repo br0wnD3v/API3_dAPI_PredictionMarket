@@ -275,8 +275,31 @@ export class PredictionMarket extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  bytes32ToString(_bytes32Data: Bytes): string {
+    let result = super.call(
+      "bytes32ToString",
+      "bytes32ToString(bytes32):(string)",
+      [ethereum.Value.fromFixedBytes(_bytes32Data)]
+    );
+
+    return result[0].toString();
+  }
+
+  try_bytes32ToString(_bytes32Data: Bytes): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "bytes32ToString",
+      "bytes32ToString(bytes32):(string)",
+      [ethereum.Value.fromFixedBytes(_bytes32Data)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
   createPrediction(
-    _tokenSymbol: string,
+    _tokenSymbol: Bytes,
     _proxyAddress: Address,
     _isAbove: boolean,
     _targetPricePoint: BigInt,
@@ -285,9 +308,9 @@ export class PredictionMarket extends ethereum.SmartContract {
   ): BigInt {
     let result = super.call(
       "createPrediction",
-      "createPrediction(string,address,bool,int224,uint256,uint256):(uint256)",
+      "createPrediction(bytes32,address,bool,int224,uint256,uint256):(uint256)",
       [
-        ethereum.Value.fromString(_tokenSymbol),
+        ethereum.Value.fromFixedBytes(_tokenSymbol),
         ethereum.Value.fromAddress(_proxyAddress),
         ethereum.Value.fromBoolean(_isAbove),
         ethereum.Value.fromSignedBigInt(_targetPricePoint),
@@ -300,7 +323,7 @@ export class PredictionMarket extends ethereum.SmartContract {
   }
 
   try_createPrediction(
-    _tokenSymbol: string,
+    _tokenSymbol: Bytes,
     _proxyAddress: Address,
     _isAbove: boolean,
     _targetPricePoint: BigInt,
@@ -309,9 +332,9 @@ export class PredictionMarket extends ethereum.SmartContract {
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "createPrediction",
-      "createPrediction(string,address,bool,int224,uint256,uint256):(uint256)",
+      "createPrediction(bytes32,address,bool,int224,uint256,uint256):(uint256)",
       [
-        ethereum.Value.fromString(_tokenSymbol),
+        ethereum.Value.fromFixedBytes(_tokenSymbol),
         ethereum.Value.fromAddress(_proxyAddress),
         ethereum.Value.fromBoolean(_isAbove),
         ethereum.Value.fromSignedBigInt(_targetPricePoint),
@@ -646,8 +669,8 @@ export class CreatePredictionCall__Inputs {
     this._call = call;
   }
 
-  get _tokenSymbol(): string {
-    return this._call.inputValues[0].value.toString();
+  get _tokenSymbol(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
   }
 
   get _proxyAddress(): Address {

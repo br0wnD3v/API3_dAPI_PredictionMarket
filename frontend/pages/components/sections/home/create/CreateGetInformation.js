@@ -25,8 +25,9 @@ import { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
 
-import { ethers } from "ethers";
 import Link from "next/link";
+
+import { encodeBytes32String, parseUnits } from "ethers";
 
 export default function CreateGetInformation() {
   const { address } = useAccount();
@@ -127,7 +128,7 @@ export default function CreateGetInformation() {
     setDueDate(unixEpochTime);
 
     const validatedValue = parseFloat(displayTargetPrice).toFixed(5);
-    const ethValue = ethers.parseUnits(validatedValue.toString(), "ether");
+    const ethValue = parseUnits(validatedValue.toString(), "ether");
     const weiValue = ethValue.toString();
     setTargetPrice(weiValue);
 
@@ -167,7 +168,7 @@ export default function CreateGetInformation() {
                 placeholder="AAPL"
                 disabled={isSubmitting}
                 value={tokenType}
-                onChange={(e) => setTokenType(e.target.value)}
+                onChange={(e) => setTokenType(e.target.value.toString())}
               />
               <FormLabel mt={5}>
                 Proxy Address{" "}
@@ -237,7 +238,7 @@ export default function CreateGetInformation() {
       </Box>
       {approved && (
         <CreateProcess
-          tokenType={tokenType}
+          tokenType={encodeBytes32String(tokenType)}
           proxyAddress={proxy}
           isAbove={isAbove}
           targetPrice={targetPrice}

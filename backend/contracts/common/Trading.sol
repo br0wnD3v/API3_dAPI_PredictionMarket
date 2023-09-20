@@ -115,6 +115,16 @@ contract PredictionMarket is Context, Ownable {
         nextPredictionId.increment();
     }
 
+    function bytes32ToString(
+        bytes32 _bytes32Data
+    ) public pure returns (string memory) {
+        bytes memory bytesData = new bytes(32);
+        for (uint i = 0; i < 32; i++) {
+            bytesData[i] = _bytes32Data[i];
+        }
+        return string(bytesData);
+    }
+
     /// @notice Called by the owner on behalf of the _caller and create a market for them.
     /// @notice Step necessary to make sure all the parameters are vaild and are true with no manipulation.
     /// @param _tokenSymbol The symbol to represent the asset we are prediction upon. Eg : BTC / ETH / XRP etc.
@@ -123,7 +133,7 @@ contract PredictionMarket is Context, Ownable {
     /// @param _basePrice The minimum cost of one 'Yes' or 'No' token for the prediction market to be created.
     /// Is a multiple of 0.01 USD or 1 cent.
     function createPrediction(
-        string memory _tokenSymbol,
+        bytes32 _tokenSymbol,
         address _proxyAddress,
         bool _isAbove,
         int224 _targetPricePoint,
@@ -166,7 +176,7 @@ contract PredictionMarket is Context, Ownable {
         );
 
         Prediction memory toAdd = Prediction({
-            tokenSymbol: _tokenSymbol,
+            tokenSymbol: bytes32ToString(_tokenSymbol),
             targetPricePoint: _targetPricePoint,
             isAbove: _isAbove,
             proxyAddress: _proxyAddress,

@@ -1,4 +1,4 @@
-export const usdcAddress = "0x5E723bac7e84B85f81667E8c032ba6E52C41A0DB";
+export const usdcAddress = "0x7382422ffD2784CE204A2526Ed729ED77f68B93D";
 export const usdcABI = [
   {
     inputs: [],
@@ -298,7 +298,7 @@ export const usdcABI = [
   },
 ];
 
-export const tradingAddress = "0xD15444a7ff0564AD8b283a94e8033F1ce31cd2E9";
+export const tradingAddress = "0x9ccdc58EddbdF7c2C317A55E17AddAbEa0ed654b";
 export const tradingABI = [
   {
     inputs: [
@@ -498,6 +498,25 @@ export const tradingABI = [
   {
     inputs: [
       {
+        internalType: "bytes32",
+        name: "_bytes32Data",
+        type: "bytes32",
+      },
+    ],
+    name: "bytes32ToString",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "_predictionId",
         type: "uint256",
@@ -516,9 +535,9 @@ export const tradingABI = [
   {
     inputs: [
       {
-        internalType: "string",
+        internalType: "bytes32",
         name: "_tokenSymbol",
-        type: "string",
+        type: "bytes32",
       },
       {
         internalType: "address",
@@ -892,7 +911,7 @@ export const tradingABI = [
   },
 ];
 
-export const settlementAddress = "0xEF13330A0d46cc5c80B9009EbF6a8a8cf280a8eE";
+export const settlementAddress = "0xd315B21C5ddf43fA462E553eFf9eAfFbAbDe5238";
 export const settlementABI = [
   {
     inputs: [
@@ -1579,4 +1598,4 @@ export const mhABI = [
 ];
 
 export const graphEndpoint =
-  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.1";
+  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.3";

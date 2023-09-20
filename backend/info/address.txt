@@ -1,4 +1,4 @@
-Deployed MockUSDC at   : 0x5E723bac7e84B85f81667E8c032ba6E52C41A0DB
-Deployed Vault at      : 0x656c8E474fB47297160825b136D6f5A00EaDC8f1
-Deployed Trading at    : 0xD15444a7ff0564AD8b283a94e8033F1ce31cd2E9
-Deployed Settlement at : 0xEF13330A0d46cc5c80B9009EbF6a8a8cf280a8eE
+Deployed MockUSDC at   : 0x7382422ffD2784CE204A2526Ed729ED77f68B93D
+Deployed Vault at      : 0xbbc93b36902e36e5f4a43b98CD7745399A5D2692
+Deployed Trading at    : 0x9ccdc58EddbdF7c2C317A55E17AddAbEa0ed654b
+Deployed Settlement at : 0xd315B21C5ddf43fA462E553eFf9eAfFbAbDe5238

@@ -23,10 +23,10 @@ export default function Sell({ setStartReset, handler, tokenType, amount }) {
       setFunctionPrepared(true);
     },
   });
-  const { data: sellData, write: sellWrite } = useContractWrite(sellConfig);
+  const { data, write: sellWrite } = useContractWrite(sellConfig);
 
   const sellWait = useWaitForTransaction({
-    hash: sellData?.hash,
+    hash: data?.hash,
     onSuccess() {
       setSold(true);
     },

@@ -7,8 +7,6 @@ import Sell from "./Sell";
 import Swap from "./Swap";
 
 export default function YesModal({ data }) {
-  console.log(data);
-
   const [amountYes, setAmountYes] = useState("");
   const [startSwap, setStartSwap] = useState(false);
   const [startSell, setStartSell] = useState(false);
