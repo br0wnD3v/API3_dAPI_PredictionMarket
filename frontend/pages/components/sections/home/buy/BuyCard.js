@@ -17,8 +17,6 @@ import NoModal from "./NoModal";
 import Link from "next/link";
 
 export default function BuyCard({ data }) {
-  console.log(data);
-
   const [dataFetched, setDataFetched] = useState(null);
   const [tokenPrice, setTokenPrice] = useState(0n);
   const [direction, setDirection] = useState("");
@@ -62,7 +60,7 @@ export default function BuyCard({ data }) {
           <>
             <Flex direction="column" fontFamily="Barlow" align="left" p={4}>
               <Flex direction="row">
-                <Text fontSize={22}>{dataFetched.tokenSymbol}</Text>
+                <Text fontSize={22}>{dataFetched.tokenSymbol.toString()}</Text>
                 <Spacer />
                 <Text color="#3BC7A6">{id}</Text>
               </Flex>{" "}
@@ -102,7 +100,7 @@ export default function BuyCard({ data }) {
                 <Link
                   display="inline"
                   target="_blank"
-                  href={`https://market.api3.org/dapis?chains=goerli&search=${dataFetched.tokenSymbol}`}
+                  href={`https://market.api3.org/dapis?chains=goerli&search=${dataFetched.tokenSymbol.toString()}`}
                 >
                   <Text decoration="underline" color="#3BC7A6">
                     {proxy.slice(0, 6) + "..." + proxy.slice(-4)}

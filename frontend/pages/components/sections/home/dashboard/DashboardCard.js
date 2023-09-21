@@ -42,7 +42,7 @@ export default function DashboardCards({ data }) {
 
   return (
     <>
-      {dataObj["amountNo"].toString() != "0" &&
+      {dataObj["amountNo"].toString() != "0" ||
       dataObj["amountYes"].toString() != "0" ? (
         <>
           <Box

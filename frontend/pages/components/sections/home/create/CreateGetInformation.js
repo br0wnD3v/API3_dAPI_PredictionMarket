@@ -32,6 +32,8 @@ import { encodeBytes32String, parseUnits } from "ethers";
 export default function CreateGetInformation() {
   const { address } = useAccount();
 
+  const [firstRun, setFirstRun] = useState(true);
+
   const [startReset, setStartReset] = useState(false);
   const [approved, setApproved] = useState(false);
   const [currentApprovedAmount, setCurrentApprovedAmount] = useState(0);
@@ -106,7 +108,9 @@ export default function CreateGetInformation() {
       !isAbove ||
       !basePrice
     ) {
-      setError("Please fill out all required fields.");
+      setError(
+        "Please fill      setHasValueChanged(true); out all required fields."
+      );
       setIsSubmitting(false);
       return;
     }
@@ -190,9 +194,12 @@ export default function CreateGetInformation() {
                 value={proxy}
                 onChange={(e) => setProxy(e.target.value)}
                 onBlur={() => {
-                  toast.info(
-                    "Please make sure the Proxy Address is correct or else it will lead to ambiguity."
-                  );
+                  if (firstRun) {
+                    toast.info(
+                      "Please make sure the Proxy Address is correct or else it will lead to ambiguity."
+                    );
+                    setFirstRun(false);
+                  }
                 }}
               />
               <FormLabel mt={5}>Deadline</FormLabel>

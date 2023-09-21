@@ -123,7 +123,7 @@ export default function YesModal({ mhAddress, price }) {
               <Input
                 type="number"
                 placeholder="10"
-                onChange={(e) => setAmount(BigInt(e.target.value * 1000000))}
+                onChange={(e) => setAmount(BigInt(e.target.value))}
               />
               <Button onClick={() => generateEstimate()} fontSize={15}>
                 Calculate

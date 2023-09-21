@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import { tradingABI, tradingAddress } from "@/constants/info";
 
+import { AbiCoder } from "ethers";
+
 export default function CreateProcess({
   tokenType,
   proxyAddress,
@@ -15,13 +17,26 @@ export default function CreateProcess({
   basePrice,
   setStartReset,
 }) {
+  const abiHandler = AbiCoder.defaultAbiCoder();
+  const editedIsabove = abiHandler.encode(
+    ["bool"],
+    [isAbove == "false" ? false : true]
+  );
+
   const [createdPrediction, setCreatedPrediction] = useState(false);
 
   const { data, write: createPredictionWrite } = useContractWrite({
     address: tradingAddress,
     abi: tradingABI,
     functionName: "createPrediction",
-    args: [tokenType, proxyAddress, isAbove, targetPrice, dueDate, basePrice],
+    args: [
+      tokenType,
+      proxyAddress,
+      editedIsabove,
+      targetPrice,
+      dueDate,
+      basePrice,
+    ],
   });
 
   const waitCreatePrediction = useWaitForTransaction({
