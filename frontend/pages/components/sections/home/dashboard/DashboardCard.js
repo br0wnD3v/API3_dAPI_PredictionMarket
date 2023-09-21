@@ -84,14 +84,12 @@ export default function DashboardCards({ data }) {
                       )}
                     </Text>
                   </Flex>
-                  <Flex mb={4}>
-                    <Text>
-                      Price Predicted To Be{" "}
-                      <Text display="inline" color="#3BC7A6">
-                        {direction}
-                      </Text>{" "}
-                      The Target Price.
+                  <Flex mb={4} gap={1}>
+                    <Text>Price Predicted To Be </Text>
+                    <Text display="inline" color="#3BC7A6">
+                      {direction}
                     </Text>
+                    <Text display="inline">The Target Price.</Text>
                   </Flex>
                   <Text>Tokens Held Per Each Side </Text>
                   <Flex direction="row" mt={3}>

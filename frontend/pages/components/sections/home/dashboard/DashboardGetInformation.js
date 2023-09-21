@@ -36,7 +36,7 @@ export default function DashboardGetInformation() {
       }
       setDataFetched(finalArray);
     }
-    toast.info("Sit back and relax while we fetch recent details...");
+    toast.info("Please Wait...");
     execute();
   }, []);
 

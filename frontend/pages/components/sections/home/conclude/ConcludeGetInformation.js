@@ -41,6 +41,7 @@ export default function ConcludeGetInformation() {
 
     return final;
   }
+
   useEffect(() => {
     async function execute() {
       var { data: predictionData } = await client.query({
@@ -63,7 +64,7 @@ export default function ConcludeGetInformation() {
       setConcludedPredictions(concludeArray);
       console.log(concludeArray);
     }
-    toast.info("Sit back and relax while we fetch recent details...");
+    toast.info("Please Wait...");
     execute();
   }, []);
 
