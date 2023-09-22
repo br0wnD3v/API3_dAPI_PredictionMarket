@@ -6,10 +6,6 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-interface IVault {
-    function rewardConcluder(address _receiver) external;
-}
-
 /// @notice Structure to represent a given Prediction.
 struct Prediction {
     string tokenSymbol; // The token symbol in question
@@ -218,7 +214,10 @@ contract PredictionMarket is Context, Ownable {
         bool _vote,
         address _initiator
     ) external callerIsSettlement(_msgSender()) {
-        require(predictions[_predictionId].deadline > block.timestamp);
+        require(
+            predictions[_predictionId].deadline <= block.timestamp,
+            "Conclude_2 Failed."
+        );
 
         address associatedMHAddress = predictions[_predictionId].marketHandler;
         IMarketHandler mhInstance = IMarketHandler(associatedMHAddress);
@@ -226,8 +225,8 @@ contract PredictionMarket is Context, Ownable {
         mhInstance.concludePrediction_3(_vote);
 
         /// Rewards for concluder
-        IVault vaultContract = IVault(vaultAddress);
-        vaultContract.rewardConcluder(_initiator);
+        I_USDC_CONTRACT.transfer(_initiator, 40000000);
+        I_USDC_CONTRACT.transfer(vaultAddress, 10000000);
 
         emit PredictionConcluded(_predictionId, block.timestamp);
     }
@@ -306,6 +305,8 @@ contract PredictionMarket is Context, Ownable {
             _amountNo
         );
     }
+
+    /// ============
 
     receive() external payable {}
 

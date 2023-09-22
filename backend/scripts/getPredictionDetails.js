@@ -22,7 +22,7 @@ async function get(id) {
 }
 
 async function main() {
-  get(3);
+  get(1);
 }
 
 main();

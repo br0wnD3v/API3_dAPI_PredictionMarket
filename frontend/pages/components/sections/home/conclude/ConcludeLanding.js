@@ -1,8 +1,11 @@
-import { Box } from "@chakra-ui/react";
+import { Flex, Heading, Text, Box } from "@chakra-ui/react";
 import ConcludeCard from "./ConcludeCard";
 import { useEffect, useState } from "react";
 
+import { FadeInWhenVisible } from "@/pages/components/TransitionBoxes";
+
 export default function ConcludeLanding({ ids, concludedArray }) {
+  console.log(ids, concludedArray);
   const [finalArray, setFinalArray] = useState([]);
 
   useEffect(() => {
@@ -36,7 +39,23 @@ export default function ConcludeLanding({ ids, concludedArray }) {
             ))}
           </Box>
         </>
-      ) : null}
+      ) : (
+        <>
+          <FadeInWhenVisible>
+            <Flex
+              direction="column"
+              align="center"
+              justify="center"
+              h={500}
+              w="70%"
+            >
+              <Heading fontFamily="Barlow" fontSize="90px">
+                It looks like there are no markets to be concluded :)
+              </Heading>
+            </Flex>
+          </FadeInWhenVisible>
+        </>
+      )}
     </>
   );
 }

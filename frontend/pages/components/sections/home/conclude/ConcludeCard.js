@@ -23,6 +23,8 @@ import {
 import { useState } from "react";
 
 export default function ConcludeCard({ id }) {
+  console.log(id);
+
   const [dataFetched, setDataFetched] = useState(null);
 
   const [functionPrepared, setFunctionPrepared] = useState(false);

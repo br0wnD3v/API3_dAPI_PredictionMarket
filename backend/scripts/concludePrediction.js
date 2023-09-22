@@ -33,7 +33,7 @@ async function conclude(id) {
 }
 
 async function main() {
-  await conclude(3);
+  await conclude(2);
 }
 
 main();

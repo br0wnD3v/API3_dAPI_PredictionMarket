@@ -13,7 +13,9 @@ export default function ConcludeGetInformation() {
   const currentEpoch = Math.floor(Date.now() / 1000);
 
   const [concludedPredictions, setConcludedPredictions] = useState([]);
+  const [concludedFetched, setConcludedFetched] = useState(false);
   const [allPredictions, setAllPredictions] = useState({});
+  const [allFetched, setAllFetched] = useState(false);
 
   const predictionDetailsQuery =
     "{\n\tpredictionCreateds(orderBy: predictionId) {\n\tdeadline\n\tpredictionId\n}\n\t}";
@@ -25,7 +27,7 @@ export default function ConcludeGetInformation() {
     cache: new InMemoryCache(),
   });
 
-  function getObject(arr) {
+  async function getObject(arr) {
     const final = {};
     for (var index = 0; index < arr.length; index++) {
       if (currentEpoch >= arr[index]["deadline"])
@@ -34,10 +36,10 @@ export default function ConcludeGetInformation() {
     return final;
   }
 
-  function getArray(arr) {
+  async function getArray(arr) {
     const final = [];
     for (var index = 0; index < arr.length; index++) {
-      final.push(arr[index]);
+      final.push(arr[index]["predictionId"]);
     }
 
     return final;
@@ -50,7 +52,9 @@ export default function ConcludeGetInformation() {
           ${predictionDetailsQuery}
         `,
       });
-      const allPredictionsArray = getObject(predictionData.predictionCreateds);
+      const allPredictionsArray = await getObject(
+        predictionData.predictionCreateds
+      );
       setAllPredictions(allPredictionsArray);
 
       /// =======null
@@ -60,8 +64,11 @@ export default function ConcludeGetInformation() {
           ${concludedPredictionsQuery}
         `,
       });
-      const concludeArray = getArray(concludeData.predictionConcludeds);
+      const concludeArray = await getArray(concludeData.predictionConcludeds);
       setConcludedPredictions(concludeArray);
+
+      setAllFetched(true);
+      setConcludedFetched(true);
     }
     toast.info("Please Wait...");
     execute();
@@ -69,31 +76,33 @@ export default function ConcludeGetInformation() {
 
   return (
     <>
-      {concludedPredictions.length != 0 ||
-      Object.keys(allPredictions).length != 0 ? (
-        <>
-          <ConcludeLanding
-            ids={allPredictions}
-            concludedArray={concludedPredictions}
-          />
-        </>
-      ) : (
-        <>
-          <FadeInWhenVisible>
-            <Flex
-              direction="column"
-              align="center"
-              justify="center"
-              h={500}
-              w="70%"
-            >
-              <Heading fontFamily="Barlow" fontSize="90px">
-                It looks like there are no markets to be concluded :)
-              </Heading>
-            </Flex>
-          </FadeInWhenVisible>
-        </>
-      )}
+      {concludedFetched && allFetched ? (
+        concludedPredictions.length != 0 ||
+        Object.keys(allPredictions).length != 0 ? (
+          <>
+            <ConcludeLanding
+              ids={allPredictions}
+              concludedArray={concludedPredictions}
+            />
+          </>
+        ) : (
+          <>
+            <FadeInWhenVisible>
+              <Flex
+                direction="column"
+                align="center"
+                justify="center"
+                h={500}
+                w="70%"
+              >
+                <Heading fontFamily="Barlow" fontSize="90px">
+                  It looks like there are no markets to be concluded :)
+                </Heading>
+              </Flex>
+            </FadeInWhenVisible>
+          </>
+        )
+      ) : null}
     </>
   );
 }

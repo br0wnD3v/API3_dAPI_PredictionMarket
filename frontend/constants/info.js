@@ -295,7 +295,7 @@ export const usdcABI = [
   },
 ];
 
-export const tradingAddress = "0xF1b2c142FF09eAc8dE9e6Ac19362e0F4bf895915";
+export const tradingAddress = "0xC16e9f8C3B19369497f9310CC36051e367a0ac22";
 export const tradingABI = [
   {
     inputs: [
@@ -913,7 +913,7 @@ export const tradingABI = [
   },
 ];
 
-export const settlementAddress = "0xec5DC0659593B94a388C8868DD1505EF8177eCAC";
+export const settlementAddress = "0xe4151B95136235b6B253cf29e9Fc7339CaA6F122";
 export const settlementABI = [
   {
     inputs: [
@@ -1600,4 +1600,4 @@ export const mhABI = [
 ];
 
 export const graphEndpoint =
-  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.4";
+  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.6";
