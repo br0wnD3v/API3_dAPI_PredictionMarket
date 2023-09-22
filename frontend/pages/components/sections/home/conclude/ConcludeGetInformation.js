@@ -7,11 +7,12 @@ import { toast } from "react-toastify";
 
 import { FadeInWhenVisible } from "@/pages/components/TransitionBoxes";
 import { Flex, Heading } from "@chakra-ui/react";
+import ConcludeLanding from "./ConcludeLanding";
 
 export default function ConcludeGetInformation() {
   const currentEpoch = Math.floor(Date.now() / 1000);
 
-  const [concludedPredictions, setConcludedPredictions] = useState({});
+  const [concludedPredictions, setConcludedPredictions] = useState([]);
   const [allPredictions, setAllPredictions] = useState({});
 
   const predictionDetailsQuery =
@@ -51,7 +52,6 @@ export default function ConcludeGetInformation() {
       });
       const allPredictionsArray = getObject(predictionData.predictionCreateds);
       setAllPredictions(allPredictionsArray);
-      console.log(allPredictionsArray);
 
       /// =======null
 
@@ -62,7 +62,6 @@ export default function ConcludeGetInformation() {
       });
       const concludeArray = getArray(concludeData.predictionConcludeds);
       setConcludedPredictions(concludeArray);
-      console.log(concludeArray);
     }
     toast.info("Please Wait...");
     execute();
@@ -72,7 +71,12 @@ export default function ConcludeGetInformation() {
     <>
       {concludedPredictions.length != 0 ||
       Object.keys(allPredictions).length != 0 ? (
-        <></>
+        <>
+          <ConcludeLanding
+            ids={allPredictions}
+            concludedArray={concludedPredictions}
+          />
+        </>
       ) : (
         <>
           <FadeInWhenVisible>

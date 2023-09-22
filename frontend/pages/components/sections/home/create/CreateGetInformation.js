@@ -73,7 +73,6 @@ export default function CreateGetInformation() {
     functionName: "allowance",
     args: [address, tradingAddress],
     onSuccess(data) {
-      console.log(data);
       setCurrentApprovedAmount(data);
     },
   });

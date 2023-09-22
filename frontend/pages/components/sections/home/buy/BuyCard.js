@@ -27,7 +27,6 @@ export default function BuyCard({ data }) {
 
   useEffect(() => {
     if (dataFetched) {
-      console.log(dataFetched);
       setProxy(dataFetched.proxyAddress);
       setDirection(dataFetched.isAbove ? "Above" : "Below");
       setMarketHandler(dataFetched.marketHandler);

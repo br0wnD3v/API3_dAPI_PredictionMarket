@@ -61,12 +61,10 @@ contract PM_Settlement is Ownable {
         address associatedProxyAddress = associatedPrediction.proxyAddress;
 
         /// API3 FTW
-        (int224 value, uint256 timestamp) = IProxy(associatedProxyAddress)
-            .read();
+        (int224 value, ) = IProxy(associatedProxyAddress).read();
 
         require(
-            block.timestamp > associatedPrediction.deadline &&
-                timestamp > associatedPrediction.deadline,
+            block.timestamp > associatedPrediction.deadline,
             "Can't run evaluation! Deadline not met."
         );
 
