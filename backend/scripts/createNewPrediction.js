@@ -68,7 +68,7 @@ async function main() {
   const proxyAddress = "0xe5Cf15fED24942E656dBF75165aF1851C89F21B5";
   const isAbove = coder.encode(["bool"], [false]);
   const targetPrice = ethers.utils.parseUnits("28000", "ether").toString();
-  const deadline = "1695372000";
+  const deadline = "1695399300";
   const basePrice = "120";
 
   console.log(

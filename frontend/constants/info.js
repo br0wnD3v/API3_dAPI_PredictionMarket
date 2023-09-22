@@ -1600,4 +1600,4 @@ export const mhABI = [
 ];
 
 export const graphEndpoint =
-  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.3";
+  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.4";
