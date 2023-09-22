@@ -183,7 +183,8 @@
   {
     "inputs": [
       { "internalType": "uint256", "name": "_predictionId", "type": "uint256" },
-      { "internalType": "bool", "name": "_vote", "type": "bool" }
+      { "internalType": "bool", "name": "_vote", "type": "bool" },
+      { "internalType": "address", "name": "_initiator", "type": "address" }
     ],
     "name": "concludePrediction_2",
     "outputs": [],

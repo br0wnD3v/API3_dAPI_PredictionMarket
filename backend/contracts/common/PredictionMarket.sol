@@ -6,6 +6,10 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+interface IVault {
+    function rewardConcluder(address _receiver) external;
+}
+
 /// @notice Structure to represent a given Prediction.
 struct Prediction {
     string tokenSymbol; // The token symbol in question
@@ -211,7 +215,8 @@ contract PredictionMarket is Context, Ownable {
     /// vote - False : The target price was predicted to be BELOW/ABOVE a threshold BUT IS ABOVE/BELOW the threshold respectively.
     function concludePrediction_2(
         uint256 _predictionId,
-        bool _vote
+        bool _vote,
+        address _initiator
     ) external callerIsSettlement(_msgSender()) {
         require(predictions[_predictionId].deadline > block.timestamp);
 
@@ -219,6 +224,10 @@ contract PredictionMarket is Context, Ownable {
         IMarketHandler mhInstance = IMarketHandler(associatedMHAddress);
 
         mhInstance.concludePrediction_3(_vote);
+
+        /// Rewards for concluder
+        IVault vaultContract = IVault(vaultAddress);
+        vaultContract.rewardConcluder(_initiator);
 
         emit PredictionConcluded(_predictionId, block.timestamp);
     }

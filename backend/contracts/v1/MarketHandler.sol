@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../interfaces/IMarketHandler.sol";
-import "../interfaces/ITrading.sol";
+import "../interfaces/IPredictionMarket.sol";
 import "../interfaces/IERC20.sol";
 
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -57,7 +57,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     /// @notice The vault address.
     address private I_VAULT_ADDRESS;
 
-    ITrading private I_TRADING_CONTRACT;
+    IPredictionMarket private I_PREDICTION_MARKET_CONTRACT;
 
     /// @notice Variables to track the 'Yes' token and its holders
     /// @notice The current valid index where new address is to be pushed in the yesHolders array.
@@ -128,7 +128,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         address _usdcTokenAddress,
         address _vaultAddress
     ) {
-        I_TRADING_CONTRACT = ITrading(_msgSender());
+        I_PREDICTION_MARKET_CONTRACT = IPredictionMarket(_msgSender());
 
         I_SELF_ID = _id;
         I_BASE_PRICE = _basePrice * 10 ** 4;
@@ -168,7 +168,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);
         reserveFEE += swapFee;
 
-        I_TRADING_CONTRACT.trackProgress(
+        I_PREDICTION_MARKET_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
             amountYes,
@@ -199,7 +199,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
         I_USDC_CONTRACT.transfer(I_VAULT_ADDRESS, swapFee);
         reserveFEE += swapFee;
 
-        I_TRADING_CONTRACT.trackProgress(
+        I_PREDICTION_MARKET_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
             -1 * amountYes,
@@ -243,7 +243,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             noIndex.increment();
         }
 
-        I_TRADING_CONTRACT.trackProgress(
+        I_PREDICTION_MARKET_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
             0,
@@ -286,7 +286,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
             yesIndex.increment();
         }
 
-        I_TRADING_CONTRACT.trackProgress(
+        I_PREDICTION_MARKET_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
             int256(finalAmount),
@@ -321,7 +321,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
 
         reserveUSDC -= totalAmount;
 
-        I_TRADING_CONTRACT.trackProgress(
+        I_PREDICTION_MARKET_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
             0,
@@ -355,7 +355,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
 
         reserveUSDC -= totalAmount;
 
-        I_TRADING_CONTRACT.trackProgress(
+        I_PREDICTION_MARKET_CONTRACT.trackProgress(
             I_SELF_ID,
             _msgSender(),
             -1 * int256(_amount),

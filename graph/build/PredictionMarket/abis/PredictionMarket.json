@@ -224,6 +224,11 @@
         "internalType": "bool",
         "name": "_vote",
         "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "_initiator",
+        "type": "address"
       }
     ],
     "name": "concludePrediction_2",

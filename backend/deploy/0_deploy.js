@@ -34,7 +34,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   await trading.setVaultAddress(Vault.address);
 
   const mock = new ethers.Contract(Mock.address, Mock.abi, signer);
-  await mock.mint(deployer, 100000000000);
+  await mock.mint(deployer, 1000000000000);
+
+  const vault = new ethers.Contract(Vault.address, Vault.abi, signer);
+  await vault.setPredictionMarketAddress(Trading.address);
 
   // const getProxyForETH = await trading.getAssetToProxy("ETH");
   // console.log(getProxyForETH);

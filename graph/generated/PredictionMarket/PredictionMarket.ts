@@ -642,6 +642,10 @@ export class ConcludePrediction_2Call__Inputs {
   get _vote(): boolean {
     return this._call.inputValues[1].value.toBoolean();
   }
+
+  get _initiator(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
 }
 
 export class ConcludePrediction_2Call__Outputs {

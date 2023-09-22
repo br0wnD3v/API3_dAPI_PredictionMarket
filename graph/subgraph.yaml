@@ -6,9 +6,9 @@ dataSources:
     name: PredictionMarket
     network: goerli
     source:
-      address: "0x9ccdc58EddbdF7c2C317A55E17AddAbEa0ed654b"
+      address: "0xF1b2c142FF09eAc8dE9e6Ac19362e0F4bf895915"
       abi: PredictionMarket
-      startBlock: 9729707
+      startBlock: 9738993
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

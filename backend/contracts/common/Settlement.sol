@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@api3/contracts/v0.8/interfaces/IProxy.sol";
 
 /// @dev Current order of settling a market :
-/// Settlement : concludePrediction_1 -> Trading : conludePrediction_2 -> Each Unique MarketHandler : concludePrediction_3
+/// Settlement : concludePrediction_1 -> PredictionMarket : conludePrediction_2 -> Each Unique MarketHandler : concludePrediction_3
 
 /// @notice We need to track certain properties of the prediction to make sure it it concluded after the deadline only.
 struct Prediction {
@@ -21,8 +21,8 @@ struct Prediction {
     address marketHandler;
 }
 
-interface ITrading {
-    function concludePrediction_2(uint256, bool) external;
+interface IPredictionMarket {
+    function concludePrediction_2(uint256, bool, address) external;
 
     function getNextPredictionId() external view returns (uint256);
 
@@ -33,16 +33,16 @@ error PM_InvalidPredictionId();
 
 /// @dev The contract is inherently a data feed reader
 contract PM_Settlement is Ownable {
-    /// @notice The Trading contract that acts as a middle ground for Settlement and MarketHandler
-    ITrading public tradingContract;
+    /// @notice The PredictionMarket contract that acts as a middle ground for Settlement and MarketHandler
+    IPredictionMarket public predictionMarketContract;
 
-    /// @param _trading The Trading Contract
-    constructor(address _trading) {
-        tradingContract = ITrading(_trading);
+    /// @param _predictionMarket The Trading Contract
+    constructor(address _predictionMarket) {
+        predictionMarketContract = IPredictionMarket(_predictionMarket);
     }
 
     modifier isValidPredictionId(uint256 _id) {
-        uint256 currentUpper = tradingContract.getNextPredictionId();
+        uint256 currentUpper = predictionMarketContract.getNextPredictionId();
         if (_id >= currentUpper) revert PM_InvalidPredictionId();
         _;
     }
@@ -55,9 +55,8 @@ contract PM_Settlement is Ownable {
     function concludePrediction_1(
         uint256 _predictionId
     ) external isValidPredictionId(_predictionId) {
-        Prediction memory associatedPrediction = tradingContract.getPrediction(
-            _predictionId
-        );
+        Prediction memory associatedPrediction = predictionMarketContract
+            .getPrediction(_predictionId);
         address associatedProxyAddress = associatedPrediction.proxyAddress;
 
         /// API3 FTW
@@ -72,13 +71,31 @@ contract PM_Settlement is Ownable {
         if (associatedPrediction.isAbove) {
             /// @dev And IS ABOVE the target and hence True
             if (associatedPrediction.targetPricePoint > value)
-                tradingContract.concludePrediction_2(_predictionId, true);
+                predictionMarketContract.concludePrediction_2(
+                    _predictionId,
+                    true,
+                    _msgSender()
+                );
                 /// @dev NOT ABOVE hence False
-            else tradingContract.concludePrediction_2(_predictionId, false);
+            else
+                predictionMarketContract.concludePrediction_2(
+                    _predictionId,
+                    false,
+                    _msgSender()
+                );
         } else {
             if (associatedPrediction.targetPricePoint < value)
-                tradingContract.concludePrediction_2(_predictionId, true);
-            else tradingContract.concludePrediction_2(_predictionId, false);
+                predictionMarketContract.concludePrediction_2(
+                    _predictionId,
+                    true,
+                    _msgSender()
+                );
+            else
+                predictionMarketContract.concludePrediction_2(
+                    _predictionId,
+                    false,
+                    _msgSender()
+                );
         }
     }
 }

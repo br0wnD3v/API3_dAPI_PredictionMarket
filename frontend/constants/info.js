@@ -1,4 +1,4 @@
-export const usdcAddress = "0x7382422ffD2784CE204A2526Ed729ED77f68B93D";
+export const usdcAddress = "0x7B28B177Bca06Abd37518F66ADa2825BF7386A7D";
 export const usdcABI = [
   {
     inputs: [],
@@ -54,10 +54,6 @@ export const usdcABI = [
     ],
     name: "Transfer",
     type: "event",
-  },
-  {
-    stateMutability: "payable",
-    type: "fallback",
   },
   {
     inputs: [
@@ -136,7 +132,7 @@ export const usdcABI = [
         type: "uint8",
       },
     ],
-    stateMutability: "view",
+    stateMutability: "pure",
     type: "function",
   },
   {
@@ -191,8 +187,13 @@ export const usdcABI = [
     inputs: [
       {
         internalType: "address",
-        name: "receiver",
+        name: "to",
         type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
       },
     ],
     name: "mint",
@@ -292,13 +293,9 @@ export const usdcABI = [
     stateMutability: "nonpayable",
     type: "function",
   },
-  {
-    stateMutability: "payable",
-    type: "receive",
-  },
 ];
 
-export const tradingAddress = "0x9ccdc58EddbdF7c2C317A55E17AddAbEa0ed654b";
+export const tradingAddress = "0xF1b2c142FF09eAc8dE9e6Ac19362e0F4bf895915";
 export const tradingABI = [
   {
     inputs: [
@@ -525,6 +522,11 @@ export const tradingABI = [
         internalType: "bool",
         name: "_vote",
         type: "bool",
+      },
+      {
+        internalType: "address",
+        name: "_initiator",
+        type: "address",
       },
     ],
     name: "concludePrediction_2",
@@ -911,13 +913,13 @@ export const tradingABI = [
   },
 ];
 
-export const settlementAddress = "0xd315B21C5ddf43fA462E553eFf9eAfFbAbDe5238";
+export const settlementAddress = "0xec5DC0659593B94a388C8868DD1505EF8177eCAC";
 export const settlementABI = [
   {
     inputs: [
       {
         internalType: "address",
-        name: "_trading",
+        name: "_predictionMarket",
         type: "address",
       },
     ],
@@ -976,22 +978,22 @@ export const settlementABI = [
   },
   {
     inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "tradingContract",
+    name: "predictionMarketContract",
     outputs: [
       {
-        internalType: "contract ITrading",
+        internalType: "contract IPredictionMarket",
         name: "",
         type: "address",
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
