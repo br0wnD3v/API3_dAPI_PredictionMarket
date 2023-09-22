@@ -22,7 +22,7 @@ struct Prediction {
 }
 
 interface IPredictionMarket {
-    function concludePrediction_2(uint256, bool, address) external;
+    function concludePrediction_2(uint256, bool, address, int224) external;
 
     function getNextPredictionId() external view returns (uint256);
 
@@ -70,31 +70,36 @@ contract PM_Settlement is Ownable {
         /// @dev The price was predicted to be above the target point
         if (associatedPrediction.isAbove) {
             /// @dev And IS ABOVE the target and hence True
+            if (associatedPrediction.targetPricePoint <= value)
+                predictionMarketContract.concludePrediction_2(
+                    _predictionId,
+                    true,
+                    _msgSender(),
+                    value
+                );
+            else
+                predictionMarketContract.concludePrediction_2(
+                    _predictionId,
+                    false,
+                    _msgSender(),
+                    value
+                );
+            /// @dev The price was predicted to be below the target point
+        } else {
+            /// @dev And IS BELOW the target and hence True
             if (associatedPrediction.targetPricePoint > value)
                 predictionMarketContract.concludePrediction_2(
                     _predictionId,
                     true,
-                    _msgSender()
-                );
-                /// @dev NOT ABOVE hence False
-            else
-                predictionMarketContract.concludePrediction_2(
-                    _predictionId,
-                    false,
-                    _msgSender()
-                );
-        } else {
-            if (associatedPrediction.targetPricePoint < value)
-                predictionMarketContract.concludePrediction_2(
-                    _predictionId,
-                    true,
-                    _msgSender()
+                    _msgSender(),
+                    value
                 );
             else
                 predictionMarketContract.concludePrediction_2(
                     _predictionId,
                     false,
-                    _msgSender()
+                    _msgSender(),
+                    value
                 );
         }
     }

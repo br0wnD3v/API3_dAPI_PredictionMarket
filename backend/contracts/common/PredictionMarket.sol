@@ -18,6 +18,7 @@ struct Prediction {
     bool isActive; // Check if the prediction is open or closed
     address marketHandler; // The contract responsible for betting on the prediction.
     uint256 predictionTokenPrice; // The price of either of the token for a given market handler.
+    int224 priceAtConclude; // Price returns from the dapi call.
 }
 
 /// @notice Error codes
@@ -185,7 +186,8 @@ contract PredictionMarket is Context, Ownable {
             deadline: _deadline,
             marketHandler: address(predictionMH),
             predictionTokenPrice: _basePrice,
-            isActive: true
+            isActive: true,
+            priceAtConclude: -1
         });
 
         predictions[predictionId] = toAdd;
@@ -212,7 +214,8 @@ contract PredictionMarket is Context, Ownable {
     function concludePrediction_2(
         uint256 _predictionId,
         bool _vote,
-        address _initiator
+        address _initiator,
+        int224 _readPrice
     ) external callerIsSettlement(_msgSender()) {
         require(
             predictions[_predictionId].deadline <= block.timestamp,
@@ -223,6 +226,10 @@ contract PredictionMarket is Context, Ownable {
         IMarketHandler mhInstance = IMarketHandler(associatedMHAddress);
 
         mhInstance.concludePrediction_3(_vote);
+
+        Prediction storage current = predictions[_predictionId];
+        current.isActive = false;
+        current.priceAtConclude = _readPrice;
 
         /// Rewards for concluder
         I_USDC_CONTRACT.transfer(_initiator, 40000000);

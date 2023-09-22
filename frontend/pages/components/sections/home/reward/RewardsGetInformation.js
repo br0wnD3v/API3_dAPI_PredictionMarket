@@ -10,6 +10,8 @@ import { useAccount } from "wagmi";
 
 import { toast } from "react-toastify";
 
+import RewardsLanding from "./RewardsLanding";
+
 export default function RewardsGetInformation() {
   const { address } = useAccount();
 
@@ -30,10 +32,10 @@ export default function RewardsGetInformation() {
     "{\n\tpredictionConcludeds(orderBy: predictionId) {\n\tpredictionId\n}\n\t}";
   const userDataQuery = `query AccountInformation\n{\n  handlerProgresses(\n    orderBy: predictionId\n    where: {trader: "${address}"}\n    orderDirection: asc\n  ) {\n    predictionId\n    marketHandler\n    trader\n    amountNo\n    amountYes\n  }\n}`;
 
-  function getArray(arr) {
+  async function getArray(arr) {
     const final = [];
     for (var index = 0; index < arr.length; index++) {
-      final.push(arr[index]);
+      final.push(arr[index]["predictionId"]);
     }
 
     return final;
@@ -46,9 +48,8 @@ export default function RewardsGetInformation() {
           ${concludedPredictionsQuery}
         `,
       });
-      const concludeArray = getArray(concludeData.predictionConcludeds);
+      const concludeArray = await getArray(concludeData.predictionConcludeds);
       setConcludedPredictions(concludeArray);
-      console.log(concludeArray);
 
       /// =========
 
@@ -135,7 +136,12 @@ export default function RewardsGetInformation() {
       ) : (
         <>
           {configuredUserData && concludedPredictions ? (
-            <>{console.log(configuredUserData, concludedPredictions)}</>
+            <>
+              <RewardsLanding
+                userData={configuredUserData}
+                concluded={concludedPredictions}
+              />
+            </>
           ) : null}
         </>
       )}

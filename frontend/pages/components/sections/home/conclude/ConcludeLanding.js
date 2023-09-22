@@ -1,4 +1,4 @@
-import { Flex, Heading, Text, Box } from "@chakra-ui/react";
+import { Flex, Heading, Box } from "@chakra-ui/react";
 import ConcludeCard from "./ConcludeCard";
 import { useEffect, useState } from "react";
 
