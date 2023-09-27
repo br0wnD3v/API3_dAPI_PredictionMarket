@@ -295,7 +295,7 @@ export const usdcABI = [
   },
 ];
 
-export const tradingAddress = "0xC16e9f8C3B19369497f9310CC36051e367a0ac22";
+export const tradingAddress = "0x51Fd7D6e6C1036d40a73963dA0d75885CD051509";
 export const tradingABI = [
   {
     inputs: [
@@ -528,6 +528,11 @@ export const tradingABI = [
         name: "_initiator",
         type: "address",
       },
+      {
+        internalType: "int224",
+        name: "_readPrice",
+        type: "int224",
+      },
     ],
     name: "concludePrediction_2",
     outputs: [],
@@ -653,6 +658,11 @@ export const tradingABI = [
             name: "predictionTokenPrice",
             type: "uint256",
           },
+          {
+            internalType: "int224",
+            name: "priceAtConclude",
+            type: "int224",
+          },
         ],
         internalType: "struct Prediction",
         name: "",
@@ -728,6 +738,11 @@ export const tradingABI = [
             internalType: "uint256",
             name: "predictionTokenPrice",
             type: "uint256",
+          },
+          {
+            internalType: "int224",
+            name: "priceAtConclude",
+            type: "int224",
           },
         ],
         internalType: "struct Prediction[]",
@@ -913,7 +928,7 @@ export const tradingABI = [
   },
 ];
 
-export const settlementAddress = "0xe4151B95136235b6B253cf29e9Fc7339CaA6F122";
+export const settlementAddress = "0xc1b6C710bd63EfA82AAa0D54682B8e545FFEe6f4";
 export const settlementABI = [
   {
     inputs: [
@@ -1600,4 +1615,4 @@ export const mhABI = [
 ];
 
 export const graphEndpoint =
-  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.6";
+  "https://api.studio.thegraph.com/query/44907/prediction-market/v0.0.7";
