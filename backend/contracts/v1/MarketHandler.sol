@@ -76,7 +76,7 @@ contract PM_MarketHandler is Context, Ownable, IMarketHandler {
     mapping(address => uint256) private NoBalances;
 
     /// @notice Check if a user collected their rewards to disable multiple withdrawls
-    mapping(address => bool) private rewardCollected;
+    mapping(address => bool) public rewardCollected;
 
     // Events
     /// @notice When a trader swaps their 'Yes' for 'No' or vica versa.
