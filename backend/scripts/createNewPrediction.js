@@ -66,10 +66,10 @@ async function main() {
 
   const symbol = ethers.utils.formatBytes32String("BTC");
   const proxyAddress = "0xe5Cf15fED24942E656dBF75165aF1851C89F21B5";
-  const isAbove = coder.encode(["bool"], [true]);
-  const targetPrice = ethers.utils.parseUnits("27000", "ether").toString();
-  const deadline = "1695382560";
-  const basePrice = "120";
+  const isAbove = coder.encode(["bool"], [false]);
+  const targetPrice = ethers.utils.parseUnits("30000", "ether").toString();
+  const deadline = "1696118400";
+  const basePrice = "110";
 
   console.log(
     "\n",

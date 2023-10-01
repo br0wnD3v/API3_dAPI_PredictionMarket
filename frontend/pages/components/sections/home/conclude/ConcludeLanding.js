@@ -14,10 +14,11 @@ export default function ConcludeLanding({ ids, concludedArray }) {
 
       if (concludedArray.length == 0) setFinalArray(Object.keys(ids));
       else {
-        const limit = concludedArray.length;
+        const keys = Object.keys(ids);
+        const limit = keys.length;
         for (var index = 0; index < limit; index++) {
-          const element = concludedArray[index];
-          if (!ids.hasOwnProperty(element)) {
+          const element = keys[index];
+          if (!concludedArray.includes(element)) {
             finalTemp.push(element);
           }
         }
