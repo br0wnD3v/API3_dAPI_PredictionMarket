@@ -8,6 +8,7 @@ const {
 
 const { ethers } = require("ethers");
 
+// const PROVIDER = process.env.MUMBAI_RP
 const PROVIDER = process.env.GOERLI_RPC;
 const DEPLOYER = process.env.PK_DEPLOYER;
 
