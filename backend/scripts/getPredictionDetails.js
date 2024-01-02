@@ -1,29 +1,19 @@
-const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
-
-const {
-  address: tradingAddress,
-  abi: tradingABI,
-} = require("../deployments/goerli/PredictionMarket.json");
-
-const { ethers } = require("ethers");
-
-// const PROVIDER = process.env.MUMBAI_RPC
-const PROVIDER = process.env.GOERLI_RPC;
-const DEPLOYER = process.env.PK_DEPLOYER;
-
-const provider = new ethers.providers.JsonRpcProvider(PROVIDER);
-const wallet = new ethers.Wallet(DEPLOYER, provider);
-
-const trading = new ethers.Contract(tradingAddress, tradingABI, wallet);
-
-async function get(id) {
-  const data = await trading.getPrediction(id);
-  console.log(data);
-}
+const hre = require("hardhat");
 
 async function main() {
-  get(1);
+  const Trading = await hre.deployments.get("PredictionMarket");
+  const tradingContract = new hre.ethers.Contract(Trading.address, Trading.abi, (await hre.ethers.getSigners())[0]);
+  const id = 1;
+  const data = await tradingContract.getPrediction(id);
+  console.log("Prediction Details:");
+  console.log("Marker Handler: " + data.marketHandler);
+  console.log("Symbol:         " + data.tokenSymbol);
+  console.log("Proxy Address:  " + data.proxyAddress);
 }
 
-main();
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });

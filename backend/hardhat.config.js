@@ -1,10 +1,9 @@
 require("dotenv").config();
-require("@nomicfoundation/hardhat-toolbox");
+require('@nomiclabs/hardhat-waffle');
 require("hardhat-deploy");
 
 const PK_DEPLOYER = process.env.PK_DEPLOYER;
 
-/** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
     version: "0.8.18",

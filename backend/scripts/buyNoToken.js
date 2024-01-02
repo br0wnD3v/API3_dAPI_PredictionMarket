@@ -1,25 +1,9 @@
-const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
+const hre = require("hardhat");
 
-const {
-  address: tradingAddress,
-  abi: tradingABI,
-} = require("../deployments/goerli/PredictionMarket.json");
-
-const { ethers } = require("ethers");
-
-// const PROVIDER = process.env.MUMBAI_RPC
-const PROVIDER = process.env.GOERLI_RPC;
-const DEPLOYER = process.env.PK_DEPLOYER;
-
-const provider = new ethers.providers.JsonRpcProvider(PROVIDER);
-const wallet = new ethers.Wallet(DEPLOYER, provider);
-
-const amount = 10n * 1000000n;
-
-const trading = new ethers.Contract(tradingAddress, tradingABI, wallet);
-
-async function buy() {
+async function main() {
+  const Trading = await hre.deployments.get("PredictionMarket");
+  const tradingContract = new hre.ethers.Contract(Trading.address, Trading.abi, (await hre.ethers.getSigners())[0]);
+  const amount = 10n * 1000000n;
   try {
     const txn = await trading.buyNoToken(amount, {
       gasLimit: 10000000,
@@ -31,8 +15,9 @@ async function buy() {
   }
 }
 
-async function main() {
-  await buy();
-}
-
-main();
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
