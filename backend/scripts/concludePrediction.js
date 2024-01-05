@@ -4,12 +4,12 @@ require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const {
   address: settlementAddress,
   abi: settlementABI,
-} = require("../deployments/goerli/PM_Settlement.json");
+} = require("../deployments/mumbai/PM_Settlement.json");
 
 const { ethers } = require("ethers");
 
 // const PROVIDER = process.env.MUMBAI_RP
-const PROVIDER = process.env.GOERLI_RPC;
+const PROVIDER = process.env.MUMBAI_RPC;
 const DEPLOYER = process.env.PK_DEPLOYER;
 
 const provider = new ethers.providers.JsonRpcProvider(PROVIDER);

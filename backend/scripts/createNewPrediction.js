@@ -4,16 +4,16 @@ require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const {
   address: tradingAddress,
   abi: tradingABI,
-} = require("../deployments/goerli/PredictionMarket.json");
+} = require("../deployments/mumbai/PredictionMarket.json");
 const {
   address: usdcAddress,
   abi: usdcABI,
-} = require("../deployments/goerli/MockUSDC.json");
+} = require("../deployments/mumbai/MockUSDC.json");
 
 const { ethers } = require("ethers");
 
 // const PROVIDER = process.env.MUMBAI_RPC
-const PROVIDER = process.env.GOERLI_RPC;
+const PROVIDER = process.env.MUMBAI_RPC;
 const DEPLOYER = process.env.PK_DEPLOYER;
 
 const provider = new ethers.providers.JsonRpcProvider(PROVIDER);
@@ -66,10 +66,10 @@ async function main() {
   const coder = ethers.utils.defaultAbiCoder;
 
   const symbol = ethers.utils.formatBytes32String("BTC");
-  const proxyAddress = "0xe5Cf15fED24942E656dBF75165aF1851C89F21B5";
+  const proxyAddress = "0xba7892c114743bFd39F7A76180CacC93bAcC67e0";
   const isAbove = coder.encode(["bool"], [false]);
-  const targetPrice = ethers.utils.parseUnits("30000", "ether").toString();
-  const deadline = "1696118400";
+  const targetPrice = ethers.utils.parseUnits("45000", "ether").toString();
+  const deadline = "1704499999";
   const basePrice = "110";
 
   console.log(
